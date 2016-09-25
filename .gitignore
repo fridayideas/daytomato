@@ -42,3 +42,6 @@ captures/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+
+#VS Packages Folder
+packages/
