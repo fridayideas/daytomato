@@ -34,7 +34,6 @@
     <Compile Include="Contracts\Views\IHomePage.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Pin.cs" />
-    <Compile Include="Models\Seed.cs" />
     <Compile Include="Models\Trip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
