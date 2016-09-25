@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="application_name">DayTomato</string>
+  
+  <!-- Home Page -->
+  <string name="home_pins_text">Pins</string>
+  <string name="home_seeds_text">seeds</string>
+  <string name="home_pin_count_default">0</string>
+  <string name="home_seed_count_default">0</string>
+  <string name="home_budget_hint">How much can you spend?</string>
+  <string name="home_make_my_trip_text">Make My Trip!</string>
+  <string name="home_current_location_text">Current Location</string>
+  <string name="home_current_location_text_title">Location</string>
+  <string name="home_budget_text_title">Your Trip Budget</string>
+</resources>
