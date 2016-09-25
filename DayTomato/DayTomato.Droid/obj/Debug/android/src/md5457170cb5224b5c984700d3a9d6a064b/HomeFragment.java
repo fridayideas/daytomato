@@ -2,7 +2,7 @@ package md5457170cb5224b5c984700d3a9d6a064b;
 
 
 public class HomeFragment
-	extends android.app.Fragment
+	extends android.support.v4.app.Fragment
 	implements
 		mono.android.IGCUserPeer
 {
@@ -10,6 +10,7 @@ public class HomeFragment
 	public static final String __md_methods;
 	static {
 		__md_methods = 
+			"n_onCreate:(Landroid/os/Bundle;)V:GetOnCreate_Landroid_os_Bundle_Handler\n" +
 			"n_onCreateView:(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;:GetOnCreateView_Landroid_view_LayoutInflater_Landroid_view_ViewGroup_Landroid_os_Bundle_Handler\n" +
 			"";
 		mono.android.Runtime.register ("DayTomato.Droid.Fragments.HomeFragment, DayTomato.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", HomeFragment.class, __md_methods);
@@ -22,6 +23,14 @@ public class HomeFragment
 		if (getClass () == HomeFragment.class)
 			mono.android.TypeManager.Activate ("DayTomato.Droid.Fragments.HomeFragment, DayTomato.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
 	}
+
+
+	public void onCreate (android.os.Bundle p0)
+	{
+		n_onCreate (p0);
+	}
+
+	private native void n_onCreate (android.os.Bundle p0);
 
 
 	public android.view.View onCreateView (android.view.LayoutInflater p0, android.view.ViewGroup p1, android.os.Bundle p2)

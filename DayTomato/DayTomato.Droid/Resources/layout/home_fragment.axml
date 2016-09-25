@@ -26,7 +26,7 @@
                 android:id="@+id/home_profile_picture"
                 android:layout_gravity="left" />
             <TextView
-                android:text="username"
+                android:text="@string/home_default_username"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,6 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/home_pin_count"
+                android:textColor="@color/primaryText"
                 android:gravity="center" />
             <TextView
                 android:text="@string/home_pins_text"
@@ -68,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/home_seed_count"
+                android:textColor="@color/primaryText"
                 android:gravity="center" />
             <TextView
                 android:text="@string/home_seeds_text"
@@ -143,6 +145,7 @@
         android:id="@+id/home_budget_edittext"
         android:layout_marginTop="16dp"
         android:hint="@string/home_budget_hint"
+        android:textColor="@color/primaryText"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp" />
     <LinearLayout

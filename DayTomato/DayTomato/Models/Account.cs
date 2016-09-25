@@ -8,5 +8,8 @@ namespace DayTomato.Models
 {
     public class Account
     {
+        public string Username { get; set; }
+        public int NumberOfPins { get; set; }
+        public double numberOfSeeds { get; set; }
     }
 }

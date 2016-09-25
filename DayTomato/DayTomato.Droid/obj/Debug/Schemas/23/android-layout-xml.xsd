@@ -3,7 +3,7 @@
   <xs:import schemaLocation="schemas.android.com.apk.res.android.xsd" namespace="http://schemas.android.com/apk/res/android" />
   <xs:annotation>
     <xs:documentation>v23</xs:documentation>
-    <xs:documentation>9/24/2016 11:19:13 PM</xs:documentation>
+    <xs:documentation>9/25/2016 4:13:41 PM</xs:documentation>
   </xs:annotation>
   <xs:group name="any-view">
     <xs:choice>
@@ -80,6 +80,9 @@
       <xs:element ref="HorizontalScrollView" />
       <xs:element ref="SearchView" />
       <xs:element ref="fragment" />
+      <xs:element ref="com.google.android.gms.maps.StreetViewPanoramaView" />
+      <xs:element ref="com.google.android.gms.maps.MapView" />
+      <xs:element ref="com.google.android.gms.common.SignInButton" />
       <xs:element ref="android.support.design.widget.VisibilityAwareImageButton" />
       <xs:element ref="android.support.design.widget.TextInputLayout" />
       <xs:element ref="android.support.design.widget.TextInputEditText" />
@@ -354,10 +357,9 @@
     <xs:attribute ref="android:foregroundTint" />
     <xs:attribute ref="android:foregroundTintMode" />
     <xs:attribute ref="android:scrollIndicators" />
+    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_width" />
     <xs:attribute ref="android:layout_height" />
-    <xs:attribute ref="android:layout_weight" />
-    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_margin" />
     <xs:attribute ref="android:layout_marginLeft" />
     <xs:attribute ref="android:layout_marginTop" />
@@ -1411,10 +1413,9 @@
     <xs:attribute ref="android:fragmentReenterTransition" />
     <xs:attribute ref="android:fragmentAllowEnterTransitionOverlap" />
     <xs:attribute ref="android:fragmentAllowReturnTransitionOverlap" />
+    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_width" />
     <xs:attribute ref="android:layout_height" />
-    <xs:attribute ref="android:layout_weight" />
-    <xs:attribute ref="android:layout_gravity" />
     <xs:attribute ref="android:layout_margin" />
     <xs:attribute ref="android:layout_marginLeft" />
     <xs:attribute ref="android:layout_marginTop" />
@@ -1423,6 +1424,36 @@
     <xs:attribute ref="android:layout_marginStart" />
     <xs:attribute ref="android:layout_marginEnd" />
     <xs:attribute ref="android:style" />
+  </xs:complexType>
+  <xs:element name="com.google.android.gms.maps.StreetViewPanoramaView" type="com.google.android.gms.maps.StreetViewPanoramaView">
+    <xs:annotation>
+      <xs:documentation>Runtime Type: Android.Gms.Maps.StreetViewPanoramaView</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="com.google.android.gms.maps.StreetViewPanoramaView">
+    <xs:complexContent mixed="false">
+      <xs:extension base="FrameLayout" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="com.google.android.gms.maps.MapView" type="com.google.android.gms.maps.MapView">
+    <xs:annotation>
+      <xs:documentation>Runtime Type: Android.Gms.Maps.MapView</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="com.google.android.gms.maps.MapView">
+    <xs:complexContent mixed="false">
+      <xs:extension base="FrameLayout" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="com.google.android.gms.common.SignInButton" type="com.google.android.gms.common.SignInButton">
+    <xs:annotation>
+      <xs:documentation>Runtime Type: Android.Gms.Common.SignInButton</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="com.google.android.gms.common.SignInButton">
+    <xs:complexContent mixed="false">
+      <xs:extension base="FrameLayout" />
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="android.support.design.widget.VisibilityAwareImageButton" type="android.support.design.widget.VisibilityAwareImageButton">
     <xs:annotation>

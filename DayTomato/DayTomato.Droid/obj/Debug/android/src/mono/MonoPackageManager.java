@@ -100,6 +100,7 @@ class MonoPackageManager_Resources {
 		/* We need to ensure that "DayTomato.Droid.dll" comes first in this list. */
 		"DayTomato.Droid.dll",
 		"DayTomato.dll",
+		"Mono.Android.Export.dll",
 		"Xamarin.Android.Support.Animated.Vector.Drawable.dll",
 		"Xamarin.Android.Support.Design.dll",
 		"Xamarin.Android.Support.v4.dll",
@@ -107,6 +108,9 @@ class MonoPackageManager_Resources {
 		"Xamarin.Android.Support.v7.CardView.dll",
 		"Xamarin.Android.Support.v7.RecyclerView.dll",
 		"Xamarin.Android.Support.Vector.Drawable.dll",
+		"Xamarin.GooglePlayServices.Base.dll",
+		"Xamarin.GooglePlayServices.Basement.dll",
+		"Xamarin.GooglePlayServices.Maps.dll",
 		"System.Runtime.dll",
 		"System.Threading.dll",
 		"System.Collections.dll",
