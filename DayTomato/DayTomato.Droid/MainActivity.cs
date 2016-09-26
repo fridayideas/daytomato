@@ -10,6 +10,10 @@ using Android.Runtime;
 using Android.Support.V4.View;
 using DayTomato.Droid.Fragments;
 using Java.Lang;
+using DayTomato.Services;
+using System.Collections.Generic;
+using DayTomato.Models;
+using System;
 
 namespace DayTomato.Droid
 {
@@ -17,7 +21,7 @@ namespace DayTomato.Droid
     public class MainActivity : FragmentActivity
     {
         TabLayout tabLayout;
-        protected override void OnCreate(Bundle bundle)
+        protected async override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
@@ -28,6 +32,10 @@ namespace DayTomato.Droid
 
             tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
             InitTabLayout();
+
+            DayTomatoClient client = new DayTomatoClient();
+            string pins = await client.GetPins();
+            Console.WriteLine(pins);
         }
 
         void InitTabLayout()
