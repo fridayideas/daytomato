@@ -8,6 +8,8 @@ xamarin:
     secure: /SzUKiO5Vi5nkyZ6e9YovA==
   android: true
   ios: true
+before_build:
+  - nuget restore
 build:
   publish_nuget: true
   publish_nuget_symbols: true
