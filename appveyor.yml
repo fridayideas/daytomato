@@ -1,15 +1,22 @@
 version: 1.0.{build}
-nuget:
-  account_feed: true
-  project_feed: true
+configuration: Release
+platform: Any CPU
+
+environment:
+  ANDROID_HOME: C:\android-sdk
+  AndroidSdkDirectory: C:\android-sdk
+
 xamarin:
-  email: jameswoo@uvic.ca
+  email: fridayideasgroup@gmail.com
   password:
-    secure: /SzUKiO5Vi5nkyZ6e9YovA==
+    secure: 8G7oASWzzzsic0ngACjkHmj9FCR1cpQ+ahZVHH00npg=
   android: true
   ios: true
-before_build:
-  - nuget restore
+
+build_script:
+ - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
+ - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-23,android-19
+
 build:
   publish_nuget: true
   publish_nuget_symbols: true
