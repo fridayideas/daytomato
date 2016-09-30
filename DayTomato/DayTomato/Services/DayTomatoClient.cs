@@ -13,7 +13,7 @@ namespace DayTomato.Services
     public class DayTomatoClient
     {
         HttpClient httpClient;
-        private readonly string BASE_URL = "http://fridayideas-db.herokuapp.com";
+        private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
         
         public DayTomatoClient()
         {
@@ -22,18 +22,35 @@ namespace DayTomato.Services
         }
 
         // Get Pins
-        public async Task<string> GetPins()
+        public async Task<List<Pin>> GetPins()
         {
             List<Pin> pins = new List<Pin>();
             var uri = new Uri(BASE_URL + "/api/pins");
             var response = await httpClient.GetAsync(uri);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsStringAsync();
-                //pins = JsonConvert.DeserializeObject<List<Pin>>(content);
+                string content = await response.Content.ReadAsStringAsync();
+                pins = JsonConvert.DeserializeObject<List<Pin>>(content);
+                return pins;
             }
 
-            return "";
+            return null;
+        }
+
+        // Get Accounts
+        public async Task<Account> GetAccount(string accountId)
+        {
+            Account account = new Account();
+            var uri = new Uri(BASE_URL + "/api/account/" + accountId);
+            var response = await httpClient.GetAsync(uri);
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                account = JsonConvert.DeserializeObject<Account>(content);
+                return account;
+            }
+
+            return null;
         }
     }
 }

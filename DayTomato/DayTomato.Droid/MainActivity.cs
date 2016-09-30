@@ -20,8 +20,9 @@ namespace DayTomato.Droid
     [Activity(MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : FragmentActivity
     {
-        TabLayout tabLayout;
-        protected async override void OnCreate(Bundle bundle)
+        TabLayout _tabLayout;
+        DayTomatoClient _dayTomatoClient;
+        protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
@@ -30,17 +31,21 @@ namespace DayTomato.Droid
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
             toolbar.SetTitle(Resource.String.application_name);
 
-            tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
+            _tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
             InitTabLayout();
 
-            DayTomatoClient client = new DayTomatoClient();
-            string pins = await client.GetPins();
-            Console.WriteLine(pins);
+            _dayTomatoClient = new DayTomatoClient();
+            GetAllPins();
+        }
+
+        async void GetAllPins()
+        {
+            List<Pin> pins = await _dayTomatoClient.GetPins();
         }
 
         void InitTabLayout()
         {
-            tabLayout.SetTabTextColors(Android.Graphics.Color.White, Android.Graphics.Color.White);
+            _tabLayout.SetTabTextColors(Android.Graphics.Color.White, Android.Graphics.Color.White);
             //Fragment array
             var fragments = new Android.Support.V4.App.Fragment[]
             {
@@ -58,14 +63,14 @@ namespace DayTomato.Droid
             viewPager.Adapter = new TabsFragmentPagerAdapter(SupportFragmentManager, fragments, titles);
 
             // Give the TabLayout the ViewPager 
-            tabLayout.SetupWithViewPager(viewPager);
+            _tabLayout.SetupWithViewPager(viewPager);
             SetIcons();
         }
 
         void SetIcons()
         {
-            tabLayout.GetTabAt(0).SetIcon(Resource.Drawable.ic_home_white_24dp);
-            tabLayout.GetTabAt(1).SetIcon(Resource.Drawable.ic_place_white_24dp);
+            _tabLayout.GetTabAt(0).SetIcon(Resource.Drawable.ic_home_white_24dp);
+            _tabLayout.GetTabAt(1).SetIcon(Resource.Drawable.ic_place_white_24dp);
         }
 
         public void OnClick(IDialogInterface dialog, int which)
