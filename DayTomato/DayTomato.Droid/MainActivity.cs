@@ -1,27 +1,24 @@
 ﻿using Android.App;
-using Android.Widget;
 using Android.OS;
-using Android.Support.V7.App;
 using Android.Support.V4.App;
 using Android.Content;
-using Android.Support.V7.Widget;
 using Android.Support.Design.Widget;
 using Android.Runtime;
 using Android.Support.V4.View;
 using DayTomato.Droid.Fragments;
 using Java.Lang;
 using DayTomato.Services;
-using System.Collections.Generic;
-using DayTomato.Models;
-using System;
 
 namespace DayTomato.Droid
 {
     [Activity(MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : FragmentActivity
-    {
-        TabLayout _tabLayout;
-        DayTomatoClient _dayTomatoClient;
+	{
+		private static string _account;
+        private TabLayout _tabLayout;
+
+        public static DayTomatoClient dayTomatoClient;
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -31,31 +28,38 @@ namespace DayTomato.Droid
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
             toolbar.SetTitle(Resource.String.application_name);
 
+			// For testing only
+			_account = "admin";
+
+			// REST API Client
+			dayTomatoClient = new DayTomatoClient();
+
+			// Tabs
             _tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
             InitTabLayout();
-
-            _dayTomatoClient = new DayTomatoClient();
-            GetAllPins();
         }
 
-        async void GetAllPins()
-        {
-            List<Pin> pins = await _dayTomatoClient.GetPins();
-        }
+		public static string GetAccount()
+		{
+			return _account;
+		}
 
-        void InitTabLayout()
+		/*
+		 * TABS SECTION
+		 */
+		private void InitTabLayout()
         {
             _tabLayout.SetTabTextColors(Android.Graphics.Color.White, Android.Graphics.Color.White);
             //Fragment array
             var fragments = new Android.Support.V4.App.Fragment[]
             {
                 new HomeFragment(),
-                new CreatePinFragment()
+                new PinMapFragment()
             };
             //Tab title array
             var titles = CharSequence.ArrayFromStringArray(new[] {
                 "Home",
-                "Create Pin"
+                "Map"
             });
 
             var viewPager = FindViewById<ViewPager>(Resource.Id.main_viewpager);
@@ -78,7 +82,7 @@ namespace DayTomato.Droid
             dialog.Dismiss();
         }
 
-        public class TabsFragmentPagerAdapter : FragmentPagerAdapter
+		public class TabsFragmentPagerAdapter : FragmentPagerAdapter
         {
             private readonly Android.Support.V4.App.Fragment[] fragments;
 
