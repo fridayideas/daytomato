@@ -8,18 +8,26 @@ using Android.Support.V4.View;
 using DayTomato.Droid.Fragments;
 using Java.Lang;
 using DayTomato.Services;
+using Android.Gms.Maps.Model;
+using System.Threading.Tasks;
+using Plugin.Geolocator;
+using Android.Util;
+using DayTomato.Models;
 
 namespace DayTomato.Droid
 {
     [Activity(MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : FragmentActivity
 	{
-		private static string _account;
+		private static readonly string TAG = "MAIN_ACTIVITY";
+
         private TabLayout _tabLayout;
+		private static LatLng _currentLocation;
+		private static Account _account;
 
         public static DayTomatoClient dayTomatoClient;
 
-        protected override void OnCreate(Bundle bundle)
+        protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
@@ -28,20 +36,46 @@ namespace DayTomato.Droid
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
             toolbar.SetTitle(Resource.String.application_name);
 
-			// For testing only
-			_account = "admin";
-
 			// REST API Client
 			dayTomatoClient = new DayTomatoClient();
+
+			// Get location
+			_currentLocation = await GetUserLocation();
+			// Get user account
+			_account = await GetUserAccount();
 
 			// Tabs
             _tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
             InitTabLayout();
         }
 
-		public static string GetAccount()
+		public static async Task<Account> GetUserAccount()
 		{
+			//_account = await dayTomatoClient.GetAccount();
+			_account = new Account();
+			_account.Username = "admin";
+			_account.Id = "100";
+			_account.Pins = 42;
+			_account.Seeds = 43;
 			return _account;
+		}
+
+		public static async Task<LatLng> GetUserLocation()
+		{
+			var locator = CrossGeolocator.Current;
+			locator.DesiredAccuracy = 50;
+			try
+			{
+				var position = await locator.GetPositionAsync(timeoutMilliseconds: 20000);
+				_currentLocation = new LatLng(position.Latitude, position.Longitude);
+			}
+			catch (Exception ex)
+			{
+				Log.Error(TAG, ex.ToString());
+				_currentLocation = new LatLng(0.0, 0.0);
+			}
+
+			return _currentLocation;
 		}
 
 		/*
