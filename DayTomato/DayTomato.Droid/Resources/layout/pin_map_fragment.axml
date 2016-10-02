@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_add_location_white_18dp"
+        android:id="@+id/map_create_pin_fab" />
+    <Button
+        android:text="Select Location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_create_pin_select_button"
+        android:background="@color/white"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="bottom"
+        android:enabled="false"
+        android:visibility="invisible" />
+    <ImageView
+        android:src="@drawable/select_location_pin"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_create_pin_select_location_pin"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        tools:visibility="invisible"
+        android:cropToPadding="true" />
+</FrameLayout>

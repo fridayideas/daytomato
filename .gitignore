@@ -9,10 +9,18 @@
 *.class
 
 # Generated files
-bin/
 gen/
 out/
-obj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
 
 # Gradle files
 .gradle/
@@ -43,5 +51,29 @@ captures/
 # Visual Studio 2015 cache/options directory
 .vs/
 
-#VS Packages Folder
+#mac
+*.DS_Store
+
+#xamarin
+Components
 packages/
+Resource.designer.cs
+
+*.pidb
+*.userprefs
+*.swp
+*.nib
+*.pfx
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+
