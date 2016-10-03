@@ -78,6 +78,16 @@ namespace DayTomato.Droid
 			return _currentLocation;
 		}
 
+		public static Account GetAccount()
+		{
+			return _account;
+		}
+
+		public static LatLng GetLocation()
+		{
+			return _currentLocation;
+		}
+
 		/*
 		 * TABS SECTION
 		 */

@@ -138,10 +138,7 @@ namespace DayTomato.Droid
 
 		void HandleClick(object sender, EventArgs e)
 		{
-			if (_listener != null)
-			{
-				_listener(base.AdapterPosition);
-			}
+			_listener?.Invoke(base.AdapterPosition);
 		}
 	}
 }

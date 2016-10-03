@@ -24,48 +24,36 @@ namespace DayTomato.Models
 	[JsonConverter(typeof(PinConverter))]
 	public class Pin
 	{
-		private string _id;
-		private int _type;
-		private string _name;
-		private float _rating;
-		private string _description;
-		private int _likes;
-		private double _latitude;
-		private double _longitude;
-		private string _linkedAccount;
-		private List<Review> _reviews;
-		private DateTime _createDate;
-
 		public Pin() { }
 
 		public Pin(int type, string name, float rating, string description, int likes, double lat, double lng, string account, DateTime date)
 		{
-			_type = type;
-			_name = name;
-			_rating = rating;
-			_description = description;
-			_likes = likes;
-			_latitude = lat;
-			_longitude = lng;
-			_linkedAccount = account;
-			_reviews = new List<Review>();
-			_createDate = date;
+			Type = type;
+			Name = name;
+			Rating = rating;
+			Description = description;
+			Likes = likes;
+			Latitude = lat;
+			Longitude = lng;
+			LinkedAccount = account;
+			Reviews = new List<Review>();
+			CreateDate = date;
 		}
 
-		public string Id { get { return _id; } set { _id = value; } }
+		public string Id { get; set; }
 
 		// Type of pin depends on the amount of seeds the user has
 		// 0-10 seeds normal user; 10-50 seeds, ...
-		public int Type { get { return _type; } set { _type = value; } }
-		public string Name { get { return _name; } set { _name = value; } }
-		public float Rating { get { return _rating; } set { _rating = value; } }
-		public string Description { get { return _description; } set { _description = value; } }
-		public int Likes { get { return _likes; } set { _likes = value; } }
-		public double Latitude { get { return _latitude; } set { _latitude = value; } }
-		public double Longitude { get { return _longitude; } set { _longitude = value; } }
-		public string LinkedAccount { get { return _linkedAccount; } set { _linkedAccount = value; } }
-		public List<Review> Reviews { get { return _reviews; } set { _reviews = value; } }
-		public DateTime CreateDate { get { return _createDate; } set { _createDate = value; } }
+		public int Type { get; set; }
+		public string Name { get; set; }
+		public float Rating { get; set; }
+		public string Description { get; set; }
+		public int Likes { get; set; }
+		public double Latitude { get; set; }
+		public double Longitude { get; set; }
+		public string LinkedAccount { get; set; }
+		public List<Review> Reviews { get; set; }
+		public DateTime CreateDate { get; set; }
 
 	}
 
@@ -158,18 +146,15 @@ namespace DayTomato.Models
 
 	public class Review
 	{
-		private string _linkedAccount;
-		private string _text;
-		private DateTime _createDate;
 		public Review(string account, string text, DateTime date)
 		{
-			_linkedAccount = account;
-			_text = text;
-			_createDate = date;
+			LinkedAccount = account;
+			Text = text;
+			CreateDate = date;
 		}
 
-		public string LinkedAccount { get {return _linkedAccount;} set {_linkedAccount = value;} }
-		public string Text { get { return _text; } set { _text = value;} }
-		public DateTime CreateDate { get { return _createDate; } set { _createDate = value;} }
-    }
+		public string LinkedAccount { get; set; } 
+		public string Text { get; set; }
+		public DateTime CreateDate { get; set; }
+	}
 }

@@ -52,7 +52,6 @@ namespace DayTomato.Droid.Fragments
 		{
 			base.OnStart();
 			await InitMapFragment();				// Wait for map to initialize
-			await MoveViewToCurrentLocation();		// Then wait for user location and then move camera
 		}
 
 		private async Task InitMapFragment()
@@ -96,22 +95,31 @@ namespace DayTomato.Droid.Fragments
 			_map.MapType = GoogleMap.MapTypeNormal;         // Set the type of map to normal
 			_map.SetOnCameraChangeListener(this);           // When the user moves the map, this will listen
 			_map.SetOnMarkerClickListener(this);
-			for (int i = 0; i < _pins.Count; ++i)
-			{
-				CreatePin(_pins[i]);
-			}
-		}
 
-		// Get the current location first, then move the camera to the current location
-		private async Task MoveViewToCurrentLocation()
-		{
-			_currentLocation = await MainActivity.GetUserLocation();
+			// Wait for location, should be relatively quick, then move camera
+			while (_currentLocation == null)
+			{
+				_currentLocation = MainActivity.GetLocation();
+			}
 			CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
 			builder.Target(_currentLocation);
 			builder.Zoom(18);
 			CameraPosition cameraPosition = builder.Build();
 			CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
 			_map.MoveCamera(cameraUpdate);
+
+			// Load pins onto map
+			UpdateMap();
+		}
+
+		// Update pins on map when view changes
+		private void UpdateMap()
+		{
+			// Load pins onto map
+			for (int i = 0; i < _pins.Count; ++i)
+			{
+				CreatePin(_pins[i]);
+			}
 		}
 
 		private void SetListeners()
@@ -182,16 +190,19 @@ namespace DayTomato.Droid.Fragments
 		// Event listener, when the dialog is closed, this will get called
 		public async void OnDialogClosed(object sender, DialogEventArgs e)
 		{
-			Account account = await MainActivity.GetUserAccount();
-			Pin pin = new Pin(0,
-							  e.Name,
-							  e.Rating,
-			                  e.Description, 
-			                  0, 
-			                  _selectLocation.Latitude, 
-			                  _selectLocation.Longitude, 
-			                  account.Id,
-			                  DateTime.Today);
+			Account account = MainActivity.GetAccount();
+			Pin pin = new Pin
+			{
+				Type = 0,
+				Name = e.Name,
+				Rating = e.Rating,
+				Description = e.Description,
+				Likes = 0,
+				Latitude = _selectLocation.Latitude,
+				Longitude = _selectLocation.Longitude,
+				LinkedAccount = account.Id,
+				CreateDate = DateTime.Today
+			};
 			_pins.Add(pin);
 			CreatePin(pin);
 			await MainActivity.dayTomatoClient.CreatePin(pin);
