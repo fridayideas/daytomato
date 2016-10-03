@@ -88,7 +88,7 @@ namespace DayTomato.Droid
             var fragments = new Android.Support.V4.App.Fragment[]
             {
                 new HomeFragment(),
-                new PinMapFragment()
+                new MapFragment()
             };
             //Tab title array
             var titles = CharSequence.ArrayFromStringArray(new[] {
