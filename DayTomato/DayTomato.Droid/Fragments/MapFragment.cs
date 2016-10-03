@@ -28,6 +28,7 @@ namespace DayTomato.Droid.Fragments
 		private LatLng _selectLocation;
 		private LatLng _currentLocation;
 		private ImageView _selectLocationPin;
+		private TextView _estimateAddress;
 		private Dictionary<string, List<Pin>> _markerPins;
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -41,6 +42,7 @@ namespace DayTomato.Droid.Fragments
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
 			_selectLocationPin = (ImageView)view.FindViewById(Resource.Id.map_create_pin_select_location_pin);
+			_estimateAddress = (TextView)view.FindViewById(Resource.Id.map_fragment_estimate_address);
 
 			SetListeners();
 
@@ -125,7 +127,7 @@ namespace DayTomato.Droid.Fragments
 		private void SetListeners()
 		{
 			// Allows the user to select a location on the map
-			_createPin.Click += (sender, args) =>
+			_createPin.Click += async (sender, args) =>
 			{
 				// Switch button states
 				_selectLocationButton.Visibility = ViewStates.Visible;
@@ -133,11 +135,13 @@ namespace DayTomato.Droid.Fragments
 				_createPin.Visibility = ViewStates.Invisible;
 				_createPin.Enabled = false;
 				_selectLocationPin.Visibility = ViewStates.Visible;
+				_estimateAddress.Visibility = ViewStates.Visible;
 
 				// Get currently centered location
 				if (_selectLocation == null)
 				{
 					_selectLocation = _map.CameraPosition.Target;
+					_estimateAddress.Text = await ReverseGeocode(_selectLocation);
 				}
 			};
 
@@ -162,16 +166,10 @@ namespace DayTomato.Droid.Fragments
 				_createPin.Visibility = ViewStates.Visible;
 				_createPin.Enabled = true;
 				_selectLocationPin.Visibility = ViewStates.Invisible;
+				_estimateAddress.Visibility = ViewStates.Invisible;
 
 				// Reverse geocode coordinates
-				var geo = new Geocoder(Context);
-				var addresses = await geo.GetFromLocationAsync(_selectLocation.Latitude, _selectLocation.Longitude, 1);
-
-				string address = "Unknown Address";
-				if (addresses.Count > 0)
-				{
-					address = addresses[0].GetAddressLine(0);
-				}
+				string address = await ReverseGeocode(_selectLocation);
 
 				// Create and show the dialog.
 				Bundle bundle = new Bundle();
@@ -185,6 +183,20 @@ namespace DayTomato.Droid.Fragments
 				//Add fragment
 				createPinDialogFragment.Show(fm, "CreatePinDialog");
 			};
+		}
+
+		public async Task<string> ReverseGeocode(LatLng coordinates)
+		{
+			// Reverse geocode coordinates
+			var geo = new Geocoder(Context);
+			var addresses = await geo.GetFromLocationAsync(coordinates.Latitude, coordinates.Longitude, 1);
+
+			string address = "Unknown Address";
+			if (addresses.Count > 0)
+			{
+				address = addresses[0].GetAddressLine(0);
+			}
+			return address;
 		}
 
 		// Event listener, when the dialog is closed, this will get called
@@ -209,11 +221,12 @@ namespace DayTomato.Droid.Fragments
 		}
 
 		// When camera has finished moving, update the selected location
-		public void OnCameraChange(CameraPosition position)
+		public async void OnCameraChange(CameraPosition position)
 		{
 			if (_selectLocation != null && _map != null)
 			{
 				_selectLocation = position.Target;
+				_estimateAddress.Text = await ReverseGeocode(_selectLocation);
 			}
 		}
 
