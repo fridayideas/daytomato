@@ -90,18 +90,7 @@ namespace DayTomato.Droid.Fragments
 		// Get the current location first, then move the camera to the current location
 		private async Task MoveViewToCurrentLocation()
 		{
-			var locator = CrossGeolocator.Current;
-			locator.DesiredAccuracy = 50;
-			try
-			{
-				var position = await locator.GetPositionAsync(timeoutMilliseconds: 20000);
-				_currentLocation = new LatLng(position.Latitude, position.Longitude);
-			}
-			catch (Exception ex)
-			{
-				Log.Error(TAG, ex.ToString());
-				_currentLocation = new LatLng(0.0, 0.0);
-			}
+			_currentLocation = await MainActivity.GetUserLocation();
 			CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
 			builder.Target(_currentLocation);
 			builder.Zoom(18);
@@ -178,7 +167,8 @@ namespace DayTomato.Droid.Fragments
 		// Event listener, when the dialog is closed, this will get called
 		public async void OnDialogClosed(object sender, DialogEventArgs e)
 		{
-			Pin pin = new Pin(0, e.Name, e.Description, 0, _selectLocation.Latitude, _selectLocation.Longitude, MainActivity.GetAccount());
+			Account account = await MainActivity.GetUserAccount();
+			Pin pin = new Pin(0, e.Name, e.Description, 0, _selectLocation.Latitude, _selectLocation.Longitude, account.Id);
 			_pins.Add(pin);
 			CreatePin(pin);
 			await MainActivity.dayTomatoClient.CreatePin(pin);

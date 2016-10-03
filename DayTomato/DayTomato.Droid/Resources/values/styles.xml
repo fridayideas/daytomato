@@ -15,4 +15,9 @@
     <item name="android:windowFullscreen">true</item>
     <item name="android:windowContentOverlay">@null</item>
   </style>
+
+  <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/white</item>
+  </style>
+	
 </resources>

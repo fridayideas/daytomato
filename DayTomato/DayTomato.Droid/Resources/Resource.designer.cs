@@ -3164,6 +3164,9 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0143
 			public const int Animation_Design_BottomSheetDialog = 2131362115;
 			
+			// aapt resource value: 0x7f0a015e
+			public const int AppTabLayout = 2131362142;
+			
 			// aapt resource value: 0x7f0a015c
 			public const int AppTheme = 2131362140;
 			
