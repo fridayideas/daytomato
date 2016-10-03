@@ -78,6 +78,16 @@ namespace DayTomato.Droid
 			return _currentLocation;
 		}
 
+		public static Account GetAccount()
+		{
+			return _account;
+		}
+
+		public static LatLng GetLocation()
+		{
+			return _currentLocation;
+		}
+
 		/*
 		 * TABS SECTION
 		 */
@@ -88,7 +98,7 @@ namespace DayTomato.Droid
             var fragments = new Android.Support.V4.App.Fragment[]
             {
                 new HomeFragment(),
-                new PinMapFragment()
+                new MapFragment()
             };
             //Tab title array
             var titles = CharSequence.ArrayFromStringArray(new[] {

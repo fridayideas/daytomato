@@ -12,10 +12,12 @@ using Plugin.Geolocator;
 using Android.Locations;
 using System;
 using Android.Util;
+using Android.Content;
+using Newtonsoft.Json;
 
 namespace DayTomato.Droid.Fragments
 {
-    class PinMapFragment : Fragment, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener
+    class MapFragment : Fragment, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener, GoogleMap.IOnMarkerClickListener
     {
 		private readonly string TAG = "PIN_MAP_FRAGMENT";
 
@@ -26,14 +28,16 @@ namespace DayTomato.Droid.Fragments
 		private LatLng _selectLocation;
 		private LatLng _currentLocation;
 		private ImageView _selectLocationPin;
+		private Dictionary<string, List<Pin>> _markerPins;
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
 
-            var view = inflater.Inflate(Resource.Layout.pin_map_fragment, container, false);
+            var view = inflater.Inflate(Resource.Layout.map_fragment, container, false);
 
 			_pins = new List<Pin>();
+			_markerPins = new Dictionary<string, List<Pin>>();
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
 			_selectLocationPin = (ImageView)view.FindViewById(Resource.Id.map_create_pin_select_location_pin);
@@ -48,7 +52,6 @@ namespace DayTomato.Droid.Fragments
 		{
 			base.OnStart();
 			await InitMapFragment();				// Wait for map to initialize
-			await MoveViewToCurrentLocation();		// Then wait for user location and then move camera
 		}
 
 		private async Task InitMapFragment()
@@ -70,7 +73,18 @@ namespace DayTomato.Droid.Fragments
 				MarkerOptions marker = new MarkerOptions();
 				marker.SetPosition(new LatLng(pin.Latitude, pin.Longitude));
 				marker.SetTitle(pin.Name);
-				_map.AddMarker(marker);
+				Marker m = _map.AddMarker(marker);
+
+				if (_markerPins.ContainsKey(m.Id))
+				{
+					_markerPins[m.Id].Add(pin);
+
+				}
+				else
+				{
+					_markerPins.Add(m.Id, new List<Pin> { pin });
+				}
+
 			}
 		}
 
@@ -80,23 +94,32 @@ namespace DayTomato.Droid.Fragments
 			_map = googleMap;								// Get the instance of the map
 			_map.MapType = GoogleMap.MapTypeNormal;         // Set the type of map to normal
 			_map.SetOnCameraChangeListener(this);           // When the user moves the map, this will listen
+			_map.SetOnMarkerClickListener(this);
 
-			for (int i = 0; i < _pins.Count; ++i)
+			// Wait for location, should be relatively quick, then move camera
+			while (_currentLocation == null)
 			{
-				CreatePin(_pins[i]);
+				_currentLocation = MainActivity.GetLocation();
 			}
-		}
-
-		// Get the current location first, then move the camera to the current location
-		private async Task MoveViewToCurrentLocation()
-		{
-			_currentLocation = await MainActivity.GetUserLocation();
 			CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
 			builder.Target(_currentLocation);
 			builder.Zoom(18);
 			CameraPosition cameraPosition = builder.Build();
 			CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
 			_map.MoveCamera(cameraUpdate);
+
+			// Load pins onto map
+			UpdateMap();
+		}
+
+		// Update pins on map when view changes
+		private void UpdateMap()
+		{
+			// Load pins onto map
+			for (int i = 0; i < _pins.Count; ++i)
+			{
+				CreatePin(_pins[i]);
+			}
 		}
 
 		private void SetListeners()
@@ -167,8 +190,19 @@ namespace DayTomato.Droid.Fragments
 		// Event listener, when the dialog is closed, this will get called
 		public async void OnDialogClosed(object sender, DialogEventArgs e)
 		{
-			Account account = await MainActivity.GetUserAccount();
-			Pin pin = new Pin(0, e.Name, e.Description, 0, _selectLocation.Latitude, _selectLocation.Longitude, account.Id);
+			Account account = MainActivity.GetAccount();
+			Pin pin = new Pin
+			{
+				Type = 0,
+				Name = e.Name,
+				Rating = e.Rating,
+				Description = e.Description,
+				Likes = 0,
+				Latitude = _selectLocation.Latitude,
+				Longitude = _selectLocation.Longitude,
+				LinkedAccount = account.Id,
+				CreateDate = DateTime.Today
+			};
 			_pins.Add(pin);
 			CreatePin(pin);
 			await MainActivity.dayTomatoClient.CreatePin(pin);
@@ -181,6 +215,18 @@ namespace DayTomato.Droid.Fragments
 			{
 				_selectLocation = position.Target;
 			}
+		}
+
+		public bool OnMarkerClick(Marker marker)
+		{
+			List<Pin> pins = _markerPins[marker.Id];
+			string pinData = JsonConvert.SerializeObject(pins);
+
+			Intent intent = new Intent(Context, typeof(ViewPin));
+			intent.PutExtra("VIEW_PIN_TITLE", marker.Title);
+			intent.PutExtra("VIEW_PIN_DATA", pinData);
+			StartActivity(intent);
+			return true;
 		}
 	}
 }

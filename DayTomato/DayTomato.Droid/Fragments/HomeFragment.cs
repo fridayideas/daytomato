@@ -51,7 +51,10 @@ namespace DayTomato.Droid.Fragments
 
 		private async void InitInstances()
 		{
-			_account = await MainActivity.GetUserAccount();
+			while (_account == null)
+			{
+				_account = MainActivity.GetAccount();
+			}
 			_username.Text = _account.Username;
 			_pinCount.Text = _account.Pins.ToString();
 			_seedCount.Text = _account.Seeds.ToString();

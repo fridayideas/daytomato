@@ -100,6 +100,9 @@
     <Reference Include="Plugin.Geolocator">
       <HintPath>..\..\packages\Xam.Plugin.Geolocator.3.0.4\lib\MonoAndroid10\Plugin.Geolocator.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DayTomato\DayTomato.csproj">
@@ -108,12 +111,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fragments\PinMapFragment.cs" />
+    <Compile Include="Fragments\MapFragment.cs" />
     <Compile Include="Fragments\HomeFragment.cs" />
-    <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Fragments\CreatePinDialogFragment.cs" />
+    <Compile Include="Activities\ViewPin.cs" />
+    <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Adapters\ViewPinAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -123,27 +128,33 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Assets\AboutAssets.txt" />
-    <AndroidResource Include="Resources\layout\home_fragment.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\pin_map_fragment.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\app_bar.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\create_pin_dialog_fragment.axml" />
     <AndroidResource Include="Resources\drawable-mdpi\ic_place_black_24dp.png" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_place_black_24dp.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\ic_place_black_24dp.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_place_black_24dp.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_place_black_24dp.png" />
     <AndroidResource Include="Resources\drawable\select_location_pin.xml" />
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidResource Include="Resources\layout\create_pin_dialog_fragment.axml" />
+    <AndroidResource Include="Resources\layout\home_fragment.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\Main.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\map_fragment.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\view_pin.axml" />
+    <AndroidResource Include="Resources\layout\pin_view_holder.axml" />
+    <AndroidResource Include="Resources\drawable\down_arrow_filled.xml" />
+    <AndroidResource Include="Resources\drawable\down_arrow_unfilled.xml" />
+    <AndroidResource Include="Resources\drawable\up_arrow_filled.xml" />
+    <AndroidResource Include="Resources\drawable\up_arrow_unfilled.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -228,6 +239,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
+    <Folder Include="Activities\" />
+    <Folder Include="Adapters\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-v21\styles.xml" />
