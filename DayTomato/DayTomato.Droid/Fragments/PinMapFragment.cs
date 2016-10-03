@@ -15,7 +15,7 @@ using Android.Util;
 
 namespace DayTomato.Droid.Fragments
 {
-    class PinMapFragment : Fragment, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener
+    class PinMapFragment : Fragment, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener, GoogleMap.IOnMarkerClickListener
     {
 		private readonly string TAG = "PIN_MAP_FRAGMENT";
 
@@ -80,7 +80,7 @@ namespace DayTomato.Droid.Fragments
 			_map = googleMap;								// Get the instance of the map
 			_map.MapType = GoogleMap.MapTypeNormal;         // Set the type of map to normal
 			_map.SetOnCameraChangeListener(this);           // When the user moves the map, this will listen
-
+			_map.SetOnMarkerClickListener(this);
 			for (int i = 0; i < _pins.Count; ++i)
 			{
 				CreatePin(_pins[i]);
@@ -191,6 +191,16 @@ namespace DayTomato.Droid.Fragments
 			{
 				_selectLocation = position.Target;
 			}
+		}
+
+		public bool OnMarkerClick(Marker marker)
+		{
+			ViewPinFragment vpf = new ViewPinFragment();
+			FragmentManager.BeginTransaction()
+			               .Replace(Resource.Layout.view_pin_fragment, vpf)
+			               .AddToBackStack("ViewPinFragment")
+			               .Commit();
+			return true;
 		}
 	}
 }
