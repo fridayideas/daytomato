@@ -23,6 +23,7 @@ namespace DayTomato.Droid.Fragments
 
 		private FloatingActionButton _createPin;
 		private Button _selectLocationButton;
+		private Button _cancelLocationButton;
 		private GoogleMap _map;
 		private List<Pin> _pins;
 		private LatLng _selectLocation;
@@ -41,6 +42,7 @@ namespace DayTomato.Droid.Fragments
 			_markerPins = new Dictionary<string, List<Pin>>();
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
+			_cancelLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_cancel_selection);
 			_selectLocationPin = (ImageView)view.FindViewById(Resource.Id.map_create_pin_select_location_pin);
 			_estimateAddress = (TextView)view.FindViewById(Resource.Id.map_fragment_estimate_address);
 
@@ -132,6 +134,8 @@ namespace DayTomato.Droid.Fragments
 				// Switch button states
 				_selectLocationButton.Visibility = ViewStates.Visible;
 				_selectLocationButton.Enabled = true;
+				_cancelLocationButton.Visibility = ViewStates.Visible;
+				_cancelLocationButton.Enabled = true;
 				_createPin.Visibility = ViewStates.Invisible;
 				_createPin.Enabled = false;
 				_selectLocationPin.Visibility = ViewStates.Visible;
@@ -143,6 +147,19 @@ namespace DayTomato.Droid.Fragments
 					_selectLocation = _map.CameraPosition.Target;
 					_estimateAddress.Text = await ReverseGeocode(_selectLocation);
 				}
+			};
+
+			_cancelLocationButton.Click += (sender, e) =>
+			{ 
+				// Switch button states
+				_selectLocationButton.Visibility = ViewStates.Invisible;
+				_selectLocationButton.Enabled = false;
+				_cancelLocationButton.Visibility = ViewStates.Invisible;
+				_cancelLocationButton.Enabled = false;
+				_createPin.Visibility = ViewStates.Visible;
+				_createPin.Enabled = true;
+				_selectLocationPin.Visibility = ViewStates.Invisible;
+				_estimateAddress.Visibility = ViewStates.Invisible;
 			};
 
 			// User can select the location after clicking and the create a pin dialog shows
@@ -163,6 +180,8 @@ namespace DayTomato.Droid.Fragments
 				// Switch button states
 				_selectLocationButton.Visibility = ViewStates.Invisible;
 				_selectLocationButton.Enabled = false;
+				_cancelLocationButton.Visibility = ViewStates.Invisible;
+				_cancelLocationButton.Enabled = false;
 				_createPin.Visibility = ViewStates.Visible;
 				_createPin.Enabled = true;
 				_selectLocationPin.Visibility = ViewStates.Invisible;

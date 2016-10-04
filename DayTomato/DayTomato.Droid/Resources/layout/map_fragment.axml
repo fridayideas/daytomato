@@ -25,17 +25,6 @@
         android:layout_gravity="center"
         android:visibility="invisible"
         android:cropToPadding="true" />
-    <Button
-        android:text="Select Location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/map_create_pin_select_button"
-        android:background="@color/white"
-        android:textColor="@color/colorPrimary"
-        android:layout_gravity="bottom"
-        android:enabled="false"
-        android:visibility="invisible"
-        android:layout_marginBottom="48dp" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -45,4 +34,32 @@
         android:background="@color/white"
         android:visibility="invisible"
         android:gravity="center" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:layout_gravity="bottom"
+        android:weightSum="1">
+        <Button
+            android:text="Cancel"
+            android:id="@+id/map_create_pin_cancel_selection"
+            android:background="@color/white"
+            android:textColor="@color/colorPrimary"
+            android:enabled="false"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+        <Button
+            android:text="@android:string/ok"
+            android:id="@+id/map_create_pin_select_button"
+            android:background="@color/white"
+            android:textColor="@color/colorPrimary"
+            android:enabled="false"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
 </FrameLayout>
