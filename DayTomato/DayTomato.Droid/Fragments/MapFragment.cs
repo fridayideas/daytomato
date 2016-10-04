@@ -232,6 +232,10 @@ namespace DayTomato.Droid.Fragments
 				Latitude = _selectLocation.Latitude,
 				Longitude = _selectLocation.Longitude,
 				LinkedAccount = account.Id,
+				Reviews = new List<Review>
+				{
+					new Review(account.Id, e.Review, DateTime.Today)
+				},
 				CreateDate = DateTime.Today
 			};
 			_pins.Add(pin);
@@ -251,7 +255,9 @@ namespace DayTomato.Droid.Fragments
 
 		public bool OnMarkerClick(Marker marker)
 		{
+			// Get pins and sort them based on # of likes
 			List<Pin> pins = _markerPins[marker.Id];
+			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
 			string pinData = JsonConvert.SerializeObject(pins);
 
 			Intent intent = new Intent(Context, typeof(ViewPin));
