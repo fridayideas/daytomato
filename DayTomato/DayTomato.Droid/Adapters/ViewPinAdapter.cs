@@ -32,13 +32,13 @@ namespace DayTomato.Droid
 						Inflate(Resource.Layout.pin_view_holder, parent, false);
 
 			// Create a ViewHolder to hold view references inside the CardView
-			ViewHolder vh = new ViewHolder(itemView);
+			ViewPinViewHolder vh = new ViewPinViewHolder(itemView);
 			return vh;
 		}
 
 		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
-			ViewHolder vh = holder as ViewHolder;
+			ViewPinViewHolder vh = holder as ViewPinViewHolder;
 
 			//vh.PinImage.SetImageResource(imagesource);
 			vh.PinName.Text = _pins[position].Name;
@@ -95,7 +95,7 @@ namespace DayTomato.Droid
 		}
 	}
 
-	public class ViewHolder : RecyclerView.ViewHolder
+	public class ViewPinViewHolder : RecyclerView.ViewHolder
 	{
 		private Action<int> _listener;
 
@@ -108,7 +108,7 @@ namespace DayTomato.Droid
 		public TextView PinReview { get; private set; }
 		public TextView PinLinkedAccount { get; private set; }
 
-		public ViewHolder(View itemView) : base (itemView)
+		public ViewPinViewHolder(View itemView) : base (itemView)
 		{
 			PinImage = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_pin_image);
 			PinName = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_pin_name);

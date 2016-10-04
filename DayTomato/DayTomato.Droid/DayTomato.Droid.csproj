@@ -119,6 +119,9 @@
     <Compile Include="Activities\ViewPin.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Adapters\ViewPinAdapter.cs" />
+    <Compile Include="Fragments\TripFragment.cs" />
+    <Compile Include="Adapters\HomeFeedAdapter.cs" />
+    <Compile Include="Adapters\TripSuggestionAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -153,6 +156,10 @@
     <AndroidResource Include="Resources\drawable\down_arrow_unfilled.xml" />
     <AndroidResource Include="Resources\drawable\up_arrow_filled.xml" />
     <AndroidResource Include="Resources\drawable\up_arrow_unfilled.xml" />
+    <AndroidResource Include="Resources\layout\trip_fragment.axml" />
+    <AndroidResource Include="Resources\drawable\ic_directions_walk_white_24px.xml" />
+    <AndroidResource Include="Resources\layout\home_feed_view_holder.axml" />
+    <AndroidResource Include="Resources\layout\trip_suggestion_view_holder.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

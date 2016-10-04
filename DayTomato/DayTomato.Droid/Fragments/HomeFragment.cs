@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using Android.Gms.Maps.Model;
 using Android.Locations;
 using Android.OS;
 using Android.Support.V4.App;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
@@ -10,15 +12,17 @@ namespace DayTomato.Droid.Fragments
 {
     class HomeFragment : Fragment
     {
+		private List<string> _feed;
+
 		private TextView _username;
 		private ImageView _profilePicture;
 		private TextView _pinCount;
 		private TextView _seedCount;
-		private TextView _userLocation;
-		private EditText _budget;
-		private Button _makeMyTripButton;
 
-		private LatLng _currentLocation;
+		private RecyclerView _recyclerView;
+		private RecyclerView.LayoutManager _layoutManager;
+		private HomeFeedAdapter _adapter;
+
 		private Account _account;
 
         public override void OnCreate(Bundle savedInstanceState)
@@ -35,11 +39,14 @@ namespace DayTomato.Droid.Fragments
 			_profilePicture = (ImageView)view.FindViewById(Resource.Id.home_profile_picture);
 			_pinCount = (TextView)view.FindViewById(Resource.Id.home_seed_count);
 			_seedCount = (TextView)view.FindViewById(Resource.Id.home_pin_count);
-			_userLocation = (TextView)view.FindViewById(Resource.Id.home_current_location);
-			_budget = (EditText)view.FindViewById(Resource.Id.home_budget_edittext);
-			_makeMyTripButton = (Button)view.FindViewById(Resource.Id.home_make_my_trip);
 
 			InitInstances();
+
+			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.home_recycler_view);
+			_layoutManager = new LinearLayoutManager(Context);
+			_recyclerView.SetLayoutManager(_layoutManager);
+			_adapter = new HomeFeedAdapter(_feed);
+			_recyclerView.SetAdapter(_adapter);
 
             return view;
         }
@@ -59,18 +66,13 @@ namespace DayTomato.Droid.Fragments
 			_pinCount.Text = _account.Pins.ToString();
 			_seedCount.Text = _account.Seeds.ToString();
 
-			_currentLocation = await MainActivity.GetUserLocation();
-
-			// Reverse geocode coordinates
-			var geo = new Geocoder(Context);
-			var addresses = await geo.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 1);
-
-			string address = "Unknown Address";
-			if (addresses.Count > 0)
+			//TODO: Get feed from server
+			while (_feed == null)
 			{
-				address = addresses[0].GetAddressLine(0);
+				_feed = new List<string>();
+				_feed.Add("User 1 liked your pin");
+				_feed.Add("User 2 disliked your pin");
 			}
-			_userLocation.Text = address;
 		}
     }
 }
