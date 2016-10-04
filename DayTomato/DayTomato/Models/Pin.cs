@@ -12,6 +12,7 @@ namespace DayTomato.Models
         "rating": <string>,
         "description": <string>, 
         "likes" : <int>,
+        "cost" : <float>
         "coordinate": {
             "latitude": <double>,
             "longitude": <double>
@@ -73,7 +74,7 @@ namespace DayTomato.Models
 				pin.Id = (string)jo["_id"];                             // Id of pin
 				pin.Type = (int)jo["pinType"];                          // Type of pin
 				pin.Name = (string)jo["pinName"];                       // Name of pin
-				pin.Rating = (int)jo["rating"];                         // Rating of pin
+				pin.Rating = (float)jo["rating"];                       // Rating of pin
 				pin.Description = (string)jo["description"];            // Description of pin
 				pin.Likes = (int)jo["likes"];                           // Pin likes
 				pin.Latitude = (double)jo["coordinate"]["latitude"];    // Pin latitude
