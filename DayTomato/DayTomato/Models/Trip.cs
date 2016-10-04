@@ -8,14 +8,16 @@ namespace DayTomato.Models
 {
     public class Trip
     {
-        public Trip(List<Pin> pins)
+        public Trip(string name, string type)
         {
-            Pins = pins;
-            NumberOfActivities = pins.Count;
+            Name = name;
+            Type = type;
         }
 
         public List<Pin> Pins { get; set; }
         public long Duration { get; set; }
         public int NumberOfActivities { get; set; }
+		public string Name { get; set; }
+		public string Type { get; set; }
     }
 }

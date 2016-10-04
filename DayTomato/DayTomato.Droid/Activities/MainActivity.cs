@@ -98,12 +98,14 @@ namespace DayTomato.Droid
             var fragments = new Android.Support.V4.App.Fragment[]
             {
                 new HomeFragment(),
-                new MapFragment()
+                new MapFragment(),
+				new TripFragment()
             };
             //Tab title array
             var titles = CharSequence.ArrayFromStringArray(new[] {
                 "Home",
-                "Map"
+                "Map",
+				"Trips"
             });
 
             var viewPager = FindViewById<ViewPager>(Resource.Id.main_viewpager);
@@ -119,6 +121,7 @@ namespace DayTomato.Droid
         {
             _tabLayout.GetTabAt(0).SetIcon(Resource.Drawable.ic_home_white_24dp);
             _tabLayout.GetTabAt(1).SetIcon(Resource.Drawable.ic_place_white_24dp);
+			_tabLayout.GetTabAt(2).SetIcon(Resource.Drawable.ic_directions_walk_white_24px);
         }
 
         public void OnClick(IDialogInterface dialog, int which)

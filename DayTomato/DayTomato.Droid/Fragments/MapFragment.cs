@@ -8,10 +8,8 @@ using System.Collections.Generic;
 using DayTomato.Models;
 using System.Threading.Tasks;
 using Android.Widget;
-using Plugin.Geolocator;
 using Android.Locations;
 using System;
-using Android.Util;
 using Android.Content;
 using Newtonsoft.Json;
 
@@ -19,7 +17,7 @@ namespace DayTomato.Droid.Fragments
 {
     class MapFragment : Fragment, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener, GoogleMap.IOnMarkerClickListener
     {
-		private readonly string TAG = "PIN_MAP_FRAGMENT";
+		private readonly static string TAG = "PIN_MAP_FRAGMENT";
 
 		private FloatingActionButton _createPin;
 		private Button _selectLocationButton;
