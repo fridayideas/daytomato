@@ -77,6 +77,18 @@
             android:numStars="5"
             android:rating="0"
             android:stepSize="1" />
+        <TextView
+            android:text="Review"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:inputType="textMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_pin_dialog_review"
+            android:hint="Give a review"
+            android:textColor="@color/black" />
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_weight="1"

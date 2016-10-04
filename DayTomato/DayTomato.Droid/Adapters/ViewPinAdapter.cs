@@ -44,7 +44,7 @@ namespace DayTomato.Droid
 			vh.PinName.Text = _pins[position].Name;
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
 			vh.PinDescription.Text = _pins[position].Description;
-			vh.PinReview.Text = _pins[position].Reviews[position].Text;
+			vh.PinReview.Text = _pins[position].Reviews[0].Text;
 			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
 			vh.UpButton.Click += (sender, e) => 
 			{

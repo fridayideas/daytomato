@@ -19,7 +19,8 @@ namespace DayTomato.Droid
 		private TextView _selectedLocationText;							// Location that reverse geocoding got
 		private EditText _name;											// Name user will put
 		private EditText _description;									// Description user will put
-		private RatingBar _rating;										// Rating user will give
+		private RatingBar _rating;                                      // Rating user will give
+		private EditText _review;										// Review user will give
 		private bool _createPin;										// Check if they pressed create or not
 
 		public static CreatePinDialogFragment NewInstance(Bundle bundle)
@@ -39,6 +40,7 @@ namespace DayTomato.Droid
 			_name = (EditText)view.FindViewById(Resource.Id.create_pin_dialog_name);
 			_description = (EditText)view.FindViewById(Resource.Id.create_pin_dialog_text_description);
 			_rating = (RatingBar)view.FindViewById(Resource.Id.create_pin_dialog_rating);
+			_review = (EditText)view.FindViewById(Resource.Id.create_pin_dialog_review);
 
 			this.Dialog.SetCancelable(true);
 			this.Dialog.SetCanceledOnTouchOutside(true);
@@ -60,6 +62,7 @@ namespace DayTomato.Droid
 					Name = _name.Text,
 					Description = _description.Text,
 					Rating = _rating.Rating,
+					Review = _review.Text,
 					Location = new LatLng(Arguments.GetDouble("SELECTED_LOCATION_LATITUDE"),
 					                      Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")) 
 				});
@@ -96,5 +99,6 @@ namespace DayTomato.Droid
 		public LatLng Location { get; set; }
 		public string Description { get; set; }
 		public float Rating { get; set; }
+		public string Review { get; set; }
 	}
 }
