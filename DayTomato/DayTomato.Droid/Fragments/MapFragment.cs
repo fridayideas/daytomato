@@ -29,6 +29,7 @@ namespace DayTomato.Droid.Fragments
 		private ImageView _selectLocationPin;
 		private TextView _estimateAddress;
 		private Dictionary<string, List<Pin>> _markerPins;
+		private Dictionary<string, Polygon> _markerPolygons;
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -38,6 +39,7 @@ namespace DayTomato.Droid.Fragments
 
 			_pins = new List<Pin>();
 			_markerPins = new Dictionary<string, List<Pin>>();
+			_markerPolygons = new Dictionary<string, Polygon>();
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
 			_cancelLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_cancel_selection);
@@ -67,24 +69,97 @@ namespace DayTomato.Droid.Fragments
 			}
 		}
 
+		private bool PointInPolygon(LatLng coord, List<LatLng> vertices)
+		{
+			int intersectCount = 0;
+			for (int j = 0; j < vertices.Count - 1; j++)
+			{
+				if (RayCastIntersect(coord, vertices[j], vertices[j + 1]))
+				{
+					intersectCount++;
+				}
+			}
+
+			return ((intersectCount % 2) == 1); // odd = inside, even = outside;
+		}
+
+		private bool RayCastIntersect(LatLng coord, LatLng vertA, LatLng vertB)
+		{
+
+			double aY = vertA.Latitude;
+			double bY = vertB.Latitude;
+			double aX = vertA.Longitude;
+			double bX = vertB.Longitude;
+			double pY = coord.Latitude;
+			double pX = coord.Longitude;
+
+			if ((aY > pY && bY > pY) || (aY < pY && bY < pY)
+					|| (aX < pX && bX < pX))
+			{
+				return false; // a and b can't both be above or below pt.y, and a or
+							  // b must be east of pt.x
+			}
+
+			double m = (aY - bY) / (aX - bX); // Rise over run
+			double bee = (-aX) * m + aY; // y = mx + b
+			double x = (pY - bee) / m; // algebra is neat!
+
+			return x > pX;
+		}
+
+
 		// Can only be called if map is ready!
 		private void CreatePin(Pin pin)
 		{
 			if (_map != null)
 			{
-				MarkerOptions marker = new MarkerOptions();
-				marker.SetPosition(new LatLng(pin.Latitude, pin.Longitude));
-				marker.SetTitle(pin.Name);
-				Marker m = _map.AddMarker(marker);
+				// If a marker already exists within a certain diameter
+				// Then do not create a new marker, rather put it in dict
+				bool stack = false; string markerId = "";
+				LatLng coordinate = new LatLng(pin.Latitude, pin.Longitude);
 
-				if (_markerPins.ContainsKey(m.Id))
+				// Look at each polygon in all the polygons
+				foreach(var p in _markerPolygons)
 				{
-					_markerPins[m.Id].Add(pin);
+					// If the point is in the polygon, then we have to stack
+					if(PolyUtil.containsLocation(coordinate, new List<LatLng>(p.Value.Points), false))
+					{
+						stack = true;
+						markerId = p.Key;
+						break;
+					}
+			  	}
+				// If not stacking, create a new pin and new polygon
+				if (!stack)
+				{
+					PolygonOptions polyO = new PolygonOptions()
+					.Add(new LatLng(pin.Latitude - 0.0001, pin.Longitude - 0.0001),
+						 new LatLng(pin.Latitude - 0.0001, pin.Longitude + 0.0001),
+						 new LatLng(pin.Latitude + 0.0001, pin.Longitude + 0.0001),
+						 new LatLng(pin.Latitude + 0.0001, pin.Longitude - 0.0001))
+					.Visible(false);
 
+					Polygon poly = _map.AddPolygon(polyO);
+
+					MarkerOptions marker = new MarkerOptions();
+					marker.SetPosition(new LatLng(pin.Latitude, pin.Longitude));
+					marker.SetTitle(pin.Name);
+					Marker m = _map.AddMarker(marker);
+
+					if (_markerPins.ContainsKey(m.Id))
+					{
+						_markerPins[m.Id].Add(pin);
+					}
+					else
+					{
+						_markerPins.Add(m.Id, new List<Pin> { pin });
+						_markerPolygons[m.Id] = poly;
+					}
 				}
-				else
+				// Otherwise, just add a new pin at the same marker
+				else 
 				{
-					_markerPins.Add(m.Id, new List<Pin> { pin });
+					_markerPins[markerId].Add(pin);
 				}
 
 			}
@@ -95,6 +170,7 @@ namespace DayTomato.Droid.Fragments
 		{
 			_map = googleMap;								// Get the instance of the map
 			_map.MapType = GoogleMap.MapTypeNormal;         // Set the type of map to normal
+			_map.MyLocationEnabled = true;
 			_map.SetOnCameraChangeListener(this);           // When the user moves the map, this will listen
 			_map.SetOnMarkerClickListener(this);
 
