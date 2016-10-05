@@ -6,18 +6,19 @@ namespace DayTomato.Droid
 {
 	public class PolyUtil
 	{
+		
 		public static double ConvertToRadians(double angle)
 		{
 			return (Math.PI / 180) * angle;
 		}
 		/**
-     * Computes whether the given point lies inside the specified polygon.
-     * The polygon is always cosidered closed, regardless of whether the last point equals
-     * the first or not.
-     * Inside is defined as not containing the South Pole -- the South Pole is always outside.
-     * The polygon is formed of great circle segments if geodesic is true, and of rhumb
-     * (loxodromic) segments otherwise.
-     */
+	     * Computes whether the given point lies inside the specified polygon.
+	     * The polygon is always cosidered closed, regardless of whether the last point equals
+	     * the first or not.
+	     * Inside is defined as not containing the South Pole -- the South Pole is always outside.
+	     * The polygon is formed of great circle segments if geodesic is true, and of rhumb
+	     * (loxodromic) segments otherwise.
+	     */
 		public static bool containsLocation(LatLng point, List<LatLng> polygon, bool geodesic)
 		{
 			int size = polygon.Count;
