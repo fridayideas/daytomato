@@ -31,6 +31,8 @@ namespace DayTomato.Droid.Fragments
 		private Dictionary<string, List<Pin>> _markerPins;
 		private Dictionary<string, Polygon> _markerPolygons;
 
+		private const double POLY_RADIUS = 0.0001;
+
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
@@ -94,10 +96,10 @@ namespace DayTomato.Droid.Fragments
 				if (!stack)
 				{
 					PolygonOptions polyO = new PolygonOptions()
-					.Add(new LatLng(pin.Latitude - 0.0001, pin.Longitude - 0.0001),
-						 new LatLng(pin.Latitude - 0.0001, pin.Longitude + 0.0001),
-						 new LatLng(pin.Latitude + 0.0001, pin.Longitude + 0.0001),
-						 new LatLng(pin.Latitude + 0.0001, pin.Longitude - 0.0001))
+					.Add(new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude - POLY_RADIUS),
+						 new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude + POLY_RADIUS),
+						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
+						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
 					.Visible(false);
 
 					Polygon poly = _map.AddPolygon(polyO);
