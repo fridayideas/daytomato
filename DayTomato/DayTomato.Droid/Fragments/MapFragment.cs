@@ -29,6 +29,9 @@ namespace DayTomato.Droid.Fragments
 		private ImageView _selectLocationPin;
 		private TextView _estimateAddress;
 		private Dictionary<string, List<Pin>> _markerPins;
+		private Dictionary<string, Polygon> _markerPolygons;
+
+		private const double POLY_RADIUS = 0.0001;
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -38,6 +41,7 @@ namespace DayTomato.Droid.Fragments
 
 			_pins = new List<Pin>();
 			_markerPins = new Dictionary<string, List<Pin>>();
+			_markerPolygons = new Dictionary<string, Polygon>();
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
 			_cancelLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_cancel_selection);
@@ -72,19 +76,53 @@ namespace DayTomato.Droid.Fragments
 		{
 			if (_map != null)
 			{
-				MarkerOptions marker = new MarkerOptions();
-				marker.SetPosition(new LatLng(pin.Latitude, pin.Longitude));
-				marker.SetTitle(pin.Name);
-				Marker m = _map.AddMarker(marker);
+				// If a marker already exists within a certain diameter
+				// Then do not create a new marker, rather put it in dict
+				bool stack = false; string markerId = "";
+				LatLng coordinate = new LatLng(pin.Latitude, pin.Longitude);
 
-				if (_markerPins.ContainsKey(m.Id))
+				// Look at each polygon in all the polygons
+				foreach(var p in _markerPolygons)
 				{
-					_markerPins[m.Id].Add(pin);
+					// If the point is in the polygon, then we have to stack
+					if(PolyUtil.containsLocation(coordinate, new List<LatLng>(p.Value.Points), false))
+					{
+						stack = true;
+						markerId = p.Key;
+						break;
+					}
+			  	}
+				// If not stacking, create a new pin and new polygon
+				if (!stack)
+				{
+					PolygonOptions polyO = new PolygonOptions()
+					.Add(new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude - POLY_RADIUS),
+						 new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude + POLY_RADIUS),
+						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
+						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
+					.Visible(false);
 
+					Polygon poly = _map.AddPolygon(polyO);
+
+					MarkerOptions marker = new MarkerOptions();
+					marker.SetPosition(new LatLng(pin.Latitude, pin.Longitude));
+					marker.SetTitle(pin.Name);
+					Marker m = _map.AddMarker(marker);
+
+					if (_markerPins.ContainsKey(m.Id))
+					{
+						_markerPins[m.Id].Add(pin);
+					}
+					else
+					{
+						_markerPins.Add(m.Id, new List<Pin> { pin });
+						_markerPolygons[m.Id] = poly;
+					}
 				}
-				else
+				// Otherwise, just add a new pin at the same marker
+				else 
 				{
-					_markerPins.Add(m.Id, new List<Pin> { pin });
+					_markerPins[markerId].Add(pin);
 				}
 
 			}
@@ -95,6 +133,7 @@ namespace DayTomato.Droid.Fragments
 		{
 			_map = googleMap;								// Get the instance of the map
 			_map.MapType = GoogleMap.MapTypeNormal;         // Set the type of map to normal
+			_map.MyLocationEnabled = true;
 			_map.SetOnCameraChangeListener(this);           // When the user moves the map, this will listen
 			_map.SetOnMarkerClickListener(this);
 

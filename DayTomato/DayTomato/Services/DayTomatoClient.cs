@@ -13,8 +13,14 @@ namespace DayTomato.Services
     public class DayTomatoClient
     {
         HttpClient httpClient;
-        private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
-        
+
+#if DEBUG
+		private readonly string BASE_URL = "http://10.0.2.2:8080";
+#else
+		private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
+#endif
+
+
         public DayTomatoClient()
         {
             httpClient = new HttpClient();
