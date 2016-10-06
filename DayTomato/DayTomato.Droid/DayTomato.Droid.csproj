@@ -103,15 +103,14 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="GoogleMapsUtilityBinding">
+      <HintPath>DLL\GoogleMapsUtilityBinding.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DayTomato\DayTomato.csproj">
       <Name>DayTomato</Name>
       <Project>{0E25C9AF-3FC4-4AAA-8C00-A517BFBD987E}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Xamarin.Android.Maps.Utils\GoogleMapsUtilityBinding.csproj">
-      <Project>{BC829F65-B3B0-43C3-A282-FD5497656434}</Project>
-      <Name>GoogleMapsUtilityBinding</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +165,7 @@
     <AndroidResource Include="Resources\drawable\ic_directions_walk_white_24px.xml" />
     <AndroidResource Include="Resources\layout\home_feed_view_holder.axml" />
     <AndroidResource Include="Resources\layout\trip_suggestion_view_holder.axml" />
+    <None Include="DLL\GoogleMapsUtilityBinding.dll" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
