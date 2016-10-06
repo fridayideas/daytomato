@@ -103,6 +103,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="GoogleMapsUtilityBinding">
+      <HintPath>DLL\GoogleMapsUtilityBinding.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DayTomato\DayTomato.csproj">
@@ -122,7 +125,8 @@
     <Compile Include="Fragments\TripFragment.cs" />
     <Compile Include="Adapters\HomeFeedAdapter.cs" />
     <Compile Include="Adapters\TripSuggestionAdapter.cs" />
-    <Compile Include="Util\PolyUtil.cs" />
+    <Compile Include="MapUtil\PolyUtil.cs" />
+    <Compile Include="MapUtil\ClusterPin.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -161,6 +165,7 @@
     <AndroidResource Include="Resources\drawable\ic_directions_walk_white_24px.xml" />
     <AndroidResource Include="Resources\layout\home_feed_view_holder.axml" />
     <AndroidResource Include="Resources\layout\trip_suggestion_view_holder.axml" />
+    <None Include="DLL\GoogleMapsUtilityBinding.dll" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
@@ -249,7 +254,7 @@
     <Folder Include="Resources\drawable\" />
     <Folder Include="Activities\" />
     <Folder Include="Adapters\" />
-    <Folder Include="Util\" />
+    <Folder Include="MapUtil\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-v21\styles.xml" />
