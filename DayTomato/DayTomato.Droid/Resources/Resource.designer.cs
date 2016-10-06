@@ -2182,7 +2182,7 @@ namespace DayTomato.Droid
 			public const int ic_place_white_24dp = 2130837631;
 			
 			// aapt resource value: 0x7f020080
-			public const int Icon = 2130837632;
+			public const int icon = 2130837632;
 			
 			// aapt resource value: 0x7f020084
 			public const int notification_template_icon_bg = 2130837636;

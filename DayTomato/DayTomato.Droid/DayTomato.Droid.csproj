@@ -161,6 +161,7 @@
     <AndroidResource Include="Resources\drawable\ic_directions_walk_white_24px.xml" />
     <AndroidResource Include="Resources\layout\home_feed_view_holder.axml" />
     <AndroidResource Include="Resources\layout\trip_suggestion_view_holder.axml" />
+    <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
