@@ -12,24 +12,32 @@ using Android.Locations;
 using System;
 using Android.Content;
 using Newtonsoft.Json;
+using Com.Google.Maps.Android.Clustering;
 
 namespace DayTomato.Droid.Fragments
 {
-    class MapFragment : Fragment, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener, GoogleMap.IOnMarkerClickListener
+    class MapFragment : Fragment, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener, 
+						ClusterManager.IOnClusterItemClickListener
     {
 		private readonly static string TAG = "PIN_MAP_FRAGMENT";
 
+		// Button to create new pin
 		private FloatingActionButton _createPin;
+
+		// Resources
 		private Button _selectLocationButton;
 		private Button _cancelLocationButton;
+		private ImageView _selectLocationPin;
+		private TextView _estimateAddress;
+
+		// Map related
 		private GoogleMap _map;
 		private List<Pin> _pins;
 		private LatLng _selectLocation;
 		private LatLng _currentLocation;
-		private ImageView _selectLocationPin;
-		private TextView _estimateAddress;
-		private Dictionary<string, List<Pin>> _markerPins;
-		private Dictionary<string, Polygon> _markerPolygons;
+		private Dictionary<long, List<Pin>> _markerPins;
+		private Dictionary<long, Polygon> _markerPolygons;
+		private ClusterManager _clusterManager;
 
 		private const double POLY_RADIUS = 0.0001;
 
@@ -40,8 +48,8 @@ namespace DayTomato.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.map_fragment, container, false);
 
 			_pins = new List<Pin>();
-			_markerPins = new Dictionary<string, List<Pin>>();
-			_markerPolygons = new Dictionary<string, Polygon>();
+			_markerPins = new Dictionary<long, List<Pin>>();
+			_markerPolygons = new Dictionary<long, Polygon>();
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
 			_cancelLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_cancel_selection);
@@ -78,7 +86,8 @@ namespace DayTomato.Droid.Fragments
 			{
 				// If a marker already exists within a certain diameter
 				// Then do not create a new marker, rather put it in dict
-				bool stack = false; string markerId = "";
+				bool stack = false; 
+				long markerId = 0;
 				LatLng coordinate = new LatLng(pin.Latitude, pin.Longitude);
 
 				// Look at each polygon in all the polygons
@@ -95,24 +104,24 @@ namespace DayTomato.Droid.Fragments
 				// If not stacking, create a new pin and new polygon
 				if (!stack)
 				{
-					PolygonOptions polyO = new PolygonOptions()
+					PolygonOptions polyOpt = new PolygonOptions()
 					.Add(new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude - POLY_RADIUS),
 						 new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude + POLY_RADIUS),
 						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
 						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
 					.Visible(false);
 
-					Polygon poly = _map.AddPolygon(polyO);
+					Polygon poly = _map.AddPolygon(polyOpt);
+					ClusterPin m = new ClusterPin(pin.Latitude, pin.Longitude);
+					m.Title = pin.Name;
+					_clusterManager.AddItem(m);
 
-					MarkerOptions marker = new MarkerOptions();
-					marker.SetPosition(new LatLng(pin.Latitude, pin.Longitude));
-					marker.SetTitle(pin.Name);
-					Marker m = _map.AddMarker(marker);
-
+					// If the marker already exists and we want to add a new pin
 					if (_markerPins.ContainsKey(m.Id))
 					{
 						_markerPins[m.Id].Add(pin);
 					}
+					// Else, we want a new marker with a new list
 					else
 					{
 						_markerPins.Add(m.Id, new List<Pin> { pin });
@@ -131,11 +140,18 @@ namespace DayTomato.Droid.Fragments
 		// Almost like a callback, gets called when the map is loaded
 		public void OnMapReady(GoogleMap googleMap)
 		{
+			// Initialize map
 			_map = googleMap;								// Get the instance of the map
 			_map.MapType = GoogleMap.MapTypeNormal;         // Set the type of map to normal
 			_map.MyLocationEnabled = true;
-			_map.SetOnCameraChangeListener(this);           // When the user moves the map, this will listen
-			_map.SetOnMarkerClickListener(this);
+
+			// Clustering
+			_clusterManager = new ClusterManager(Context, _map);
+			_clusterManager.SetOnClusterItemClickListener(this);
+
+			// Map Listeners
+			_map.SetOnCameraChangeListener(_clusterManager);// When the user moves the map, this will listen
+			_map.SetOnMarkerClickListener(_clusterManager);
 
 			// Wait for location, should be relatively quick, then move camera
 			while (_currentLocation == null)
@@ -290,15 +306,15 @@ namespace DayTomato.Droid.Fragments
 			}
 		}
 
-		public bool OnMarkerClick(Marker marker)
+		public bool OnClusterItemClick(Java.Lang.Object marker)
 		{
 			// Get pins and sort them based on # of likes
-			List<Pin> pins = _markerPins[marker.Id];
+			List<Pin> pins = _markerPins[((ClusterPin)marker).Id];
 			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
 			string pinData = JsonConvert.SerializeObject(pins);
 
 			Intent intent = new Intent(Context, typeof(ViewPin));
-			intent.PutExtra("VIEW_PIN_TITLE", marker.Title);
+			intent.PutExtra("VIEW_PIN_TITLE", ((ClusterPin)marker).Title);
 			intent.PutExtra("VIEW_PIN_DATA", pinData);
 			StartActivity(intent);
 			return true;

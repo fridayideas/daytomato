@@ -69,6 +69,11 @@ namespace DayTomato.Droid
 				var position = await locator.GetPositionAsync(timeoutMilliseconds: 20000);
 				_currentLocation = new LatLng(position.Latitude, position.Longitude);
 			}
+			catch (TaskCanceledException tc)
+			{
+				Log.Error(TAG, tc.Message);
+				_currentLocation = new LatLng(0.0, 0.0);
+			}
 			catch (Exception ex)
 			{
 				Log.Error(TAG, ex.ToString());
