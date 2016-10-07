@@ -24,7 +24,8 @@
         android:id="@+id/map_create_pin_select_location_pin"
         android:layout_gravity="center"
         android:visibility="invisible"
-        android:cropToPadding="true" />
+        android:cropToPadding="true"
+        android:layout_marginBottom="10dp" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="48dp"

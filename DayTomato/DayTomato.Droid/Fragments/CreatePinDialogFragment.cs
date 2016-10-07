@@ -12,7 +12,7 @@ namespace DayTomato.Droid
 {
 	public class CreatePinDialogFragment : DialogFragment
 	{
-		public event EventHandler<DialogEventArgs> DialogClosed;		// Event handler when user presses create
+		public event EventHandler<CreatePinDialogEventArgs> CreatePinDialogClosed;		// Event handler when user presses create
 		private Button _createPinButton;								// Create pin button
 		private Button _cancelButton;									// Cancel create pin button
 		private ImageView _image;										// TODO: Allow user to take photos
@@ -50,14 +50,20 @@ namespace DayTomato.Droid
 			return view;
 		}
 
+		public override void OnResume()
+		{
+			base.OnResume();
+			Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+		}
+
 		public override void OnDismiss(IDialogInterface dialog)
 		{
 			base.OnDismiss(dialog);
 
 			// Store and output data to the parent fragment
-			if (DialogClosed != null && _createPin)
+			if (CreatePinDialogClosed != null && _createPin)
 			{
-				DialogClosed(this, new DialogEventArgs
+				CreatePinDialogClosed(this, new CreatePinDialogEventArgs
 				{
 					Name = _name.Text,
 					Description = _description.Text,
@@ -93,7 +99,7 @@ namespace DayTomato.Droid
 		}
 	}
 
-	public class DialogEventArgs
+	public class CreatePinDialogEventArgs
 	{
 		public string Name { get; set; }
 		public LatLng Location { get; set; }
