@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Android.Widget;
 using Android.Locations;
 using System;
-using Android.Content;
 using Newtonsoft.Json;
 using Com.Google.Maps.Android.Clustering;
 
@@ -86,9 +85,9 @@ namespace DayTomato.Droid.Fragments
 			{
 				// If a marker already exists within a certain diameter
 				// Then do not create a new marker, rather put it in dict
-				bool stack = false; 
-				long markerId = 0;
-				LatLng coordinate = new LatLng(pin.Latitude, pin.Longitude);
+				var stack = false; 
+				var markerId = 0L;
+				var coordinate = new LatLng(pin.Latitude, pin.Longitude);
 
 				// Look at each polygon in all the polygons
 				foreach(var p in _markerPolygons)
@@ -104,29 +103,22 @@ namespace DayTomato.Droid.Fragments
 				// If not stacking, create a new pin and new polygon
 				if (!stack)
 				{
-					PolygonOptions polyOpt = new PolygonOptions()
+					var polyOpt = new PolygonOptions()
 					.Add(new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude - POLY_RADIUS),
 						 new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude + POLY_RADIUS),
 						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
 						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
 					.Visible(false);
 
-					Polygon poly = _map.AddPolygon(polyOpt);
-					ClusterPin m = new ClusterPin(pin.Latitude, pin.Longitude);
+					var poly = _map.AddPolygon(polyOpt);
+					var m = new ClusterPin(pin.Latitude, pin.Longitude);
 					m.Title = pin.Name;
 					_clusterManager.AddItem(m);
+					_clusterManager.Cluster();
 
-					// If the marker already exists and we want to add a new pin
-					if (_markerPins.ContainsKey(m.Id))
-					{
-						_markerPins[m.Id].Add(pin);
-					}
-					// Else, we want a new marker with a new list
-					else
-					{
-						_markerPins.Add(m.Id, new List<Pin> { pin });
-						_markerPolygons[m.Id] = poly;
-					}
+					// Add new pin
+					_markerPins.Add(m.Id, new List<Pin> { pin });
+					_markerPolygons[m.Id] = poly;
 				}
 				// Otherwise, just add a new pin at the same marker
 				else 
@@ -150,7 +142,7 @@ namespace DayTomato.Droid.Fragments
 			_clusterManager.SetOnClusterItemClickListener(this);
 
 			// Map Listeners
-			_map.SetOnCameraChangeListener(_clusterManager);// When the user moves the map, this will listen
+			_map.SetOnCameraChangeListener(this);// When the user moves the map, this will listen
 			_map.SetOnMarkerClickListener(_clusterManager);
 
 			// Wait for location, should be relatively quick, then move camera
@@ -158,11 +150,11 @@ namespace DayTomato.Droid.Fragments
 			{
 				_currentLocation = MainActivity.GetLocation();
 			}
-			CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+			var builder = CameraPosition.InvokeBuilder();
 			builder.Target(_currentLocation);
 			builder.Zoom(18);
-			CameraPosition cameraPosition = builder.Build();
-			CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+			var cameraPosition = builder.Build();
+			var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
 			_map.MoveCamera(cameraUpdate);
 
 			// Load pins onto map
@@ -216,45 +208,47 @@ namespace DayTomato.Droid.Fragments
 			};
 
 			// User can select the location after clicking and the create a pin dialog shows
-			_selectLocationButton.Click += async (sender, args) =>
+			_selectLocationButton.Click += (sender, e) => { CreatePinDialog(); }; 
+		}
+
+		async void CreatePinDialog()
+		{
+			var fm = FragmentManager;
+			var ft = fm.BeginTransaction();
+
+			//Remove fragment else it will crash as it is already added to backstack
+			var prev = fm.FindFragmentByTag("CreatePinDialog");
+			if (prev != null)
 			{
-				var fm = FragmentManager;
-				FragmentTransaction ft = fm.BeginTransaction();
+				ft.Remove(prev);
+			}
 
-				//Remove fragment else it will crash as it is already added to backstack
-				Fragment prev = fm.FindFragmentByTag("CreatePinDialog");
-				if (prev != null)
-				{
-					ft.Remove(prev);
-				}
+			ft.AddToBackStack(null);
 
-				ft.AddToBackStack(null);
+			// Switch button states
+			_selectLocationButton.Visibility = ViewStates.Invisible;
+			_selectLocationButton.Enabled = false;
+			_cancelLocationButton.Visibility = ViewStates.Invisible;
+			_cancelLocationButton.Enabled = false;
+			_createPin.Visibility = ViewStates.Visible;
+			_createPin.Enabled = true;
+			_selectLocationPin.Visibility = ViewStates.Invisible;
+			_estimateAddress.Visibility = ViewStates.Invisible;
 
-				// Switch button states
-				_selectLocationButton.Visibility = ViewStates.Invisible;
-				_selectLocationButton.Enabled = false;
-				_cancelLocationButton.Visibility = ViewStates.Invisible;
-				_cancelLocationButton.Enabled = false;
-				_createPin.Visibility = ViewStates.Visible;
-				_createPin.Enabled = true;
-				_selectLocationPin.Visibility = ViewStates.Invisible;
-				_estimateAddress.Visibility = ViewStates.Invisible;
+			// Reverse geocode coordinates
+			var address = await ReverseGeocode(_selectLocation);
 
-				// Reverse geocode coordinates
-				string address = await ReverseGeocode(_selectLocation);
+			// Create and show the dialog.
+			var bundle = new Bundle();
+			bundle.PutString("SELECTED_LOCATION", address);
+			bundle.PutDouble("SELECTED_LOCATION_LATITUDE", _selectLocation.Latitude);
+			bundle.PutDouble("SELECTED_LOCATION_LONGITUDE", _selectLocation.Longitude);
 
-				// Create and show the dialog.
-				Bundle bundle = new Bundle();
-				bundle.PutString("SELECTED_LOCATION", address);
-				bundle.PutDouble("SELECTED_LOCATION_LATITUDE", _selectLocation.Latitude);
-				bundle.PutDouble("SELECTED_LOCATION_LONGITUDE", _selectLocation.Longitude);
+			var createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
+			createPinDialogFragment.CreatePinDialogClosed += OnCreatePinDialogClosed;
 
-				CreatePinDialogFragment createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
-				createPinDialogFragment.DialogClosed += OnDialogClosed;
-
-				//Add fragment
-				createPinDialogFragment.Show(fm, "CreatePinDialog");
-			};
+			//Add fragment
+			createPinDialogFragment.Show(fm, "CreatePinDialog");
 		}
 
 		public async Task<string> ReverseGeocode(LatLng coordinates)
@@ -263,7 +257,7 @@ namespace DayTomato.Droid.Fragments
 			var geo = new Geocoder(Context);
 			var addresses = await geo.GetFromLocationAsync(coordinates.Latitude, coordinates.Longitude, 1);
 
-			string address = "Unknown Address";
+			var address = "Unknown Address";
 			if (addresses.Count > 0)
 			{
 				address = addresses[0].GetAddressLine(0);
@@ -272,10 +266,10 @@ namespace DayTomato.Droid.Fragments
 		}
 
 		// Event listener, when the dialog is closed, this will get called
-		public async void OnDialogClosed(object sender, DialogEventArgs e)
+		public async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
 		{
-			Account account = MainActivity.GetAccount();
-			Pin pin = new Pin
+			var account = MainActivity.GetAccount();
+			var pin = new Pin
 			{
 				Type = 0,
 				Name = e.Name,
@@ -299,6 +293,7 @@ namespace DayTomato.Droid.Fragments
 		// When camera has finished moving, update the selected location
 		public async void OnCameraChange(CameraPosition position)
 		{
+			_clusterManager.OnCameraChange(position);
 			if (_selectLocation != null && _map != null)
 			{
 				_selectLocation = position.Target;
@@ -309,15 +304,56 @@ namespace DayTomato.Droid.Fragments
 		public bool OnClusterItemClick(Java.Lang.Object marker)
 		{
 			// Get pins and sort them based on # of likes
-			List<Pin> pins = _markerPins[((ClusterPin)marker).Id];
+			var pins = _markerPins[((ClusterPin)marker).Id];
 			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
-			string pinData = JsonConvert.SerializeObject(pins);
+			var pinData = JsonConvert.SerializeObject(pins);
 
-			Intent intent = new Intent(Context, typeof(ViewPin));
-			intent.PutExtra("VIEW_PIN_TITLE", ((ClusterPin)marker).Title);
-			intent.PutExtra("VIEW_PIN_DATA", pinData);
-			StartActivity(intent);
+			var fm = FragmentManager;
+			var ft = fm.BeginTransaction();
+
+			//Remove fragment else it will crash as it is already added to backstack
+			var prev = fm.FindFragmentByTag("ViewPinDialog");
+			if (prev != null)
+			{
+				ft.Remove(prev);
+			}
+
+			ft.AddToBackStack(null);
+
+			// Switch button states
+			_selectLocationButton.Visibility = ViewStates.Invisible;
+			_selectLocationButton.Enabled = false;
+			_cancelLocationButton.Visibility = ViewStates.Invisible;
+			_cancelLocationButton.Enabled = false;
+			_createPin.Visibility = ViewStates.Invisible;
+			_createPin.Enabled = false;
+			_selectLocationPin.Visibility = ViewStates.Invisible;
+			_estimateAddress.Visibility = ViewStates.Invisible;
+
+			// Create and show the dialog.
+			var bundle = new Bundle();
+			bundle.PutString("VIEW_PIN_TITLE", ((ClusterPin)marker).Title);
+			bundle.PutString("VIEW_PIN_DATA", pinData);
+
+			var viewPinDialogFragment = ViewPinDialogFragment.NewInstance(bundle);
+			viewPinDialogFragment.ViewPinDialogClosed += OnViewPinDialogClosed;
+
+			//Add fragment
+			viewPinDialogFragment.Show(fm, "ViewPinDialog");
 			return true;
+		}
+
+		// Event listener, when the dialog is closed, this will get called
+		public void OnViewPinDialogClosed(object sender, ViewPinDialogEventArgs e)
+		{
+			if (e.Create)
+			{
+				CreatePinDialog();
+			}
+
+			// Switch button states
+			_createPin.Visibility = ViewStates.Visible;
+			_createPin.Enabled = true;
 		}
 	}
 }

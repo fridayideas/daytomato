@@ -2761,11 +2761,20 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a000a
 			public const int view_offset_helper = 2131361802;
 			
+			// aapt resource value: 0x7f0a00bd
+			public const int view_pin_dialog_add_button = 2131361981;
+			
+			// aapt resource value: 0x7f0a00bc
+			public const int view_pin_dialog_return_button = 2131361980;
+			
 			// aapt resource value: 0x7f0a00ba
-			public const int view_pin_recycler_view = 2131361978;
+			public const int view_pin_dialog_title = 2131361978;
 			
 			// aapt resource value: 0x7f0a00bb
-			public const int webview = 2131361979;
+			public const int view_pin_recycler_view = 2131361979;
+			
+			// aapt resource value: 0x7f0a00be
+			public const int webview = 2131361982;
 			
 			// aapt resource value: 0x7f0a0015
 			public const int wide = 2131361813;
@@ -3010,7 +3019,7 @@ namespace DayTomato.Droid
 			public const int trip_suggestion_view_holder = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int view_pin = 2130903100;
+			public const int view_pin_dialog_fragment = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
 			public const int webview = 2130903101;
