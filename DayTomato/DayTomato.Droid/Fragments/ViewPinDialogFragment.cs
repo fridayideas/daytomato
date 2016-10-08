@@ -44,7 +44,7 @@ namespace DayTomato.Droid
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_pin_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins);
+			_adapter = new ViewPinAdapter(_pins, Activity);
 			_recyclerView.SetAdapter(_adapter);
 
 			this.Dialog.SetCancelable(true);

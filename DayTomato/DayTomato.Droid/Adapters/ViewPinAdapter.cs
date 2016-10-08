@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Android.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
@@ -12,17 +13,19 @@ namespace DayTomato.Droid
 		private List<Pin> _pins;
 		private List<bool> _pinLiked;
 		private List<bool> _pinDisliked;
+		private Activity _context;
 
-		public ViewPinAdapter(List<Pin> pins)
+		public ViewPinAdapter(List<Pin> pins, Activity context)
 		{
 			_pins = pins;
 			_pinLiked = new List<bool>(new bool[pins.Count]);
 			_pinDisliked = new List<bool>(new bool[pins.Count]);
+			_context = context;
 		}
 
 		public override int ItemCount
 		{
-			get { return _pins.Count;}
+			get { return _pins.Count; }
 		}
 
 		public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
@@ -44,9 +47,41 @@ namespace DayTomato.Droid
 			vh.PinName.Text = _pins[position].Name;
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
 			vh.PinDescription.Text = _pins[position].Description;
-			vh.PinReview.Text = _pins[position].Reviews[0].Text;
+			vh.PinReview.Text = _pins[position].Review;
 			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
-			vh.UpButton.Click += (sender, e) => 
+
+			// Initializing listview
+			vh.CommentsAdapter = new ViewPinCommentsAdapter(_context, _pins[position].Comments);
+			// Make sure we can see the comments
+			vh.CommentsListView.RemoveAllViews();
+			for (int i = 0; i < vh.CommentsAdapter.Count; i++)
+			{
+				View v = vh.CommentsAdapter.GetView(i, null, vh.CommentsListView);
+				vh.CommentsListView.AddView(v);
+			}
+
+			// When clicking add comment, show an edit text
+			vh.AddComment.Click += (sender, e) => 
+			{
+				vh.AddCommentInput.Visibility = ViewStates.Visible;
+				vh.AddCommentButton.Visibility = ViewStates.Visible;
+			};
+
+			// When the user presses add, add the new comment
+			vh.AddCommentButton.Click += async (sender, e) => 
+			{
+				vh.AddCommentInput.Visibility = ViewStates.Gone;
+				vh.AddCommentButton.Visibility = ViewStates.Gone;
+
+				Account account = MainActivity.GetAccount();
+				await MainActivity.dayTomatoClient.AddCommentToPin(_pins[position],
+				                                                   vh.AddCommentInput.Text,
+				                                                   account.Id);
+				_pins[position].Comments.Add(new Comment(account.Id, vh.AddCommentInput.Text, DateTime.Today));
+				this.NotifyDataSetChanged();
+			};
+
+			vh.UpButton.Click += (sender, e) =>
 			{
 				// If the like and dislike button was not pressed, then its fresh
 				if (!_pinLiked[position] && !_pinDisliked[position])
@@ -107,8 +142,14 @@ namespace DayTomato.Droid
 		public TextView PinDescription { get; private set; }
 		public TextView PinReview { get; private set; }
 		public TextView PinLinkedAccount { get; private set; }
+		public TextView AddComment { get; private set; }
+		public EditText AddCommentInput { get; private set; }
+		public Button AddCommentButton { get; private set; }
 
-		public ViewPinViewHolder(View itemView) : base (itemView)
+		public LinearLayout CommentsListView { get; set; }
+		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
+
+		public ViewPinViewHolder(View itemView) : base(itemView)
 		{
 			PinImage = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_pin_image);
 			PinName = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_pin_name);
@@ -118,6 +159,10 @@ namespace DayTomato.Droid
 			PinDescription = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_description);
 			PinReview = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_review);
 			PinLinkedAccount = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_account);
+			CommentsListView = itemView.FindViewById<LinearLayout>(Resource.Id.pin_view_holder_comment_list);
+			AddComment = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_add_comment);
+			AddCommentInput = itemView.FindViewById<EditText>(Resource.Id.pin_view_holder_comment_edit_text);
+			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.pin_view_holder_add_comment_button);
 		}
 
 		public void SetClickListener(Action<int> listener)

@@ -279,10 +279,7 @@ namespace DayTomato.Droid.Fragments
 				Latitude = _selectLocation.Latitude,
 				Longitude = _selectLocation.Longitude,
 				LinkedAccount = account.Id,
-				Reviews = new List<Review>
-				{
-					new Review(account.Id, e.Review, DateTime.Today)
-				},
+				Review = e.Review,
 				CreateDate = DateTime.Today
 			};
 			_pins.Add(pin);
