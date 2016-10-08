@@ -54,10 +54,13 @@ namespace DayTomato.Droid
 			vh.CommentsAdapter = new ViewPinCommentsAdapter(_context, _pins[position].Comments);
 			// Make sure we can see the comments
 			vh.CommentsListView.RemoveAllViews();
-			for (int i = 0; i < vh.CommentsAdapter.Count; i++)
+			if (!vh.HideComments)
 			{
-				View v = vh.CommentsAdapter.GetView(i, null, vh.CommentsListView);
-				vh.CommentsListView.AddView(v);
+				for (int i = 0; i < vh.CommentsAdapter.Count; i++)
+				{
+					View v = vh.CommentsAdapter.GetView(i, null, vh.CommentsListView);
+					vh.CommentsListView.AddView(v);
+				}
 			}
 
 			// When clicking add comment, show an edit text
@@ -79,6 +82,30 @@ namespace DayTomato.Droid
 				                                                   account.Id);
 				_pins[position].Comments.Add(new Comment(account.Id, vh.AddCommentInput.Text, DateTime.Today));
 				this.NotifyDataSetChanged();
+			};
+
+			vh.ShowComments.Click += (sender, e) => 
+			{
+				vh.HideComments = !vh.HideComments;
+				if (vh.HideComments)
+				{
+					Console.WriteLine("Removing");
+					vh.CommentsListView.RemoveAllViews();
+					vh.CommentsListView.Visibility = ViewStates.Gone;
+					vh.ShowComments.Text = "show comments";
+				}
+				else
+				{
+					Console.WriteLine("Showing");
+					vh.CommentsListView.Visibility = ViewStates.Visible;
+					vh.ShowComments.Text = "hide comments";
+					vh.CommentsListView.RemoveAllViews();
+					for (int i = 0; i < vh.CommentsAdapter.Count; i++)
+					{
+						View v = vh.CommentsAdapter.GetView(i, null, vh.CommentsListView);
+						vh.CommentsListView.AddView(v);
+					}
+				}
 			};
 
 			vh.UpButton.Click += (sender, e) =>
@@ -145,6 +172,8 @@ namespace DayTomato.Droid
 		public TextView AddComment { get; private set; }
 		public EditText AddCommentInput { get; private set; }
 		public Button AddCommentButton { get; private set; }
+		public TextView ShowComments { get; private set; }
+		public bool HideComments { get; set; }
 
 		public LinearLayout CommentsListView { get; set; }
 		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
@@ -163,6 +192,8 @@ namespace DayTomato.Droid
 			AddComment = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_add_comment);
 			AddCommentInput = itemView.FindViewById<EditText>(Resource.Id.pin_view_holder_comment_edit_text);
 			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.pin_view_holder_add_comment_button);
+			ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
+			HideComments = true;
 		}
 
 		public void SetClickListener(Action<int> listener)
