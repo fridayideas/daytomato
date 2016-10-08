@@ -6,21 +6,6 @@ using System.Reflection;
 
 namespace DayTomato.Models
 {
-	/*
-    {
-        "_id": <ObjectId>
-        "rating": <string>,
-        "description": <string>, 
-        "likes" : <int>,
-        "cost" : <float>
-        "coordinate": {
-            "latitude": <double>,
-            "longitude": <double>
-        },
-        "linkedAccount": <ObjectId>, 
-        "reviews": <List>
-    }
-    */
 
 	[JsonConverter(typeof(PinConverter))]
 	public class Pin
@@ -37,7 +22,7 @@ namespace DayTomato.Models
 			Latitude = lat;
 			Longitude = lng;
 			LinkedAccount = account;
-			Reviews = new List<Review>();
+			Comments = new List<Comment>();
 			CreateDate = date;
 		}
 
@@ -53,7 +38,8 @@ namespace DayTomato.Models
 		public double Latitude { get; set; }
 		public double Longitude { get; set; }
 		public string LinkedAccount { get; set; }
-		public List<Review> Reviews { get; set; }
+		public string Review { get; set;}
+		public List<Comment> Comments { get; set; }
 		public DateTime CreateDate { get; set; }
 
 	}
@@ -77,6 +63,7 @@ namespace DayTomato.Models
 				pin.Rating = (float)jo["rating"];                       // Rating of pin
 				pin.Description = (string)jo["description"];            // Description of pin
 				pin.Likes = (int)jo["likes"];                           // Pin likes
+				pin.Review = (string)jo["review"];						// Pin review
 				pin.Latitude = (double)jo["coordinate"]["latitude"];    // Pin latitude
 				pin.Longitude = (double)jo["coordinate"]["longitude"];  // Pin longitude
 				pin.LinkedAccount = (string)jo["linkedAccount"];        // Pin linked account
@@ -87,23 +74,18 @@ namespace DayTomato.Models
 				// TODO:Catch error here
 			}
 
-			/* Rewviews
-             * Reviews are in this format:
+			/* Comments
+             * Comments are in this format:
              * [{"linkedAccount":111,"text":"LOOOOL","createDate":"2016-09-30T02:44:20.637Z"}]
              */
-			JArray ja = (JArray)jo["reviews"];
+			pin.Comments = new List<Comment>();
+			JArray ja = (JArray)jo["comments"];
 			for (int i = 0; i < ja.Count; ++i)
 			{
-				string reviewAccount = (string)ja[i]["linkedAccount"];
-				string reviewText = (string)ja[i]["text"];
-				DateTime reviewCreateDate = (DateTime)ja[i]["createDate"];
-				pin.Reviews = new List<Review>();
-				pin.Reviews.Add(new Review(reviewAccount, reviewText, reviewCreateDate));
-			}
-			if (ja.Count == 0)
-			{
-				pin.Reviews = new List<Review>();
-				pin.Reviews.Add(new Review(pin.LinkedAccount, "No Reviews", pin.CreateDate));
+				string account = (string)ja[i]["linkedAccount"];
+				string text = (string)ja[i]["text"];
+				DateTime date = (DateTime)ja[i]["createDate"];
+				pin.Comments.Add(new Comment(account, text, date));
 			}
 
 			return pin;
@@ -114,7 +96,7 @@ namespace DayTomato.Models
 			JObject jo = new JObject();
 
 			Pin pin = (Pin)value;
-
+			jo.Add("_id", pin.Id);
 			jo.Add("pinType", pin.Type);
 			jo.Add("pinName", pin.Name);
 			jo.Add("rating", pin.Rating);
@@ -125,29 +107,30 @@ namespace DayTomato.Models
 			jo.Add("coordinate", coordinates);
 			jo.Add("linkedAccount", pin.LinkedAccount);
 			jo.Add("likes", pin.Likes);
+			jo.Add("review", pin.Review);
 
 			JArray ja = new JArray();
-			if (pin.Reviews != null)
+			if (pin.Comments != null)
 			{
-				for (int i = 0; i < pin.Reviews.Count; ++i)
+				for (int i = 0; i < pin.Comments.Count; ++i)
 				{
 					JObject jr = new JObject();
-					jr.Add("linkedAccount", pin.Reviews[i].LinkedAccount);
-					jr.Add("text", pin.Reviews[i].Text);
-					jr.Add("createDate", pin.Reviews[i].CreateDate);
+					jr.Add("linkedAccount", pin.Comments[i].LinkedAccount);
+					jr.Add("text", pin.Comments[i].Text);
+					jr.Add("createDate", pin.Comments[i].CreateDate);
 					ja.Add(jr);
 				}
 			}
 
-			jo.Add("reviews", ja);
+			jo.Add("comments", ja);
 
 			jo.WriteTo(writer);
 		}
 	}
 
-	public class Review
+	public class Comment
 	{
-		public Review(string account, string text, DateTime date)
+		public Comment(string account, string text, DateTime date)
 		{
 			LinkedAccount = account;
 			Text = text;

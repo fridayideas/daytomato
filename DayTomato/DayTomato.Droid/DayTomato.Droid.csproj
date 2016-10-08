@@ -127,6 +127,7 @@
     <Compile Include="MapUtil\PolyUtil.cs" />
     <Compile Include="MapUtil\ClusterPin.cs" />
     <Compile Include="Fragments\ViewPinDialogFragment.cs" />
+    <Compile Include="Adapters\ViewPinCommentsAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -166,6 +167,7 @@
     <AndroidResource Include="Resources\layout\home_feed_view_holder.axml" />
     <AndroidResource Include="Resources\layout\trip_suggestion_view_holder.axml" />
     <None Include="DLL\GoogleMapsUtilityBinding.dll" />
+    <AndroidResource Include="Resources\layout\pin_comment_view_holder.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

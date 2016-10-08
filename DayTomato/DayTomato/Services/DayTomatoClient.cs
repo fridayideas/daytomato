@@ -70,11 +70,7 @@ namespace DayTomato.Services
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			var content = new StringContent(JsonConvert.SerializeObject(pin), Encoding.UTF8, "application/json");
 			var response = await httpClient.PostAsync(uri, content);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
 		// Delete Pin
@@ -82,11 +78,7 @@ namespace DayTomato.Services
 		{
 			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id);
 			var response = await httpClient.DeleteAsync(uri);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
 		// Update Pin
@@ -96,11 +88,7 @@ namespace DayTomato.Services
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			var content = new StringContent(JsonConvert.SerializeObject(pin), Encoding.UTF8, "application/json");
 			var response = await httpClient.PutAsync(uri, content);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
 		// Like Pin
@@ -108,11 +96,7 @@ namespace DayTomato.Services
 		{
 			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/likes");
 			var response = await httpClient.PutAsync(uri, null);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
 		// Dislike Pin
@@ -120,39 +104,30 @@ namespace DayTomato.Services
 		{
 			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/dislikes");
 			var response = await httpClient.PutAsync(uri, null);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
 		// Add a review 
 		// Need to pass {text:<string>, linkedAccount:<string>}
-		public async Task<bool> AddReviewToPin(Pin pin, JObject review)
+		public async Task<bool> AddCommentToPin(Pin pin, string text, string linkedAccount)
 		{
-			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/review");
+			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/comments");
+			JObject comment = new JObject();
+			comment.Add("text", text);
+			comment.Add("linkedAccount", linkedAccount);
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var content = new StringContent(review.ToString(), Encoding.UTF8, "application/json");
+			var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
 			var response = await httpClient.PostAsync(uri, content);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
 		// Delete a review 
 		// Need to pass the pin and account ID
 		public async Task<bool> DeleteReviewFromPin(Pin pin, string accountId)
 		{
-			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/reviews/" + accountId);
+			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/comments/" + accountId);
 			var response = await httpClient.DeleteAsync(uri);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
         // Get Accounts
@@ -179,11 +154,7 @@ namespace DayTomato.Services
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			var content = new StringContent(account.ToString(), Encoding.UTF8, "application/json");
 			var response = await httpClient.PostAsync(uri, content);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
 
 		// Change seed amount of account
@@ -192,11 +163,7 @@ namespace DayTomato.Services
 		{
 			var uri = new Uri(BASE_URL + "/api/accounts/seeds/" + accountId + "/" + amount);
 			var response = await httpClient.PutAsync(uri, null);
-			if (response.IsSuccessStatusCode)
-			{
-				return true;
-			}
-			return false;
+			return response.IsSuccessStatusCode;
 		}
     }
 }

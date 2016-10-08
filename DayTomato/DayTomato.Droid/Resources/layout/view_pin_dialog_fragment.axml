@@ -5,33 +5,36 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
+    <TextView
+        android:text="Pin"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_pin_dialog_title"
+        android:background="@color/colorPrimary"
+        android:padding="8dp" />
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:weightSum="1">
-        <TextView
-            android:text="Pin"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/view_pin_dialog_title"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp" />
+        android:weightSum="1"
+        android:id="@+id/linearLayout2">
         <android.support.v7.widget.RecyclerView
             android:scrollbars="vertical"
             android:id="@+id/view_pin_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.9" />
+            android:layout_weight="0.9"
+            android:layout_marginTop="8dp" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:id="@+id/linearLayout1"
             android:layout_weight="0.1">
             <Button
                 android:text="Return"

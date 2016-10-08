@@ -2290,9 +2290,6 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a00a0
 			public const int cancel_action = 2131361952;
 			
-			// aapt resource value: 0x7f0a00ab
-			public const int cardView1 = 2131361963;
-			
 			// aapt resource value: 0x7f0a0037
 			public const int center = 2131361847;
 			
@@ -2494,6 +2491,12 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a00a8
 			public const int line3 = 2131361960;
 			
+			// aapt resource value: 0x7f0a00c2
+			public const int linearLayout1 = 2131361986;
+			
+			// aapt resource value: 0x7f0a00c0
+			public const int linearLayout2 = 2131361984;
+			
 			// aapt resource value: 0x7f0a0019
 			public const int listMode = 2131361817;
 			
@@ -2560,8 +2563,26 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0035
 			public const int pin = 2131361845;
 			
+			// aapt resource value: 0x7f0a00ab
+			public const int pin_comment_text = 2131361963;
+			
 			// aapt resource value: 0x7f0a00b3
 			public const int pin_view_holder_account = 2131361971;
+			
+			// aapt resource value: 0x7f0a00b4
+			public const int pin_view_holder_add_comment = 2131361972;
+			
+			// aapt resource value: 0x7f0a00b6
+			public const int pin_view_holder_add_comment_button = 2131361974;
+			
+			// aapt resource value: 0x7f0a00b5
+			public const int pin_view_holder_comment_edit_text = 2131361973;
+			
+			// aapt resource value: 0x7f0a00b8
+			public const int pin_view_holder_comment_list = 2131361976;
+			
+			// aapt resource value: 0x7f0a00b7
+			public const int pin_view_holder_comment_list_view = 2131361975;
 			
 			// aapt resource value: 0x7f0a00b1
 			public const int pin_view_holder_description = 2131361969;
@@ -2716,11 +2737,11 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0059
 			public const int textSpacerNoButtons = 2131361881;
 			
-			// aapt resource value: 0x7f0a00b4
-			public const int textView1 = 2131361972;
+			// aapt resource value: 0x7f0a00b9
+			public const int textView1 = 2131361977;
 			
-			// aapt resource value: 0x7f0a00b5
-			public const int textView2 = 2131361973;
+			// aapt resource value: 0x7f0a00ba
+			public const int textView2 = 2131361978;
 			
 			// aapt resource value: 0x7f0a00a5
 			public const int time = 2131361957;
@@ -2740,17 +2761,17 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0080
 			public const int touch_outside = 2131361920;
 			
-			// aapt resource value: 0x7f0a00b6
-			public const int trip_current_location = 2131361974;
+			// aapt resource value: 0x7f0a00bb
+			public const int trip_current_location = 2131361979;
 			
-			// aapt resource value: 0x7f0a00b7
-			public const int trip_recycler_view = 2131361975;
+			// aapt resource value: 0x7f0a00bc
+			public const int trip_recycler_view = 2131361980;
 			
-			// aapt resource value: 0x7f0a00b8
-			public const int trip_suggestion_name = 2131361976;
+			// aapt resource value: 0x7f0a00bd
+			public const int trip_suggestion_name = 2131361981;
 			
-			// aapt resource value: 0x7f0a00b9
-			public const int trip_suggestion_type = 2131361977;
+			// aapt resource value: 0x7f0a00be
+			public const int trip_suggestion_type = 2131361982;
 			
 			// aapt resource value: 0x7f0a0009
 			public const int up = 2131361801;
@@ -2761,20 +2782,20 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a000a
 			public const int view_offset_helper = 2131361802;
 			
-			// aapt resource value: 0x7f0a00bd
-			public const int view_pin_dialog_add_button = 2131361981;
+			// aapt resource value: 0x7f0a00c4
+			public const int view_pin_dialog_add_button = 2131361988;
 			
-			// aapt resource value: 0x7f0a00bc
-			public const int view_pin_dialog_return_button = 2131361980;
+			// aapt resource value: 0x7f0a00c3
+			public const int view_pin_dialog_return_button = 2131361987;
 			
-			// aapt resource value: 0x7f0a00ba
-			public const int view_pin_dialog_title = 2131361978;
+			// aapt resource value: 0x7f0a00bf
+			public const int view_pin_dialog_title = 2131361983;
 			
-			// aapt resource value: 0x7f0a00bb
-			public const int view_pin_recycler_view = 2131361979;
+			// aapt resource value: 0x7f0a00c1
+			public const int view_pin_recycler_view = 2131361985;
 			
-			// aapt resource value: 0x7f0a00be
-			public const int webview = 2131361982;
+			// aapt resource value: 0x7f0a00c5
+			public const int webview = 2131361989;
 			
 			// aapt resource value: 0x7f0a0015
 			public const int wide = 2131361813;
@@ -2995,34 +3016,37 @@ namespace DayTomato.Droid
 			public const int notification_template_part_time = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int pin_view_holder = 2130903092;
+			public const int pin_comment_view_holder = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int select_dialog_item_material = 2130903093;
+			public const int pin_view_holder = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int select_dialog_multichoice_material = 2130903094;
+			public const int select_dialog_item_material = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int select_dialog_singlechoice_material = 2130903095;
+			public const int select_dialog_multichoice_material = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int support_simple_spinner_dropdown_item = 2130903096;
+			public const int select_dialog_singlechoice_material = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int text_bubble = 2130903097;
+			public const int support_simple_spinner_dropdown_item = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int trip_fragment = 2130903098;
+			public const int text_bubble = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int trip_suggestion_view_holder = 2130903099;
+			public const int trip_fragment = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int view_pin_dialog_fragment = 2130903100;
+			public const int trip_suggestion_view_holder = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int webview = 2130903101;
+			public const int view_pin_dialog_fragment = 2130903101;
+			
+			// aapt resource value: 0x7f03003e
+			public const int webview = 2130903102;
 			
 			static Layout()
 			{
