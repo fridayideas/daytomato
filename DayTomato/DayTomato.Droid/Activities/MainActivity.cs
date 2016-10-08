@@ -56,7 +56,7 @@ namespace DayTomato.Droid
 			_account.Username = "admin";
 			_account.Id = "100";
 			_account.Pins = 42;
-			_account.Seeds = 43;
+			_account.Seeds = 42;
 			return _account;
 		}
 
