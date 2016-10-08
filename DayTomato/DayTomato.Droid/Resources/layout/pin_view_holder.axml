@@ -113,13 +113,6 @@
                         android:background="@color/colorPrimary"
                         android:visibility="gone" />
                 </LinearLayout>
-                <ListView
-                    android:minWidth="25px"
-                    android:minHeight="25px"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:id="@+id/pin_view_holder_comment_list_view"
-                    android:layout_weight="1" />
                 <LinearLayout
                     android:orientation="vertical"
                     android:minWidth="25px"
@@ -127,6 +120,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/pin_view_holder_comment_list" />
+                <TextView
+                    android:text="show comments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pin_view_holder_show_comments"
+                    android:textColor="#E0E0E0" />
             </LinearLayout>
         </LinearLayout>
         <View

@@ -2578,11 +2578,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a00b5
 			public const int pin_view_holder_comment_edit_text = 2131361973;
 			
-			// aapt resource value: 0x7f0a00b8
-			public const int pin_view_holder_comment_list = 2131361976;
-			
 			// aapt resource value: 0x7f0a00b7
-			public const int pin_view_holder_comment_list_view = 2131361975;
+			public const int pin_view_holder_comment_list = 2131361975;
 			
 			// aapt resource value: 0x7f0a00b1
 			public const int pin_view_holder_description = 2131361969;
@@ -2601,6 +2598,9 @@ namespace DayTomato.Droid
 			
 			// aapt resource value: 0x7f0a00b2
 			public const int pin_view_holder_review = 2131361970;
+			
+			// aapt resource value: 0x7f0a00b8
+			public const int pin_view_holder_show_comments = 2131361976;
 			
 			// aapt resource value: 0x7f0a00ad
 			public const int pin_view_holder_up_button = 2131361965;
