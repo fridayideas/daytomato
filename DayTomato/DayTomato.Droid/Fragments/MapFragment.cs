@@ -272,6 +272,7 @@ namespace DayTomato.Droid.Fragments
 			bundle.PutDouble("SELECTED_LOCATION_LONGITUDE", _selectLocation.Longitude);
 			bundle.PutByteArray("SELECTED_LOCATION_IMAGE", place.Image);
 			bundle.PutString("SELECTED_LOCATION_NAME", place.Name);
+			bundle.PutString("SELECTED_LOCATION_DESCRIPTION", place.Description);
 
 			var createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
 			createPinDialogFragment.CreatePinDialogClosed += OnCreatePinDialogClosed;

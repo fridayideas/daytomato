@@ -94,6 +94,7 @@ namespace DayTomato.Droid
 			{
 				Log.Error(TAG, ex.Message);
 			}
+			_description.Text = Arguments.GetString("SELECTED_LOCATION_DESCRIPTION", "");
 		}
 
 		private void SetListeners()

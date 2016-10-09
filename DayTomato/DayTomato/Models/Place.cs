@@ -11,6 +11,8 @@ namespace DayTomato
 		public string Name { get; set; }
 		public string PhotoReference { get; set; }
 		public Byte[] Image { get; set; }
+		public string Description { get; set; }
+		public string[] Types { get; set; }
 
 		public Place()
 		{
@@ -28,12 +30,20 @@ namespace DayTomato
 				var jo = JObject.Load(reader);
 				var place = new Place();
 
+				// For each result, find the result that contains all required info
 				var ja = (JArray)jo["results"];
 				for (int i = 0; i < ja.Count; ++i)
 				{
 					try
 					{
 						place.Name = (string)ja[i]["name"];
+						var jat = (JArray)ja[i]["types"];
+						place.Description = "";
+						for (int j = 0; j < jat.Count; ++j)
+						{
+							place.Description += ((string)jat[j]).Replace('_', ' ');
+							place.Types = (string[])jat[j].Values<string>();
+						}
 						var jap = (JArray)ja[i]["photos"];
 						for (int j = 0; j < jap.Count; ++j)
 						{
