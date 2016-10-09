@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DayTomato.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,7 +13,7 @@ namespace DayTomato
 		public string PhotoReference { get; set; }
 		public Byte[] Image { get; set; }
 		public string Description { get; set; }
-		public string[] Types { get; set; }
+		public List<string> Types { get; set; }
 
 		public Place()
 		{
@@ -32,29 +33,39 @@ namespace DayTomato
 
 				// For each result, find the result that contains all required info
 				var ja = (JArray)jo["results"];
+
 				for (int i = 0; i < ja.Count; ++i)
 				{
 					try
 					{
+						// Get the name
 						place.Name = (string)ja[i]["name"];
+
+						// Get the description and types
 						var jat = (JArray)ja[i]["types"];
 						place.Description = "";
+						place.Types = new List<string>();
 						for (int j = 0; j < jat.Count; ++j)
 						{
-							place.Description += ((string)jat[j]).Replace('_', ' ');
-							place.Types = (string[])jat[j].Values<string>();
+							string type = jat[j].Value<string>();
+							place.Types.Add(type);
+							place.Description += (type).Replace('_', ' ') + " ";
 						}
+
+						// Get the photo
 						var jap = (JArray)ja[i]["photos"];
 						for (int j = 0; j < jap.Count; ++j)
 						{
 							place.PhotoReference = (string)jap[j]["photo_reference"];
-							if (place.Image != null) break;
+							if (place.PhotoReference != null) break;
 						}
 					}
 					catch (Exception ex)
-					{ }
+					{
+						//TODO: Catch exception
+					}
 
-					if (place.Name != null && place.Image != null) break;
+					if (place.Name != null) break;
 				}
 
 				return place;

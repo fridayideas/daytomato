@@ -22,9 +22,10 @@ namespace DayTomato.Services
 #endif
 
 		private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
-		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=";
-		private readonly string GOOGLE_PLACES_PHOTO_BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
-		private readonly string GOOGLE_PLACES_DETAIL_BASE_URL = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
+		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+		private readonly string GOOGLE_PLACES_PHOTO_BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?";
+		private readonly string GOOGLE_RANK_BY = "distance";
+		private readonly string GOOGLE_PHOTO_MAX_WIDTH = "256";
 
         public DayTomatoClient()
         {
@@ -37,7 +38,10 @@ namespace DayTomato.Services
 		{
 			Place place = new Place();
 			string result = "";
-			var uri = new Uri(GOOGLE_PLACES_BASE_URL + lat + "," + lng + "&radius=100&rankby=distance&key=" + GOOGLE_API_KEY);
+			var uri = new Uri(GOOGLE_PLACES_BASE_URL 
+			                  + "location=" + lat + "," + lng 
+			                  + "&rankby=" + GOOGLE_RANK_BY
+			                  + "&key=" + GOOGLE_API_KEY);
 			var response = await httpClient.GetAsync(uri);
 			if (response.IsSuccessStatusCode)
 			{
@@ -45,7 +49,10 @@ namespace DayTomato.Services
 				place = JsonConvert.DeserializeObject<Place>(result);
 			}
 
-			uri = new Uri(GOOGLE_PLACES_PHOTO_BASE_URL + place.PhotoReference + "&key=" + GOOGLE_API_KEY);
+			uri = new Uri(GOOGLE_PLACES_PHOTO_BASE_URL 
+			              + "maxwidth=" + GOOGLE_PHOTO_MAX_WIDTH 
+			              + "&photoreference=" + place.PhotoReference 
+			              + "&key=" + GOOGLE_API_KEY);
 			response = await httpClient.GetAsync(uri);
 			if (response.IsSuccessStatusCode)
 			{
