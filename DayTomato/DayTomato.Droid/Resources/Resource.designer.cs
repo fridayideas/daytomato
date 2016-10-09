@@ -2482,9 +2482,6 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a00aa
 			public const int info = 2131361962;
 			
-			// aapt resource value: 0x7f0a00c8
-			public const int item1 = 2131361992;
-			
 			// aapt resource value: 0x7f0a0000
 			public const int item_touch_helper_previous_elevation = 2131361792;
 			
@@ -2901,6 +2898,9 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a00c2
 			public const int view_pin_dialog_title = 2131361986;
 			
+			// aapt resource value: 0x7f0a00c8
+			public const int view_pin_popup_menu_delete = 2131361992;
+			
 			// aapt resource value: 0x7f0a00c4
 			public const int view_pin_recycler_view = 2131361988;
 			
@@ -3173,7 +3173,7 @@ namespace DayTomato.Droid
 		{
 			
 			// aapt resource value: 0x7f0d0000
-			public const int popup_menu = 2131558400;
+			public const int view_pin_popup_menu = 2131558400;
 			
 			static Menu()
 			{
@@ -3943,9 +3943,6 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b015d
 			public const int ClusterIcon_TextAppearance = 2131427677;
 			
-			// aapt resource value: 0x7f0b0162
-			public const int CustomFontStyle = 2131427682;
-			
 			// aapt resource value: 0x7f0b001b
 			public const int Platform_AppCompat = 2131427355;
 			
@@ -3975,6 +3972,9 @@ namespace DayTomato.Droid
 			
 			// aapt resource value: 0x7f0b001f
 			public const int Platform_Widget_AppCompat_Spinner = 2131427359;
+			
+			// aapt resource value: 0x7f0b0162
+			public const int PopupMenuText = 2131427682;
 			
 			// aapt resource value: 0x7f0b002c
 			public const int RtlOverlay_DialogWindowTitle_AppCompat = 2131427372;

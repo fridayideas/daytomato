@@ -24,7 +24,7 @@ namespace DayTomato.Droid
 		private Button _return;
 		private Button _add;
 		private bool _create;
-		private ImageView _ViewMenu;
+		bool quit = false;
 
 		public static ViewPinDialogFragment NewInstance(Bundle bundle)
 		{
@@ -45,9 +45,8 @@ namespace DayTomato.Droid
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_pin_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins, Activity);
+			_adapter = new ViewPinAdapter(_pins, Activity, this.Dialog);
 			_recyclerView.SetAdapter(_adapter);
-
 
 			this.Dialog.SetCancelable(true);
 			this.Dialog.SetCanceledOnTouchOutside(true);
@@ -62,6 +61,8 @@ namespace DayTomato.Droid
 		{
 			base.OnResume();
 			Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+
+		
 		}
 
 		public override void OnDismiss(IDialogInterface dialog)
@@ -75,8 +76,13 @@ namespace DayTomato.Droid
 					Create = _create
 				});
 			}
-		}
 
+		}
+		public override void OnDestroyOptionsMenu()
+		{
+			base.OnDestroyOptionsMenu();
+			Console.WriteLine("asd");
+		}
 		private void SetInstances()
 		{
 			_title.Text = Arguments.GetString("VIEW_PIN_TITLE");
@@ -95,7 +101,15 @@ namespace DayTomato.Droid
 				_create = true;
 				Dialog.Dismiss();
 			};
-
+			_recyclerView.LayoutChange += (sender, e) =>
+			{
+				if (_adapter.ItemCount == 0)
+				{
+					_create = false;
+					Console.WriteLine("sdf");
+					Dialog.Dismiss();
+				}
+			};
 		}
 	}
 

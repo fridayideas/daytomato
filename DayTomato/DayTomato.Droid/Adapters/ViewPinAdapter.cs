@@ -15,13 +15,15 @@ namespace DayTomato.Droid
 		private List<bool> _pinLiked;
 		private List<bool> _pinDisliked;
 		private Activity _context;
+		private Dialog _dialog;
 
-		public ViewPinAdapter(List<Pin> pins, Activity context)
+		public ViewPinAdapter(List<Pin> pins, Activity context, Dialog dialog)
 		{
 			_pins = pins;
 			_pinLiked = new List<bool>(new bool[pins.Count]);
 			_pinDisliked = new List<bool>(new bool[pins.Count]);
 			_context = context;
+			_dialog = dialog;
 		}
 
 		public override int ItemCount
@@ -158,18 +160,24 @@ namespace DayTomato.Droid
 			};
 			vh.ViewMenu.Click += (sender, e) =>
 			{
-				Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu);
-				menu.Inflate(Resource.Menu.popup_menu);
+				Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu, (int)GravityFlags.End);
+				menu.Inflate(Resource.Menu.view_pin_popup_menu);
 
 				menu.MenuItemClick += (s1, arg1) =>
 				{
-					Console.WriteLine("{0} selected", arg1.Item.TitleFormatted);
+					
+					switch (arg1.Item.TitleFormatted.ToString() ){
+						case "Delete":
+							_pins.RemoveAt(position);
+							NotifyItemRemoved(position);
+							NotifyDataSetChanged();
+
+							break;
+					}
 				};
 
-				menu.DismissEvent += (s2, arg2) =>
-				{
-					Console.WriteLine("menu dismissed");
-				};
+
+
 				menu.Show();
 			};
 		}

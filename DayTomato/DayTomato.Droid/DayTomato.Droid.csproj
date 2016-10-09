@@ -191,7 +191,7 @@
     <AndroidResource Include="Resources\layout\pin_comment_view_holder.axml" />
     <AndroidResource Include="Resources\drawable\three_dots.png" />
     <AndroidResource Include="Resources\drawable\more.png" />
-    <AndroidResource Include="Resources\menu\popup_menu.xml" />
+    <AndroidResource Include="Resources\menu\view_pin_popup_menu.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
