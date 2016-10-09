@@ -12,11 +12,12 @@ namespace DayTomato.Models
 	{
 		public Pin() { }
 
-		public Pin(int type, string name, float rating, string description, int likes, double lat, double lng, string account, DateTime date)
+		public Pin(int type, string name, float rating, float cost, string description, int likes, double lat, double lng, string account, DateTime date)
 		{
 			Type = type;
 			Name = name;
 			Rating = rating;
+            Cost = cost;
 			Description = description;
 			Likes = likes;
 			Latitude = lat;
@@ -39,6 +40,7 @@ namespace DayTomato.Models
 		public double Longitude { get; set; }
 		public string LinkedAccount { get; set; }
 		public string Review { get; set;}
+        public float Cost { get; set; }
 		public List<Comment> Comments { get; set; }
 		public DateTime CreateDate { get; set; }
 
@@ -64,6 +66,7 @@ namespace DayTomato.Models
 				pin.Description = (string)jo["description"];            // Description of pin
 				pin.Likes = (int)jo["likes"];                           // Pin likes
 				pin.Review = (string)jo["review"];						// Pin review
+                pin.Cost = (float)jo["cost"];                           // Pin cost
 				pin.Latitude = (double)jo["coordinate"]["latitude"];    // Pin latitude
 				pin.Longitude = (double)jo["coordinate"]["longitude"];  // Pin longitude
 				pin.LinkedAccount = (string)jo["linkedAccount"];        // Pin linked account
@@ -108,6 +111,7 @@ namespace DayTomato.Models
 			jo.Add("linkedAccount", pin.LinkedAccount);
 			jo.Add("likes", pin.Likes);
 			jo.Add("review", pin.Review);
+            jo.Add("cost", pin.Cost);
 
 			JArray ja = new JArray();
 			if (pin.Comments != null)
