@@ -48,6 +48,7 @@ namespace DayTomato.Droid
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
 			vh.PinDescription.Text = _pins[position].Description;
 			vh.PinReview.Text = _pins[position].Review;
+            vh.PinCost.Text = _pins[position].Cost.ToString();
 			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
 
 			// Initializing listview
@@ -168,6 +169,7 @@ namespace DayTomato.Droid
 		public ImageView DownButton { get; private set; }
 		public TextView PinDescription { get; private set; }
 		public TextView PinReview { get; private set; }
+        public TextView PinCost { get; private set; }
 		public TextView PinLinkedAccount { get; private set; }
 		public TextView AddComment { get; private set; }
 		public EditText AddCommentInput { get; private set; }
@@ -187,6 +189,7 @@ namespace DayTomato.Droid
 			DownButton = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_down_button);
 			PinDescription = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_description);
 			PinReview = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_review);
+            PinCost = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_cost);
 			PinLinkedAccount = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_account);
 			CommentsListView = itemView.FindViewById<LinearLayout>(Resource.Id.pin_view_holder_comment_list);
 			AddComment = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_add_comment);

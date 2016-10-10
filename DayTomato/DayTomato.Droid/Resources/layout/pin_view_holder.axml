@@ -66,6 +66,12 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="16dp" />
                 <TextView
+                    android:text="Cost"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pin_view_holder_cost" />
+                <TextView
                     android:text="Description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
