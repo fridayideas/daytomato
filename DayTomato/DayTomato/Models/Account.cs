@@ -8,20 +8,34 @@ using System.Threading.Tasks;
 
 namespace DayTomato.Models
 {
-    public class Account
-    {
-        // Images are not stored in server, rather, they will be saved locally on the phone
-        private string _id;
-        private string _username;
-        private double _seeds;
-        private int _pins;
-        private Byte[] _profilePicture;
+	public class Account
+	{
+		// NOOB = 0-10 seeds, EXPERIENCED = 10-200, seeds, PRO = 200-1000 seeds, ESTABLISHED = 1000-20000 seeds, TRUSTED = 20000-25000 seeds, GOD = 25000+ seeds
+		public enum SeedLevels { NOOB, EXPERIENCED, PRO, ESTABLISHED, TRUSTED, GOD };
 
-        public string Id { get { return _id; } set { _id = value; } }
-        public string Username { get { return _username; } set { _username = value; } }
-        public double Seeds { get { return _seeds; } set { _seeds = value; } }
-        public int Pins { get { return _pins; } set { _pins = value; } }
-        public Byte[] ProfilePicture { get { return _profilePicture; } set { _profilePicture = value; } }
+		// Images are not stored in server, rather, they will be saved locally on the phone
+		public string Id { get; set; }
+		public string Username { get; set; }
+		public double Seeds { get; set; }
+		public int Pins { get; set; }
+		public Byte[] ProfilePicture { get; set; }
+		public SeedLevels Privilege { get; set; }
+
+		public SeedLevels GetAccountPrivileges()
+		{
+			if (Seeds < 10)
+				return SeedLevels.NOOB;
+			else if (Seeds < 200)
+				return SeedLevels.EXPERIENCED;
+			else if (Seeds < 1000)
+				return SeedLevels.PRO;
+			else if (Seeds < 20000)
+				return SeedLevels.ESTABLISHED;
+			else if (Seeds < 25000)
+				return SeedLevels.TRUSTED;
+			else
+				return SeedLevels.GOD;
+		}
 
         public class AccountConverter : JsonConverter
         {
