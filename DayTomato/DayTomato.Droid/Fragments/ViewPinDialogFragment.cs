@@ -24,6 +24,7 @@ namespace DayTomato.Droid
 		private Button _return;
 		private Button _add;
 		private bool _create;
+		private ImageView _ViewMenu;
 
 		public static ViewPinDialogFragment NewInstance(Bundle bundle)
 		{
@@ -46,6 +47,7 @@ namespace DayTomato.Droid
 			_recyclerView.SetLayoutManager(_layoutManager);
 			_adapter = new ViewPinAdapter(_pins, Activity);
 			_recyclerView.SetAdapter(_adapter);
+
 
 			this.Dialog.SetCancelable(true);
 			this.Dialog.SetCanceledOnTouchOutside(true);
@@ -93,6 +95,7 @@ namespace DayTomato.Droid
 				_create = true;
 				Dialog.Dismiss();
 			};
+
 		}
 	}
 

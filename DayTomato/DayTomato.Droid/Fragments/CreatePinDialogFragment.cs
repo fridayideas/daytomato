@@ -7,6 +7,7 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Android.Gms.Maps.Model;
+using DayTomato.Droid.Fragments;
 using Android.Graphics;
 using Android.Util;
 
@@ -25,6 +26,7 @@ namespace DayTomato.Droid
 		private EditText _description;									// Description user will put
 		private RatingBar _rating;                                      // Rating user will give
 		private EditText _review;										// Review user will give
+        private EditText _cost;                                         // Amount user spent
 		private bool _createPin;										// Check if they pressed create or not
 
 		public static CreatePinDialogFragment NewInstance(Bundle bundle)
@@ -45,6 +47,7 @@ namespace DayTomato.Droid
 			_description = (EditText)view.FindViewById(Resource.Id.create_pin_dialog_text_description);
 			_rating = (RatingBar)view.FindViewById(Resource.Id.create_pin_dialog_rating);
 			_review = (EditText)view.FindViewById(Resource.Id.create_pin_dialog_review);
+            _cost = (EditText)view.FindViewById(Resource.Id.create_pin_dialog_cost);
 
 			this.Dialog.SetCancelable(true);
 			this.Dialog.SetCanceledOnTouchOutside(true);
@@ -67,16 +70,19 @@ namespace DayTomato.Droid
 			// Store and output data to the parent fragment
 			if (CreatePinDialogClosed != null && _createPin)
 			{
-				CreatePinDialogClosed(this, new CreatePinDialogEventArgs
-				{
-					Name = _name.Text,
-					Description = _description.Text,
-					Rating = _rating.Rating,
-					Review = _review.Text,
+                CreatePinDialogClosed(this, new CreatePinDialogEventArgs
+                {
+                    Name = _name.Text,
+                    Description = _description.Text,
+                    Rating = _rating.Rating,
+                    Review = _review.Text,
+					Cost = Convert.ToDouble(_cost.Text),
 					Location = new LatLng(Arguments.GetDouble("SELECTED_LOCATION_LATITUDE"),
 					                      Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")) 
 				});
-			}
+
+				MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
+            }
 		}
 
 		private void SetInstances()
@@ -122,5 +128,6 @@ namespace DayTomato.Droid
 		public string Description { get; set; }
 		public float Rating { get; set; }
 		public string Review { get; set; }
+        public double Cost { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Android.App;
+using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
@@ -48,6 +49,7 @@ namespace DayTomato.Droid
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
 			vh.PinDescription.Text = _pins[position].Description;
 			vh.PinReview.Text = _pins[position].Review;
+            vh.PinCost.Text = _pins[position].Cost.ToString();
 			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
 
 			// Initializing listview
@@ -154,6 +156,22 @@ namespace DayTomato.Droid
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
 				}
 			};
+			vh.ViewMenu.Click += (sender, e) =>
+			{
+				Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu);
+				menu.Inflate(Resource.Menu.popup_menu);
+
+				menu.MenuItemClick += (s1, arg1) =>
+				{
+					Console.WriteLine("{0} selected", arg1.Item.TitleFormatted);
+				};
+
+				menu.DismissEvent += (s2, arg2) =>
+				{
+					Console.WriteLine("menu dismissed");
+				};
+				menu.Show();
+			};
 		}
 	}
 
@@ -168,14 +186,17 @@ namespace DayTomato.Droid
 		public ImageView DownButton { get; private set; }
 		public TextView PinDescription { get; private set; }
 		public TextView PinReview { get; private set; }
+        public TextView PinCost { get; private set; }
 		public TextView PinLinkedAccount { get; private set; }
 		public TextView AddComment { get; private set; }
 		public EditText AddCommentInput { get; private set; }
 		public Button AddCommentButton { get; private set; }
 		public TextView ShowComments { get; private set; }
+		public ImageView ViewMenu { get; private set; }
 		public bool HideComments { get; set; }
-
 		public LinearLayout CommentsListView { get; set; }
+
+
 		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
 
 		public ViewPinViewHolder(View itemView) : base(itemView)
@@ -187,13 +208,17 @@ namespace DayTomato.Droid
 			DownButton = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_down_button);
 			PinDescription = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_description);
 			PinReview = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_review);
+            PinCost = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_cost);
 			PinLinkedAccount = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_account);
 			CommentsListView = itemView.FindViewById<LinearLayout>(Resource.Id.pin_view_holder_comment_list);
 			AddComment = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_add_comment);
 			AddCommentInput = itemView.FindViewById<EditText>(Resource.Id.pin_view_holder_comment_edit_text);
 			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.pin_view_holder_add_comment_button);
 			ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
+			ViewMenu = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_view_menu);
 			HideComments = true;
+
+			
 		}
 
 		public void SetClickListener(Action<int> listener)

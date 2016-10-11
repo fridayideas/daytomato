@@ -9,14 +9,36 @@
         android:orientation="vertical"
         android:minWidth="25px"
         android:minHeight="25px">
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/black"
-            android:text="Caption"
-            android:id="@+id/pin_view_holder_pin_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:id="@+id/linearLayout1">
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black"
+                android:text="Caption"
+                android:id="@+id/pin_view_holder_pin_name"
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/relativeLayout1"
+                android:layout_gravity="right">
+                <ImageView
+                    android:src="@drawable/more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pin_view_holder_view_menu"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="3dp" />
+            </RelativeLayout>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -65,6 +87,12 @@
                     android:src="@drawable/icon"
                     android:layout_gravity="center"
                     android:layout_marginRight="16dp" />
+                <TextView
+                    android:text="Cost"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pin_view_holder_cost" />
                 <TextView
                     android:text="Description"
                     android:layout_width="match_parent"

@@ -13,15 +13,17 @@ using System.Threading.Tasks;
 using Plugin.Geolocator;
 using Android.Util;
 using DayTomato.Models;
+using System;
 
 namespace DayTomato.Droid
 {
     [Activity(MainLauncher = true, Icon = "@drawable/icon")]
-    public class MainActivity : FragmentActivity
+    public class MainActivity : FragmentActivity, ViewPager.IOnPageChangeListener
 	{
 		private static readonly string TAG = "MAIN_ACTIVITY";
 
         private TabLayout _tabLayout;
+		private ViewPager _viewPager;
 		private static LatLng _currentLocation;
 		private static Account _account;
 
@@ -55,8 +57,8 @@ namespace DayTomato.Droid
 			_account = new Account();
 			_account.Username = "admin";
 			_account.Id = "100";
-			_account.Pins = 42;
-			_account.Seeds = 999999;
+			_account.Pins = 0;
+			_account.Seeds = 0;
 			return _account;
 		}
 
@@ -74,7 +76,7 @@ namespace DayTomato.Droid
 				Log.Error(TAG, tc.Message);
 				_currentLocation = new LatLng(0.0, 0.0);
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
 				Log.Error(TAG, ex.ToString());
 				_currentLocation = new LatLng(0.0, 0.0);
@@ -91,6 +93,12 @@ namespace DayTomato.Droid
 		public static LatLng GetLocation()
 		{
 			return _currentLocation;
+		}
+
+		public static void UpdateAccount(string accountId, double seeds, int pins)
+		{
+			_account.Pins += pins;
+			_account.Seeds += seeds;
 		}
 
 		/*
@@ -113,12 +121,13 @@ namespace DayTomato.Droid
 				"Trips"
             });
 
-            var viewPager = FindViewById<ViewPager>(Resource.Id.main_viewpager);
+            _viewPager = FindViewById<ViewPager>(Resource.Id.main_viewpager);
             //viewpager holding fragment array and tab title text
-            viewPager.Adapter = new TabsFragmentPagerAdapter(SupportFragmentManager, fragments, titles);
-
+            _viewPager.Adapter = new TabsFragmentPagerAdapter(SupportFragmentManager, fragments, titles);
+			_viewPager.AddOnPageChangeListener(this);
             // Give the TabLayout the ViewPager 
-            _tabLayout.SetupWithViewPager(viewPager);
+            _tabLayout.SetupWithViewPager(_viewPager);
+			//_tabLayout.SetOnTabSelectedListener(this);
             SetIcons();
         }
 
@@ -133,6 +142,33 @@ namespace DayTomato.Droid
         {
             dialog.Dismiss();
         }
+
+		public void OnPageScrollStateChanged(int state)
+		{
+			return;
+		}
+
+		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+		{
+			return;
+		}
+
+		public void OnPageSelected(int position)
+		{
+			switch (position)
+			{
+				// Home Fragment
+				case 0:
+					HomeFragment.UpdateHomePage();
+					break;
+				// Map Fragment
+				case 1:
+					break;
+				// Trip Fragment
+				case 2:
+					break;
+			}
+		}
 
 		public class TabsFragmentPagerAdapter : FragmentPagerAdapter
         {
