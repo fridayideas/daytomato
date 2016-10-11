@@ -7,6 +7,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
+//using DayTomato.Services;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -16,8 +17,8 @@ namespace DayTomato.Droid.Fragments
 
 		private TextView _username;
 		private ImageView _profilePicture;
-		private TextView _pinCount;
-		private TextView _seedCount;
+		private static TextView _pinCount;
+		private static TextView _seedCount;
 
 		private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
@@ -37,8 +38,8 @@ namespace DayTomato.Droid.Fragments
             var view = inflater.Inflate(Resource.Layout.home_fragment, container, false);
 			_username = (TextView)view.FindViewById(Resource.Id.home_user_name);
 			_profilePicture = (ImageView)view.FindViewById(Resource.Id.home_profile_picture);
-			_pinCount = (TextView)view.FindViewById(Resource.Id.home_seed_count);
-			_seedCount = (TextView)view.FindViewById(Resource.Id.home_pin_count);
+			_pinCount = (TextView)view.FindViewById(Resource.Id.home_pin_count);
+			_seedCount = (TextView)view.FindViewById(Resource.Id.home_seed_count);
 
 			InitInstances();
 
@@ -74,5 +75,22 @@ namespace DayTomato.Droid.Fragments
 				_feed.Add("User 2 disliked your pin");
 			}
 		}
+        public static void IncreaseSeeds(int seeds)
+        {
+            int _seeds = System.Convert.ToInt32(_seedCount.Text);
+            _seeds += 1;
+            _seedCount.Text = _seeds.ToString();
+            //Need to update the actual number of seeds for the account
+            //dayTomatoClient.UpdateAccountSeeds(accountId, seeds);
+
+        }
+        public static void IncreasePins()
+        {
+            int _pins = System.Convert.ToInt32(_pinCount.Text);
+            _pins += 1;
+            _pinCount.Text = _pins.ToString();
+            //Need to update the actual number of pins for the account
+
+        }
     }
 }

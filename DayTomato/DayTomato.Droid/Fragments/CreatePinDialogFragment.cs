@@ -7,6 +7,7 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Android.Gms.Maps.Model;
+using DayTomato.Droid.Fragments;
 
 namespace DayTomato.Droid
 {
@@ -75,7 +76,9 @@ namespace DayTomato.Droid
 					Location = new LatLng(Arguments.GetDouble("SELECTED_LOCATION_LATITUDE"),
 					                      Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")) 
 				});
-			}
+                HomeFragment.IncreaseSeeds(5);
+                HomeFragment.IncreasePins();
+            }
 		}
 
 		private void SetInstances()
