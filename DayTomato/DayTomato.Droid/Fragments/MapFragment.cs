@@ -12,6 +12,7 @@ using Android.Locations;
 using System;
 using Newtonsoft.Json;
 using Com.Google.Maps.Android.Clustering;
+using Android.Support.V7.App;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -208,7 +209,31 @@ namespace DayTomato.Droid.Fragments
 			};
 
 			// User can select the location after clicking and the create a pin dialog shows
-			_selectLocationButton.Click += (sender, e) => { CreatePinDialog(); }; 
+			_selectLocationButton.Click += (sender, e) => 
+			{
+				Location curr = new Location("Current");
+				Location sel = new Location("Selected");
+				curr.Latitude = _currentLocation.Latitude;
+				curr.Longitude = _currentLocation.Longitude;
+				sel.Latitude = _selectLocation.Latitude;
+				sel.Longitude = _selectLocation.Longitude;
+
+				if (curr.DistanceTo(sel) > 100 && (MainActivity.GetAccount().Seeds < 200))
+				{
+					AlertDialog.Builder alert = new AlertDialog.Builder(Context);
+					alert.SetTitle("You're too far away!");
+					alert.SetMessage("You need to be within 100m of placing a new pin. " +
+					                 "Collect more seeds to remove this restriction! ");
+					alert.SetPositiveButton("OK", (senderAlert, args) => {});
+
+					Android.App.Dialog dialog = alert.Create();
+					dialog.Show();
+				}
+				else
+				{
+					CreatePinDialog();
+				}
+			}; 
 		}
 
 		async void CreatePinDialog()
@@ -235,6 +260,8 @@ namespace DayTomato.Droid.Fragments
 			_selectLocationPin.Visibility = ViewStates.Invisible;
 			_estimateAddress.Visibility = ViewStates.Invisible;
 
+			var place = await MainActivity.dayTomatoClient.GetPlace(_selectLocation.Latitude, _selectLocation.Longitude);
+
 			// Reverse geocode coordinates
 			var address = await ReverseGeocode(_selectLocation);
 
@@ -243,6 +270,9 @@ namespace DayTomato.Droid.Fragments
 			bundle.PutString("SELECTED_LOCATION", address);
 			bundle.PutDouble("SELECTED_LOCATION_LATITUDE", _selectLocation.Latitude);
 			bundle.PutDouble("SELECTED_LOCATION_LONGITUDE", _selectLocation.Longitude);
+			bundle.PutByteArray("SELECTED_LOCATION_IMAGE", place.Image);
+			bundle.PutString("SELECTED_LOCATION_NAME", place.Name);
+			bundle.PutString("SELECTED_LOCATION_DESCRIPTION", place.Description);
 
 			var createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
 			createPinDialogFragment.CreatePinDialogClosed += OnCreatePinDialogClosed;

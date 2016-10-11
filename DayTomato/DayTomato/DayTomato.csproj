@@ -36,6 +36,7 @@
     <Compile Include="Models\Trip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DayTomatoClient.cs" />
+    <Compile Include="Models\Place.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

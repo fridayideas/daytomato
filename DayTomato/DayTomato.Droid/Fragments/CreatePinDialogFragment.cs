@@ -8,11 +8,15 @@ using Android.Views;
 using Android.Widget;
 using Android.Gms.Maps.Model;
 using DayTomato.Droid.Fragments;
+using Android.Graphics;
+using Android.Util;
 
 namespace DayTomato.Droid
 {
 	public class CreatePinDialogFragment : DialogFragment
 	{
+		private readonly static string TAG = "CREATE_PIN_DIALOG_FRAGMENT";
+
 		public event EventHandler<CreatePinDialogEventArgs> CreatePinDialogClosed;		// Event handler when user presses create
 		private Button _createPinButton;								// Create pin button
 		private Button _cancelButton;									// Cancel create pin button
@@ -72,12 +76,12 @@ namespace DayTomato.Droid
                     Description = _description.Text,
                     Rating = _rating.Rating,
                     Review = _review.Text,
-                    Cost = Convert.ToSingle(_cost.Text),
+					Cost = Convert.ToDouble(_cost.Text),
 					Location = new LatLng(Arguments.GetDouble("SELECTED_LOCATION_LATITUDE"),
 					                      Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")) 
 				});
-                HomeFragment.IncreaseSeeds(5);
-                HomeFragment.IncreasePins();
+
+				MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
             }
 		}
 
@@ -85,6 +89,18 @@ namespace DayTomato.Droid
 		{
 			// Get the location that the user selected
 			_selectedLocationText.Text = Arguments.GetString("SELECTED_LOCATION", "Unknown Location");
+			_name.Text = Arguments.GetString("SELECTED_LOCATION_NAME", "");
+			try
+			{
+				byte[] image = Arguments.GetByteArray("SELECTED_LOCATION_IMAGE");
+				Bitmap bmp = BitmapFactory.DecodeByteArray(image, 0, image.Length);
+				_image.SetImageBitmap(bmp);
+			}
+			catch (Exception ex)
+			{
+				Log.Error(TAG, ex.Message);
+			}
+			_description.Text = Arguments.GetString("SELECTED_LOCATION_DESCRIPTION", "");
 		}
 
 		private void SetListeners()
@@ -112,6 +128,6 @@ namespace DayTomato.Droid
 		public string Description { get; set; }
 		public float Rating { get; set; }
 		public string Review { get; set; }
-        public float Cost { get; set; }
+        public double Cost { get; set; }
 	}
 }
