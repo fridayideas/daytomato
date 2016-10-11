@@ -10,6 +10,7 @@ using DayTomato.Models;
 using Newtonsoft.Json;
 using System;
 using Android.Graphics.Drawables;
+using System.Threading.Tasks;
 
 namespace DayTomato.Droid
 {
@@ -24,7 +25,7 @@ namespace DayTomato.Droid
 		private Button _return;
 		private Button _add;
 		private bool _create;
-		bool quit = false;
+		private bool _delete;
 
 		public static ViewPinDialogFragment NewInstance(Bundle bundle)
 		{
@@ -45,7 +46,7 @@ namespace DayTomato.Droid
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_pin_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins, Activity, this.Dialog);
+			_adapter = new ViewPinAdapter(_pins, Activity);
 			_recyclerView.SetAdapter(_adapter);
 
 			this.Dialog.SetCancelable(true);
@@ -61,8 +62,6 @@ namespace DayTomato.Droid
 		{
 			base.OnResume();
 			Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
-
-		
 		}
 
 		public override void OnDismiss(IDialogInterface dialog)
@@ -73,20 +72,17 @@ namespace DayTomato.Droid
 			{
 				ViewPinDialogClosed(this, new ViewPinDialogEventArgs
 				{
-					Create = _create
+					Create = _create,
+					Delete = _delete
 				});
 			}
+		}
 
-		}
-		public override void OnDestroyOptionsMenu()
-		{
-			base.OnDestroyOptionsMenu();
-			Console.WriteLine("asd");
-		}
 		private void SetInstances()
 		{
 			_title.Text = Arguments.GetString("VIEW_PIN_TITLE");
 			_create = false;
+			_delete = false;
 		}
 
 		private void SetListeners()
@@ -101,13 +97,19 @@ namespace DayTomato.Droid
 				_create = true;
 				Dialog.Dismiss();
 			};
-			_recyclerView.LayoutChange += (sender, e) =>
+			_recyclerView.ChildViewRemoved += (sender, e) =>
 			{
 				if (_adapter.ItemCount == 0)
 				{
-					_create = false;
-					Console.WriteLine("sdf");
-					Dialog.Dismiss();
+					if (Dialog != null)
+					{
+						_delete = true;
+						Dialog.Dismiss();
+						_recyclerView.Dispose();
+						_adapter.Dispose();
+						_layoutManager.Dispose();
+						this.Dispose();
+					}
 				}
 			};
 		}
@@ -116,5 +118,6 @@ namespace DayTomato.Droid
 	public class ViewPinDialogEventArgs
 	{
 		public bool Create { get; set; }
+		public bool Delete { get; set; }
 	}
 }

@@ -378,6 +378,10 @@ namespace DayTomato.Droid.Fragments
 			{
 				CreatePinDialog();
 			}
+			if (e.Delete)
+			{
+				UpdateMap();
+			}
 
 			// Switch button states
 			_createPin.Visibility = ViewStates.Visible;

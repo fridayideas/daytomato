@@ -15,15 +15,13 @@ namespace DayTomato.Droid
 		private List<bool> _pinLiked;
 		private List<bool> _pinDisliked;
 		private Activity _context;
-		private Dialog _dialog;
 
-		public ViewPinAdapter(List<Pin> pins, Activity context, Dialog dialog)
+		public ViewPinAdapter(List<Pin> pins, Activity context)
 		{
 			_pins = pins;
 			_pinLiked = new List<bool>(new bool[pins.Count]);
 			_pinDisliked = new List<bool>(new bool[pins.Count]);
 			_context = context;
-			_dialog = dialog;
 		}
 
 		public override int ItemCount
@@ -158,28 +156,45 @@ namespace DayTomato.Droid
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
 				}
 			};
-			vh.ViewMenu.Click += (sender, e) =>
+			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
 			{
+<<<<<<< HEAD
 				Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu, (int)GravityFlags.End);
 				menu.Inflate(Resource.Menu.view_pin_popup_menu);
 
-				menu.MenuItemClick += (s1, arg1) =>
+				menu.MenuItemClick += async (s1, arg1) =>
 				{
-					
-					switch (arg1.Item.TitleFormatted.ToString() ){
+					switch (arg1.Item.TitleFormatted.ToString())
+					{
 						case "Delete":
+							//await MainActivity.dayTomatoClient.DeletePin(_pins[position]);
 							_pins.RemoveAt(position);
 							NotifyItemRemoved(position);
 							NotifyDataSetChanged();
-
 							break;
 					}
+=======
+				vh.ViewMenu.Visibility = ViewStates.Visible;
+				vh.ViewMenu.Click += (sender, e) =>
+			   	{
+				   	Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu, (int)GravityFlags.End);
+				   	menu.Inflate(Resource.Menu.view_pin_popup_menu);
+
+				   	menu.MenuItemClick += async (s1, arg1) =>
+				   	{
+					   	string command = arg1.Item.TitleFormatted.ToString();
+					   	if (command.Equals("Delete"))
+					   	{
+							await MainActivity.dayTomatoClient.DeletePin(_pins[position]);
+						   	_pins.RemoveAt(position);
+						   	NotifyItemRemoved(position);
+						   	NotifyDataSetChanged();
+						}
+					};
+					menu.Show();
+>>>>>>> 414091d... Finished with deleting
 				};
-
-
-
-				menu.Show();
-			};
+			}
 		}
 	}
 
@@ -225,8 +240,6 @@ namespace DayTomato.Droid
 			ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
 			ViewMenu = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_view_menu);
 			HideComments = true;
-
-			
 		}
 
 		public void SetClickListener(Action<int> listener)
