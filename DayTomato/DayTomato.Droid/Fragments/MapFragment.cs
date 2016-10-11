@@ -310,6 +310,7 @@ namespace DayTomato.Droid.Fragments
 				Longitude = _selectLocation.Longitude,
 				LinkedAccount = account.Id,
 				Review = e.Review,
+                Cost = e.Cost,
 				CreateDate = DateTime.Today
 			};
 			_pins.Add(pin);

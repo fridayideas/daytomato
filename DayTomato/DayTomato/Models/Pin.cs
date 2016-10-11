@@ -12,11 +12,12 @@ namespace DayTomato.Models
 	{
 		public Pin() { }
 
-		public Pin(int type, string name, float rating, string description, int likes, double lat, double lng, string account, DateTime date)
+		public Pin(int type, string name, float rating, double cost, string description, int likes, double lat, double lng, string account, DateTime date)
 		{
 			Type = type;
 			Name = name;
 			Rating = rating;
+            Cost = cost;
 			Description = description;
 			Likes = likes;
 			Latitude = lat;
@@ -39,6 +40,7 @@ namespace DayTomato.Models
 		public double Longitude { get; set; }
 		public string LinkedAccount { get; set; }
 		public string Review { get; set;}
+        public double Cost { get; set; }
 		public List<Comment> Comments { get; set; }
 		public DateTime CreateDate { get; set; }
 
@@ -59,11 +61,12 @@ namespace DayTomato.Models
 			{
 				pin.Id = (string)jo["_id"];                             // Id of pin
 				pin.Type = (int)jo["pinType"];                          // Type of pin
-				pin.Name = (string)jo["pinName"];                       // Name of pin
+				pin.Name = (string)jo["name"];                       // Name of pin
 				pin.Rating = (float)jo["rating"];                       // Rating of pin
 				pin.Description = (string)jo["description"];            // Description of pin
 				pin.Likes = (int)jo["likes"];                           // Pin likes
 				pin.Review = (string)jo["review"];						// Pin review
+                pin.Cost = (double)jo["cost"];                           // Pin cost
 				pin.Latitude = (double)jo["coordinate"]["latitude"];    // Pin latitude
 				pin.Longitude = (double)jo["coordinate"]["longitude"];  // Pin longitude
 				pin.LinkedAccount = (string)jo["linkedAccount"];        // Pin linked account
@@ -98,7 +101,7 @@ namespace DayTomato.Models
 			Pin pin = (Pin)value;
 			jo.Add("_id", pin.Id);
 			jo.Add("pinType", pin.Type);
-			jo.Add("pinName", pin.Name);
+			jo.Add("name", pin.Name);
 			jo.Add("rating", pin.Rating);
 			jo.Add("description", pin.Description);
 			JObject coordinates = new JObject();
@@ -108,6 +111,7 @@ namespace DayTomato.Models
 			jo.Add("linkedAccount", pin.LinkedAccount);
 			jo.Add("likes", pin.Likes);
 			jo.Add("review", pin.Review);
+            jo.Add("cost", pin.Cost);
 
 			JArray ja = new JArray();
 			if (pin.Comments != null)
