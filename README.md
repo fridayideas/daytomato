@@ -20,8 +20,8 @@ On the Map tab, you can see all the pins that users have placed. Tap any to view
 ### Documentation
 [Architectural Overview]()  
 [Authentication Workflow]()  
-[Main Features]()  
-[Main Use Cases]()  
+[Main Features](https://github.com/fridayideas/daytomato/wiki/Features)  
+[Main Use Cases](https://drive.google.com/open?id=0B6iCv6f-iYt0OG1GeVFJdlV0SWM)  
 [Public REST API](https://github.com/fridayideas/daytomatoserver)  
 [Third Party Libraries]()  
 [Tool & Installation Instructions]()  
