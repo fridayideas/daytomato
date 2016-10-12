@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/relativeLayout1"
                 android:layout_gravity="right">
-                <ImageView
+                <ImageView xmlns:tools="http://schemas.android.com/tools"
                     android:src="@drawable/more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -37,7 +37,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="6dp"
                     android:layout_marginRight="3dp"
-                    xmlns:tools="http://schemas.android.com/tools"
                     tools:visibility="gone" />
             </RelativeLayout>
         </LinearLayout>
@@ -90,12 +89,20 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="16dp" />
                 <TextView
+                    android:text="Rating:"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pin_view_holder_rating"
+                    android:layout_gravity="right" />
+                <TextView
                     android:text="Cost"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/pin_view_holder_cost"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="-17dp" />
                 <TextView
                     android:text="Description"
                     android:layout_width="match_parent"
