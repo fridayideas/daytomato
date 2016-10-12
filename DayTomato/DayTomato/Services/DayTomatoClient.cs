@@ -98,6 +98,21 @@ namespace DayTomato.Services
 			return null;
 		}
 
+		// Get hot pins
+		public async Task<List<Pin>> GetHotPins()
+		{
+			List<Pin> pins = new List<Pin>();
+			var uri = new Uri(BASE_URL + "/api/pins?sort=likes&limit=10");
+			var response = await httpClient.GetAsync(uri);
+			if (response.IsSuccessStatusCode)
+			{
+				string content = await response.Content.ReadAsStringAsync();
+				pins = JsonConvert.DeserializeObject<List<Pin>>(content);
+				return pins;
+			}
+			return null;
+		}
+
 		// Create Pins
 		public async Task<bool> CreatePin(Pin pin)
 		{

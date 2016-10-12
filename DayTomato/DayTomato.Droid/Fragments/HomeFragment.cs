@@ -13,7 +13,7 @@ namespace DayTomato.Droid.Fragments
 {
     class HomeFragment : Fragment
     {
-		private List<string> _feed;
+		private List<Feed> _feed;
 
 		private TextView _username;
 		private ImageView _profilePicture;
@@ -46,7 +46,7 @@ namespace DayTomato.Droid.Fragments
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.home_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new HomeFeedAdapter(_feed);
+			_adapter = new HomeFeedAdapter(_feed, this.Activity);
 			_recyclerView.SetAdapter(_adapter);
 
             return view;
@@ -77,13 +77,29 @@ namespace DayTomato.Droid.Fragments
 			_pinCount.Text = _account.Pins.ToString();
 			_seedCount.Text = _account.Seeds.ToString();
 
-			//TODO: Get feed from server
-			while (_feed == null)
+			// Get feed from server
+			_feed = new List<Feed>();
+			_feed.Add(new Feed
 			{
-				_feed = new List<string>();
-				_feed.Add("User 1 liked your pin");
-				_feed.Add("User 2 disliked your pin");
+				Notification = "User 1 liked your pin",
+				Type = Feed.FEED_NOTIFICATION
+			});
+			_feed.Add(new Feed
+			{
+				Notification = "User 2 disliked your pin",
+				Type = Feed.FEED_NOTIFICATION
+			});
+
+			var pins = await MainActivity.dayTomatoClient.GetHotPins();
+			foreach (var p in pins)
+			{
+				_feed.Add(new Feed
+				{
+					Pin = p,
+					Type = Feed.FEED_PIN
+				});
 			}
+			_adapter.NotifyDataSetChanged();
 		}
     }
 }

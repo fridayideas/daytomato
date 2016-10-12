@@ -143,8 +143,8 @@ namespace DayTomato.Droid.Fragments
 			// Clustering
 			_clusterManager = new ClusterManager(Context, _map);
 			_clusterManager.SetOnClusterItemClickListener(this);
-			_clusterManager.SetAlgorithm(new Com.Google.Maps.Android.Clustering.Algo.GridBasedAlgorithm());
-
+			_clusterManager.SetAlgorithm(new Com.Google.Maps.Android.Clustering.Algo.PreCachingAlgorithmDecorator
+			                             (new Com.Google.Maps.Android.Clustering.Algo.GridBasedAlgorithm()));
 			// Map Listeners
 			_map.SetOnCameraChangeListener(this);// When the user moves the map, this will listen
 			_map.SetOnMarkerClickListener(_clusterManager);
