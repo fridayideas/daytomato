@@ -276,9 +276,6 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_insert_photo_black_48dp.png" />
   </ItemGroup>
-<<<<<<< HEAD
-  <ItemGroup />
-=======
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
     <Folder Include="Activities\" />
@@ -286,7 +283,6 @@
     <Folder Include="MapUtil\" />
     <Folder Include="Resources\menu\" />
   </ItemGroup>
->>>>>>> a1c6982... menu
   <ItemGroup>
     <AndroidResource Include="Resources\values-v21\styles.xml" />
   </ItemGroup>

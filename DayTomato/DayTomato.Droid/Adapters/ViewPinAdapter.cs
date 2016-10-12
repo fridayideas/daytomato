@@ -158,22 +158,6 @@ namespace DayTomato.Droid
 			};
 			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
 			{
-<<<<<<< HEAD
-				Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu, (int)GravityFlags.End);
-				menu.Inflate(Resource.Menu.view_pin_popup_menu);
-
-				menu.MenuItemClick += async (s1, arg1) =>
-				{
-					switch (arg1.Item.TitleFormatted.ToString())
-					{
-						case "Delete":
-							//await MainActivity.dayTomatoClient.DeletePin(_pins[position]);
-							_pins.RemoveAt(position);
-							NotifyItemRemoved(position);
-							NotifyDataSetChanged();
-							break;
-					}
-=======
 				vh.ViewMenu.Visibility = ViewStates.Visible;
 				vh.ViewMenu.Click += (sender, e) =>
 			   	{
@@ -192,7 +176,6 @@ namespace DayTomato.Droid
 						}
 					};
 					menu.Show();
->>>>>>> 414091d... Finished with deleting
 				};
 			}
 		}

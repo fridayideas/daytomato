@@ -2500,19 +2500,11 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a00a9
 			public const int line3 = 2131361961;
 			
-<<<<<<< HEAD
-			// aapt resource value: 0x7f0a00c4
-			public const int linearLayout1 = 2131361988;
+			// aapt resource value: 0x7f0a00ad
+			public const int linearLayout1 = 2131361965;
 			
-			// aapt resource value: 0x7f0a00c2
-			public const int linearLayout2 = 2131361986;
-=======
-			// aapt resource value: 0x7f0a00ac
-			public const int linearLayout1 = 2131361964;
-			
-			// aapt resource value: 0x7f0a00c3
-			public const int linearLayout2 = 2131361987;
->>>>>>> a1c6982... menu
+			// aapt resource value: 0x7f0a00c5
+			public const int linearLayout2 = 2131361989;
 			
 			// aapt resource value: 0x7f0a0019
 			public const int listMode = 2131361817;
@@ -2580,97 +2572,53 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0035
 			public const int pin = 2131361845;
 			
-<<<<<<< HEAD
 			// aapt resource value: 0x7f0a00ac
 			public const int pin_comment_text = 2131361964;
 			
-			// aapt resource value: 0x7f0a00b5
-			public const int pin_view_holder_account = 2131361973;
-			
-			// aapt resource value: 0x7f0a00b6
-			public const int pin_view_holder_add_comment = 2131361974;
-			
 			// aapt resource value: 0x7f0a00b8
-			public const int pin_view_holder_add_comment_button = 2131361976;
-			
-			// aapt resource value: 0x7f0a00b7
-			public const int pin_view_holder_comment_edit_text = 2131361975;
+			public const int pin_view_holder_account = 2131361976;
 			
 			// aapt resource value: 0x7f0a00b9
-			public const int pin_view_holder_comment_list = 2131361977;
-			
-			// aapt resource value: 0x7f0a00b2
-			public const int pin_view_holder_cost = 2131361970;
-			
-			// aapt resource value: 0x7f0a00b3
-			public const int pin_view_holder_description = 2131361971;
-			
-			// aapt resource value: 0x7f0a00b0
-			public const int pin_view_holder_down_button = 2131361968;
-			
-			// aapt resource value: 0x7f0a00af
-			public const int pin_view_holder_likes = 2131361967;
-			
-			// aapt resource value: 0x7f0a00b1
-			public const int pin_view_holder_pin_image = 2131361969;
-			
-			// aapt resource value: 0x7f0a00ad
-			public const int pin_view_holder_pin_name = 2131361965;
-=======
-			// aapt resource value: 0x7f0a00ab
-			public const int pin_comment_text = 2131361963;
-			
-			// aapt resource value: 0x7f0a00b6
-			public const int pin_view_holder_account = 2131361974;
-			
-			// aapt resource value: 0x7f0a00b7
-			public const int pin_view_holder_add_comment = 2131361975;
-			
-			// aapt resource value: 0x7f0a00b9
-			public const int pin_view_holder_add_comment_button = 2131361977;
-			
-			// aapt resource value: 0x7f0a00b8
-			public const int pin_view_holder_comment_edit_text = 2131361976;
-			
-			// aapt resource value: 0x7f0a00ba
-			public const int pin_view_holder_comment_list = 2131361978;
-			
-			// aapt resource value: 0x7f0a00b4
-			public const int pin_view_holder_description = 2131361972;
-			
-			// aapt resource value: 0x7f0a00b2
-			public const int pin_view_holder_down_button = 2131361970;
-			
-			// aapt resource value: 0x7f0a00b1
-			public const int pin_view_holder_likes = 2131361969;
-			
-			// aapt resource value: 0x7f0a00b3
-			public const int pin_view_holder_pin_image = 2131361971;
-			
-			// aapt resource value: 0x7f0a00ad
-			public const int pin_view_holder_pin_name = 2131361965;
-			
-			// aapt resource value: 0x7f0a00b5
-			public const int pin_view_holder_review = 2131361973;
+			public const int pin_view_holder_add_comment = 2131361977;
 			
 			// aapt resource value: 0x7f0a00bb
-			public const int pin_view_holder_show_comments = 2131361979;
-			
-			// aapt resource value: 0x7f0a00b0
-			public const int pin_view_holder_up_button = 2131361968;
-			
-			// aapt resource value: 0x7f0a00af
-			public const int pin_view_holder_view_menu = 2131361967;
->>>>>>> a1c6982... menu
-			
-			// aapt resource value: 0x7f0a00b4
-			public const int pin_view_holder_review = 2131361972;
+			public const int pin_view_holder_add_comment_button = 2131361979;
 			
 			// aapt resource value: 0x7f0a00ba
-			public const int pin_view_holder_show_comments = 2131361978;
+			public const int pin_view_holder_comment_edit_text = 2131361978;
+			
+			// aapt resource value: 0x7f0a00bc
+			public const int pin_view_holder_comment_list = 2131361980;
+			
+			// aapt resource value: 0x7f0a00b5
+			public const int pin_view_holder_cost = 2131361973;
+			
+			// aapt resource value: 0x7f0a00b6
+			public const int pin_view_holder_description = 2131361974;
+			
+			// aapt resource value: 0x7f0a00b3
+			public const int pin_view_holder_down_button = 2131361971;
+			
+			// aapt resource value: 0x7f0a00b2
+			public const int pin_view_holder_likes = 2131361970;
+			
+			// aapt resource value: 0x7f0a00b4
+			public const int pin_view_holder_pin_image = 2131361972;
 			
 			// aapt resource value: 0x7f0a00ae
-			public const int pin_view_holder_up_button = 2131361966;
+			public const int pin_view_holder_pin_name = 2131361966;
+			
+			// aapt resource value: 0x7f0a00b7
+			public const int pin_view_holder_review = 2131361975;
+			
+			// aapt resource value: 0x7f0a00bd
+			public const int pin_view_holder_show_comments = 2131361981;
+			
+			// aapt resource value: 0x7f0a00b1
+			public const int pin_view_holder_up_button = 2131361969;
+			
+			// aapt resource value: 0x7f0a00b0
+			public const int pin_view_holder_view_menu = 2131361968;
 			
 			// aapt resource value: 0x7f0a008b
 			public const int profile_row = 2131361931;
@@ -2684,8 +2632,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0060
 			public const int radio = 2131361888;
 			
-			// aapt resource value: 0x7f0a00ae
-			public const int relativeLayout1 = 2131361966;
+			// aapt resource value: 0x7f0a00af
+			public const int relativeLayout1 = 2131361967;
 			
 			// aapt resource value: 0x7f0a003c
 			public const int right = 2131361852;
@@ -2807,19 +2755,11 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0059
 			public const int textSpacerNoButtons = 2131361881;
 			
-<<<<<<< HEAD
-			// aapt resource value: 0x7f0a00bb
-			public const int textView1 = 2131361979;
+			// aapt resource value: 0x7f0a00be
+			public const int textView1 = 2131361982;
 			
-			// aapt resource value: 0x7f0a00bc
-			public const int textView2 = 2131361980;
-=======
-			// aapt resource value: 0x7f0a00bc
-			public const int textView1 = 2131361980;
-			
-			// aapt resource value: 0x7f0a00bd
-			public const int textView2 = 2131361981;
->>>>>>> a1c6982... menu
+			// aapt resource value: 0x7f0a00bf
+			public const int textView2 = 2131361983;
 			
 			// aapt resource value: 0x7f0a00a6
 			public const int time = 2131361958;
@@ -2836,37 +2776,20 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a0053
 			public const int topPanel = 2131361875;
 			
-<<<<<<< HEAD
 			// aapt resource value: 0x7f0a0081
 			public const int touch_outside = 2131361921;
 			
-			// aapt resource value: 0x7f0a00bd
-			public const int trip_current_location = 2131361981;
-			
-			// aapt resource value: 0x7f0a00be
-			public const int trip_recycler_view = 2131361982;
-			
-			// aapt resource value: 0x7f0a00bf
-			public const int trip_suggestion_name = 2131361983;
-			
 			// aapt resource value: 0x7f0a00c0
-			public const int trip_suggestion_type = 2131361984;
-=======
-			// aapt resource value: 0x7f0a0080
-			public const int touch_outside = 2131361920;
-			
-			// aapt resource value: 0x7f0a00be
-			public const int trip_current_location = 2131361982;
-			
-			// aapt resource value: 0x7f0a00bf
-			public const int trip_recycler_view = 2131361983;
-			
-			// aapt resource value: 0x7f0a00c0
-			public const int trip_suggestion_name = 2131361984;
+			public const int trip_current_location = 2131361984;
 			
 			// aapt resource value: 0x7f0a00c1
-			public const int trip_suggestion_type = 2131361985;
->>>>>>> a1c6982... menu
+			public const int trip_recycler_view = 2131361985;
+			
+			// aapt resource value: 0x7f0a00c2
+			public const int trip_suggestion_name = 2131361986;
+			
+			// aapt resource value: 0x7f0a00c3
+			public const int trip_suggestion_type = 2131361987;
 			
 			// aapt resource value: 0x7f0a0009
 			public const int up = 2131361801;
@@ -2877,36 +2800,23 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0a000a
 			public const int view_offset_helper = 2131361802;
 			
-			// aapt resource value: 0x7f0a00c6
-			public const int view_pin_dialog_add_button = 2131361990;
-<<<<<<< HEAD
-			
-			// aapt resource value: 0x7f0a00c5
-			public const int view_pin_dialog_return_button = 2131361989;
-			
-			// aapt resource value: 0x7f0a00c1
-			public const int view_pin_dialog_title = 2131361985;
-			
-			// aapt resource value: 0x7f0a00c3
-			public const int view_pin_recycler_view = 2131361987;
-			
-=======
-			
-			// aapt resource value: 0x7f0a00c5
-			public const int view_pin_dialog_return_button = 2131361989;
-			
-			// aapt resource value: 0x7f0a00c2
-			public const int view_pin_dialog_title = 2131361986;
-			
 			// aapt resource value: 0x7f0a00c8
-			public const int view_pin_popup_menu_delete = 2131361992;
+			public const int view_pin_dialog_add_button = 2131361992;
+			
+			// aapt resource value: 0x7f0a00c7
+			public const int view_pin_dialog_return_button = 2131361991;
 			
 			// aapt resource value: 0x7f0a00c4
-			public const int view_pin_recycler_view = 2131361988;
+			public const int view_pin_dialog_title = 2131361988;
 			
->>>>>>> a1c6982... menu
-			// aapt resource value: 0x7f0a00c7
-			public const int webview = 2131361991;
+			// aapt resource value: 0x7f0a00ca
+			public const int view_pin_popup_menu_delete = 2131361994;
+			
+			// aapt resource value: 0x7f0a00c6
+			public const int view_pin_recycler_view = 2131361990;
+			
+			// aapt resource value: 0x7f0a00c9
+			public const int webview = 2131361993;
 			
 			// aapt resource value: 0x7f0a0015
 			public const int wide = 2131361813;
