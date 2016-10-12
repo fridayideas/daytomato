@@ -18,7 +18,7 @@
             android:padding="8dp">
             <TextView
                 android:text="User X actioned your pin"
-                android:id="@+id/home_feed_action"
+                android:id="@+id/home_feed_notification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
