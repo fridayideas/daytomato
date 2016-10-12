@@ -73,7 +73,8 @@ namespace DayTomato.Droid
 				ViewPinDialogClosed(this, new ViewPinDialogEventArgs
 				{
 					Create = _create,
-					Delete = _delete
+					Delete = _delete,
+					MarkerId = Arguments.GetLong("VIEW_PIN_MARKER")
 				});
 			}
 		}
@@ -105,10 +106,6 @@ namespace DayTomato.Droid
 					{
 						_delete = true;
 						Dialog.Dismiss();
-						_recyclerView.Dispose();
-						_adapter.Dispose();
-						_layoutManager.Dispose();
-						this.Dispose();
 					}
 				}
 			};
@@ -119,5 +116,6 @@ namespace DayTomato.Droid
 	{
 		public bool Create { get; set; }
 		public bool Delete { get; set; }
+		public long MarkerId { get; set; }
 	}
 }

@@ -37,6 +37,7 @@ namespace DayTomato.Droid.Fragments
 		private LatLng _currentLocation;
 		private Dictionary<long, List<Pin>> _markerPins;
 		private Dictionary<long, Polygon> _markerPolygons;
+		private Dictionary<long, ClusterPin> _markers;
 		private ClusterManager _clusterManager;
 
 		private const double POLY_RADIUS = 0.0001;
@@ -50,6 +51,7 @@ namespace DayTomato.Droid.Fragments
 			_pins = new List<Pin>();
 			_markerPins = new Dictionary<long, List<Pin>>();
 			_markerPolygons = new Dictionary<long, Polygon>();
+			_markers = new Dictionary<long, ClusterPin>();
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
 			_cancelLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_cancel_selection);
@@ -118,6 +120,7 @@ namespace DayTomato.Droid.Fragments
 					_clusterManager.Cluster();
 
 					// Add new pin
+					_markers.Add(m.Id, m);
 					_markerPins.Add(m.Id, new List<Pin> { pin });
 					_markerPolygons[m.Id] = poly;
 				}
@@ -126,7 +129,6 @@ namespace DayTomato.Droid.Fragments
 				{
 					_markerPins[markerId].Add(pin);
 				}
-
 			}
 		}
 
@@ -141,6 +143,7 @@ namespace DayTomato.Droid.Fragments
 			// Clustering
 			_clusterManager = new ClusterManager(Context, _map);
 			_clusterManager.SetOnClusterItemClickListener(this);
+			_clusterManager.SetAlgorithm(new Com.Google.Maps.Android.Clustering.Algo.GridBasedAlgorithm());
 
 			// Map Listeners
 			_map.SetOnCameraChangeListener(this);// When the user moves the map, this will listen
@@ -153,7 +156,7 @@ namespace DayTomato.Droid.Fragments
 			}
 			var builder = CameraPosition.InvokeBuilder();
 			builder.Target(_currentLocation);
-			builder.Zoom(18);
+			builder.Zoom(15);
 			var cameraPosition = builder.Build();
 			var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
 			_map.MoveCamera(cameraUpdate);
@@ -311,7 +314,7 @@ namespace DayTomato.Droid.Fragments
 				LinkedAccount = account.Id,
 				Review = e.Review,
                 Cost = e.Cost,
-				CreateDate = DateTime.Today
+				CreateDate = e.CreateDate
 			};
 			_pins.Add(pin);
 			CreatePin(pin);
@@ -362,6 +365,7 @@ namespace DayTomato.Droid.Fragments
 			var bundle = new Bundle();
 			bundle.PutString("VIEW_PIN_TITLE", ((ClusterPin)marker).Title);
 			bundle.PutString("VIEW_PIN_DATA", pinData);
+			bundle.PutLong("VIEW_PIN_MARKER", ((ClusterPin)marker).Id);
 
 			var viewPinDialogFragment = ViewPinDialogFragment.NewInstance(bundle);
 			viewPinDialogFragment.ViewPinDialogClosed += OnViewPinDialogClosed;
@@ -372,7 +376,7 @@ namespace DayTomato.Droid.Fragments
 		}
 
 		// Event listener, when the dialog is closed, this will get called
-		public void OnViewPinDialogClosed(object sender, ViewPinDialogEventArgs e)
+		public async void OnViewPinDialogClosed(object sender, ViewPinDialogEventArgs e)
 		{
 			if (e.Create)
 			{
@@ -380,7 +384,12 @@ namespace DayTomato.Droid.Fragments
 			}
 			if (e.Delete)
 			{
-				UpdateMap();
+				_pins = await MainActivity.dayTomatoClient.GetPins();
+				_markerPins.Remove(e.MarkerId);
+				_markerPolygons.Remove(e.MarkerId);
+				_clusterManager.RemoveItem(_markers[e.MarkerId]);
+				_markers.Remove(e.MarkerId);
+				_clusterManager.Cluster();
 			}
 
 			// Switch button states

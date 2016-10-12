@@ -16,7 +16,8 @@ namespace DayTomato.Services
         HttpClient httpClient;
 
 #if DEBUG
-		private readonly string BASE_URL = "http://10.0.2.2:8080";
+		private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
+		//private readonly string BASE_URL = "http://10.0.2.2:8080";
 #else
 		private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
 #endif
@@ -198,6 +199,11 @@ namespace DayTomato.Services
 			var uri = new Uri(BASE_URL + "/api/accounts/seeds/" + accountId + "/" + amount);
 			var response = await httpClient.PutAsync(uri, null);
 			return response.IsSuccessStatusCode;
+		}
+
+		public async Task<byte[]> GetImageBitmapFromUrlAsync(string url)
+		{
+			return await httpClient.GetByteArrayAsync(url);
 		}
     }
 }

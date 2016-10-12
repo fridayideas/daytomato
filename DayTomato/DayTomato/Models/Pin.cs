@@ -43,6 +43,7 @@ namespace DayTomato.Models
         public double Cost { get; set; }
 		public List<Comment> Comments { get; set; }
 		public DateTime CreateDate { get; set; }
+		public string ImageURL { get; set; }
 
 	}
 
@@ -59,18 +60,19 @@ namespace DayTomato.Models
 			Pin pin = new Pin();
 			try
 			{
-				pin.Id = (string)jo["_id"];                             // Id of pin
-				pin.Type = (int)jo["pinType"];                          // Type of pin
-				pin.Name = (string)jo["name"];                       // Name of pin
-				pin.Rating = (float)jo["rating"];                       // Rating of pin
-				pin.Description = (string)jo["description"];            // Description of pin
-				pin.Likes = (int)jo["likes"];                           // Pin likes
-				pin.Review = (string)jo["review"];						// Pin review
-                pin.Cost = (double)jo["cost"];                           // Pin cost
-				pin.Latitude = (double)jo["coordinate"]["latitude"];    // Pin latitude
-				pin.Longitude = (double)jo["coordinate"]["longitude"];  // Pin longitude
-				pin.LinkedAccount = (string)jo["linkedAccount"];        // Pin linked account
-				pin.CreateDate = (DateTime)jo["createDate"];            // Pin create date
+				pin.Id = (string)jo["_id"];                                // Id of pin
+				pin.Type = (int)jo["pinType"];                             // Type of pin
+				pin.Name = (string)jo["name"];                       	   // Name of pin
+				pin.Rating = (float)jo["rating"];                          // Rating of pin
+				pin.Description = (string)jo["description"];               // Description of pin
+				pin.Likes = (int)jo["likes"];                              // Pin likes
+				pin.Review = (string)jo["review"];						   // Pin review
+                pin.Cost = (double)jo["cost"];                             // Pin cost
+				pin.Latitude = (double)jo["coordinate"]["latitude"];       // Pin latitude
+				pin.Longitude = (double)jo["coordinate"]["longitude"];     // Pin longitude
+				pin.LinkedAccount = (string)jo["linkedAccount"];           // Pin linked account
+				pin.CreateDate = (DateTime)jo["createDate"];               // Pin create date
+				pin.ImageURL = (string)jo["image"];						   // Pin image url
 			}
 			catch
 			{
@@ -118,6 +120,8 @@ namespace DayTomato.Models
 			jo.Add("likes", pin.Likes);
 			jo.Add("review", pin.Review);
             jo.Add("cost", pin.Cost);
+			jo.Add("image", pin.ImageURL);
+			jo.Add("createDate", pin.CreateDate);
 
 			JArray ja = new JArray();
 			if (pin.Comments != null)

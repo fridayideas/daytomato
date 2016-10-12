@@ -70,15 +70,16 @@ namespace DayTomato.Droid
 			// Store and output data to the parent fragment
 			if (CreatePinDialogClosed != null && _createPin)
 			{
-                CreatePinDialogClosed(this, new CreatePinDialogEventArgs
-                {
-                    Name = _name.Text,
-                    Description = _description.Text,
-                    Rating = _rating.Rating,
-                    Review = _review.Text,
+				CreatePinDialogClosed(this, new CreatePinDialogEventArgs
+				{
+					Name = _name.Text,
+					Description = _description.Text,
+					Rating = _rating.Rating,
+					Review = _review.Text,
 					Cost = Convert.ToDouble(_cost.Text),
 					Location = new LatLng(Arguments.GetDouble("SELECTED_LOCATION_LATITUDE"),
-					                      Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")) 
+										  Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")),
+					CreateDate = DateTime.Today
 				});
 
 				MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
@@ -129,5 +130,6 @@ namespace DayTomato.Droid
 		public float Rating { get; set; }
 		public string Review { get; set; }
         public double Cost { get; set; }
+		public DateTime CreateDate { get; set; }
 	}
 }
