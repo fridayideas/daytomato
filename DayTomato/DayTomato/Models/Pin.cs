@@ -83,15 +83,21 @@ namespace DayTomato.Models
              * Comments are in this format:
              * [{"linkedAccount":111,"text":"LOOOOL","createDate":"2016-09-30T02:44:20.637Z"}]
              */
-			pin.Comments = new List<Comment>();
-			JArray ja = (JArray)jo["comments"];
-			for (int i = 0; i < ja.Count; ++i)
-			{
-				string account = (string)ja[i]["linkedAccount"];
-				string text = (string)ja[i]["text"];
-				DateTime date = (DateTime)ja[i]["createDate"];
-				pin.Comments.Add(new Comment(account, text, date));
+			try
+			{ 
+				pin.Comments = new List<Comment>();
+				JArray ja = (JArray)jo["comments"];
+				for (int i = 0; i < ja.Count; ++i)
+				{
+					string account = (string)ja[i]["linkedAccount"];
+					string text = (string)ja[i]["text"];
+					DateTime date = (DateTime)ja[i]["createDate"];
+					pin.Comments.Add(new Comment(account, text, date));
+				}
 			}
+			catch
+			{
+			}	
 
 			return pin;
 		}

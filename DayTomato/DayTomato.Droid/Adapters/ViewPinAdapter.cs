@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
-using Java.Net;
 
 namespace DayTomato.Droid
 {
@@ -48,7 +46,7 @@ namespace DayTomato.Droid
 
 			// Pin imageURL 
 			var imageUrl = _pins[position].ImageURL;
-			if (!imageUrl.Equals("none"))
+			if (!imageUrl.Equals("none") && !imageUrl.Equals(""))
 			{
 				var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
 				var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
@@ -168,6 +166,28 @@ namespace DayTomato.Droid
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
 				}
 			};
+			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
+			{
+				vh.ViewMenu.Visibility = ViewStates.Visible;
+				vh.ViewMenu.Click += (sender, e) =>
+			   	{
+				   	Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu, (int)GravityFlags.End);
+				   	menu.Inflate(Resource.Menu.view_pin_popup_menu);
+
+				   	menu.MenuItemClick += async (s1, arg1) =>
+				   	{
+					   	string command = arg1.Item.TitleFormatted.ToString();
+					   	if (command.Equals("Delete"))
+					   	{
+							await MainActivity.dayTomatoClient.DeletePin(_pins[position]);
+						   	_pins.RemoveAt(position);
+						   	NotifyItemRemoved(position);
+						   	NotifyDataSetChanged();
+						}
+					};
+					menu.Show();
+				};
+			}
 		}
 	}
 
@@ -188,9 +208,11 @@ namespace DayTomato.Droid
 		public EditText AddCommentInput { get; private set; }
 		public Button AddCommentButton { get; private set; }
 		public TextView ShowComments { get; private set; }
+		public ImageView ViewMenu { get; private set; }
 		public bool HideComments { get; set; }
-
 		public LinearLayout CommentsListView { get; set; }
+
+
 		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
 
 		public ViewPinViewHolder(View itemView) : base(itemView)
@@ -209,6 +231,7 @@ namespace DayTomato.Droid
 			AddCommentInput = itemView.FindViewById<EditText>(Resource.Id.pin_view_holder_comment_edit_text);
 			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.pin_view_holder_add_comment_button);
 			ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
+			ViewMenu = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_view_menu);
 			HideComments = true;
 		}
 

@@ -6,6 +6,10 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+	<item name="textAppearanceLargePopupMenu">@style/PopupMenuText</item>
+	<item name="android:textAppearanceLargePopupMenu">@style/PopupMenuText</item>
+	<item name="textAppearanceSmallPopupMenu">@style/PopupMenuText</item>
+	<item name="android:textAppearanceSmallPopupMenu">@style/PopupMenuText</item>	
   </style>
   <style name="AppTheme" parent="AppTheme.Base">
   </style>
@@ -19,5 +23,12 @@
   <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/white</item>
   </style>
+  <style name="PopupMenuText">
+            <item name="android:textColor">@color/black</item>
+			<item name="android:textSize">15sp</item>
+  </style>	
+
+
+
 	
 </resources>

@@ -10,6 +10,7 @@ using DayTomato.Models;
 using Newtonsoft.Json;
 using System;
 using Android.Graphics.Drawables;
+using System.Threading.Tasks;
 
 namespace DayTomato.Droid
 {
@@ -24,6 +25,7 @@ namespace DayTomato.Droid
 		private Button _return;
 		private Button _add;
 		private bool _create;
+		private bool _delete;
 
 		public static ViewPinDialogFragment NewInstance(Bundle bundle)
 		{
@@ -70,7 +72,9 @@ namespace DayTomato.Droid
 			{
 				ViewPinDialogClosed(this, new ViewPinDialogEventArgs
 				{
-					Create = _create
+					Create = _create,
+					Delete = _delete,
+					MarkerId = Arguments.GetLong("VIEW_PIN_MARKER")
 				});
 			}
 		}
@@ -79,6 +83,7 @@ namespace DayTomato.Droid
 		{
 			_title.Text = Arguments.GetString("VIEW_PIN_TITLE");
 			_create = false;
+			_delete = false;
 		}
 
 		private void SetListeners()
@@ -93,11 +98,24 @@ namespace DayTomato.Droid
 				_create = true;
 				Dialog.Dismiss();
 			};
+			_recyclerView.ChildViewRemoved += (sender, e) =>
+			{
+				if (_adapter.ItemCount == 0)
+				{
+					if (Dialog != null)
+					{
+						_delete = true;
+						Dialog.Dismiss();
+					}
+				}
+			};
 		}
 	}
 
 	public class ViewPinDialogEventArgs
 	{
 		public bool Create { get; set; }
+		public bool Delete { get; set; }
+		public long MarkerId { get; set; }
 	}
 }
