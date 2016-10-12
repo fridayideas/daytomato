@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Android.App;
+using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
+using Java.Net;
 
 namespace DayTomato.Droid
 {
@@ -39,17 +42,27 @@ namespace DayTomato.Droid
 			return vh;
 		}
 
-		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+		public async override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
 			ViewPinViewHolder vh = holder as ViewPinViewHolder;
 
-			//vh.PinImage.SetImageResource(imagesource);
+			// Pin imageURL 
+			var imageUrl = _pins[position].ImageURL;
+			if (!imageUrl.Equals("none"))
+			{
+				var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
+				var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+				vh.PinImage.SetImageBitmap(imageBitmap);
+			}
+
 			vh.PinName.Text = _pins[position].Name;
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
 			vh.PinDescription.Text = _pins[position].Description;
 			vh.PinReview.Text = _pins[position].Review;
-            vh.PinCost.Text = _pins[position].Cost.ToString();
 			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
+
+			double cost = _pins[position].Cost;
+			vh.PinCost.Text = "Cost: $" + cost;
 
 			// Initializing listview
 			vh.CommentsAdapter = new ViewPinCommentsAdapter(_context, _pins[position].Comments);
