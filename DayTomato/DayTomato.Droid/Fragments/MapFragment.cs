@@ -153,7 +153,7 @@ namespace DayTomato.Droid.Fragments
 			}
 			var builder = CameraPosition.InvokeBuilder();
 			builder.Target(_currentLocation);
-			builder.Zoom(18);
+			builder.Zoom(15);
 			var cameraPosition = builder.Build();
 			var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
 			_map.MoveCamera(cameraUpdate);
@@ -311,7 +311,7 @@ namespace DayTomato.Droid.Fragments
 				LinkedAccount = account.Id,
 				Review = e.Review,
                 Cost = e.Cost,
-				CreateDate = DateTime.Today
+				CreateDate = e.CreateDate
 			};
 			_pins.Add(pin);
 			CreatePin(pin);
