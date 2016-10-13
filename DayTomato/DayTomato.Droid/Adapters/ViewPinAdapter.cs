@@ -69,6 +69,10 @@ namespace DayTomato.Droid
 					   	return;
 				   	}
 
+					ProgressDialog pd = new ProgressDialog(_context);
+				    pd.Show();
+					pd.SetMessage("Loading...");
+
 				   	var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
 				   	{
 					  	Directory = "DayTomato",
@@ -85,7 +89,6 @@ namespace DayTomato.Droid
 
 				   	Toast.MakeText(_context, "Photo saved: " + file.Path, ToastLength.Short);
 
-				   	vh.ProgressBar.Visibility = ViewStates.Visible;
 				   	var resizedBitmap = await DecodeByteArrayAsync(file.AlbumPath, 200, 200);
 
 				   	var stream = new MemoryStream();
@@ -95,7 +98,7 @@ namespace DayTomato.Droid
 				   	var imgurl = await MainActivity.dayTomatoClient.UploadImage(resizedImg);
 				   	_pins[position].ImageURL = imgurl;
 				   	vh.PinImage.SetImageBitmap(resizedBitmap);
-				   	vh.ProgressBar.Visibility = ViewStates.Gone;
+				    pd.Hide();
 					_parent.Update(_pins[position]);
 				};
 			}

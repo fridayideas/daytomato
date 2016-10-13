@@ -372,11 +372,11 @@ namespace DayTomato.Droid.Fragments
 				List<Pin> update = e.PinsToUpdate;
 				foreach (var u in update)
 				{
+					// This really sucks, but I cannot figure out why its creating multiple of the same pins here
+					_markerPins[e.MarkerId].RemoveAll(p => p.Id.Equals(u.Id));
 					int r1 = _pins.FindIndex(p => p.Id.Equals(u.Id));
-					int r2 = _markerPins[e.MarkerId].FindIndex(p => p.Id.Equals(u.Id));
 					_pins.RemoveAt(r1);
 					_pins.Add(u);
-					_markerPins[e.MarkerId].RemoveAt(r2);
 					_markerPins[e.MarkerId].Add(u);
 					await MainActivity.dayTomatoClient.UpdatePin(u);
 				}
