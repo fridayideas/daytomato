@@ -67,19 +67,20 @@ namespace DayTomato.Droid.Fragments
 		public override async void OnStart()
 		{
 			base.OnStart();
-			await InitMapFragment();				// Wait for map to initialize
-		}
-
-		private async Task InitMapFragment()
-		{
-			// Get the pins
-			_pins = await MainActivity.dayTomatoClient.GetPins();
 			// If map is not attached to this fragment, get it async
 			if (_map == null)
 			{
 				((SupportMapFragment)ChildFragmentManager.FindFragmentById(Resource.Id.map)).GetMapAsync(this);
 			}
-		}
+
+            // Get pins
+            // TODO can we do this progressively?
+			_pins = await MainActivity.dayTomatoClient.GetPins();
+
+			// Load pins onto map
+            UpdateMap();
+            _clusterManager.Cluster();
+        }
 
 		// Can only be called if map is ready!
 		private void CreatePin(Pin pin)
@@ -96,13 +97,14 @@ namespace DayTomato.Droid.Fragments
 				foreach(var p in _markerPolygons)
 				{
 					// If the point is in the polygon, then we have to stack
-					if(PolyUtil.containsLocation(coordinate, new List<LatLng>(p.Value.Points), false))
+					if (PolyUtil.containsLocation(coordinate, new List<LatLng>(p.Value.Points), false))
 					{
 						stack = true;
 						markerId = p.Key;
 						break;
 					}
 			  	}
+
 				// If not stacking, create a new pin and new polygon
 				if (!stack)
 				{
@@ -112,12 +114,11 @@ namespace DayTomato.Droid.Fragments
 						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
 						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
 					.Visible(false);
-
 					var poly = _map.AddPolygon(polyOpt);
 					var m = new ClusterPin(pin.Latitude, pin.Longitude);
 					m.Title = pin.Name;
 					_clusterManager.AddItem(m);
-					_clusterManager.Cluster();
+					//_clusterManager.Cluster();
 
 					// Add new pin
 					_markers.Add(m.Id, m);
@@ -160,15 +161,13 @@ namespace DayTomato.Droid.Fragments
 			var cameraPosition = builder.Build();
 			var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
 			_map.MoveCamera(cameraUpdate);
-
-			// Load pins onto map
-			UpdateMap();
 		}
 
 		// Update pins on map when view changes
 		private void UpdateMap()
 		{
 			// Load pins onto map
+            // TODO culling by area/viewport
 			for (int i = 0; i < _pins.Count; ++i)
 			{
 				CreatePin(_pins[i]);
