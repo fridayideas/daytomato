@@ -35,8 +35,14 @@ namespace DayTomato.Droid
 		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
 			TripSuggestionViewHolder vh = holder as TripSuggestionViewHolder;
-			vh.SuggestionName.Text = _suggestions[position].Name;
-			vh.SuggestionType.Text = _suggestions[position].Type;
+			vh.Name.Text = _suggestions[position].Name;
+			vh.Type.Text = _suggestions[position].Type;
+			foreach (var p in _suggestions[position].Pins)
+			{
+				vh.Pins.Text += p.Name + "\n";
+			}
+			vh.CreateDate.Text = "created " + _suggestions[position].CreateDate.ToLongDateString();
+			vh.Author.Text = _suggestions[position].LinkedAccount;
 		}
 	}
 
@@ -44,13 +50,19 @@ namespace DayTomato.Droid
 	{
 		private Action<int> _listener;
 
-		public TextView SuggestionName { get; private set; }
-		public TextView SuggestionType { get; private set; }
+		public TextView Name { get; private set; }
+		public TextView Type { get; private set; }
+		public TextView Pins { get; private set; }
+		public TextView CreateDate { get; private set; }
+		public TextView Author { get; private set; }
 
 		public TripSuggestionViewHolder(View itemView) : base(itemView)
 		{
-			SuggestionName = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_name);
-			SuggestionType = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_type);
+			Name = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_name);
+			Type = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_type);
+			Pins = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_pins);
+			CreateDate = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_createdate);
+			Author = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_author);
 		}
 
 		public void SetClickListener(Action<int> listener)

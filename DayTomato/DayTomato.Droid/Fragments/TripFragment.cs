@@ -37,14 +37,9 @@ namespace DayTomato.Droid.Fragments
 			var view = inflater.Inflate(Resource.Layout.trip_fragment, container, false);
 
 			_userLocation = (TextView)view.FindViewById(Resource.Id.trip_current_location);
+			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.trip_recycler_view);
 
 			InitInstances();
-
-			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.trip_recycler_view);
-			_layoutManager = new LinearLayoutManager(Context);
-			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new TripSuggestionAdapter(_suggestions);
-			_recyclerView.SetAdapter(_adapter);
 
 			return view;
 		}
@@ -56,13 +51,12 @@ namespace DayTomato.Droid.Fragments
 
 		private async void InitInstances()
 		{
-			//TODO: Get suggestions from server
-			while (_suggestions == null)
-			{
-				_suggestions = new List<Trip>();
-				_suggestions.Add(new Trip("cool trip", "adventure"));
-				_suggestions.Add(new Trip("cool trip #2", "foodie"));
-			}
+			_suggestions = await MainActivity.dayTomatoClient.GetTrips();
+
+			_layoutManager = new LinearLayoutManager(Context);
+			_recyclerView.SetLayoutManager(_layoutManager);
+			_adapter = new TripSuggestionAdapter(_suggestions);
+			_recyclerView.SetAdapter(_adapter);
 
 			_currentLocation = await MainActivity.GetUserLocation();
 
