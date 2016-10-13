@@ -26,6 +26,8 @@ namespace DayTomato.Droid
 		private Button _add;
 		private bool _create;
 		private bool _delete;
+		private bool _update;
+		private List<Pin> _pinsToUpdate;
 
 		public static ViewPinDialogFragment NewInstance(Bundle bundle)
 		{
@@ -46,7 +48,7 @@ namespace DayTomato.Droid
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_pin_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins, Activity);
+			_adapter = new ViewPinAdapter(_pins, Activity, this);
 			_recyclerView.SetAdapter(_adapter);
 
 			this.Dialog.SetCancelable(true);
@@ -74,6 +76,8 @@ namespace DayTomato.Droid
 				{
 					Create = _create,
 					Delete = _delete,
+					Update = _update,
+					PinsToUpdate = _pinsToUpdate,
 					MarkerId = Arguments.GetLong("VIEW_PIN_MARKER")
 				});
 			}
@@ -84,13 +88,14 @@ namespace DayTomato.Droid
 			_title.Text = Arguments.GetString("VIEW_PIN_TITLE");
 			_create = false;
 			_delete = false;
+			_update = false;
+			_pinsToUpdate = new List<Pin>();
 		}
 
 		private void SetListeners()
 		{
 			_return.Click += (sender, e) => 
 			{
-				_create = false;
 				Dialog.Dismiss();
 			};
 			_add.Click += (sender, e) => 
@@ -110,12 +115,20 @@ namespace DayTomato.Droid
 				}
 			};
 		}
+
+		public void Update(Pin pin)
+		{
+			_pinsToUpdate.Add(pin);
+			_update = true;
+		}
 	}
 
 	public class ViewPinDialogEventArgs
 	{
 		public bool Create { get; set; }
 		public bool Delete { get; set; }
+		public bool Update { get; set; }
+		public List<Pin> PinsToUpdate { get; set; }
 		public long MarkerId { get; set; }
 	}
 }

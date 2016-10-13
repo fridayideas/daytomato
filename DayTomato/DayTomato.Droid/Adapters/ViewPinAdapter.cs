@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Graphics;
+using Android.Media;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
@@ -18,13 +19,15 @@ namespace DayTomato.Droid
 		private List<bool> _pinLiked;
 		private List<bool> _pinDisliked;
 		private Activity _context;
+		private ViewPinDialogFragment _parent;
 
-		public ViewPinAdapter(List<Pin> pins, Activity context)
+		public ViewPinAdapter(List<Pin> pins, Activity context, ViewPinDialogFragment parent)
 		{
 			_pins = pins;
 			_pinLiked = new List<bool>(new bool[pins.Count]);
 			_pinDisliked = new List<bool>(new bool[pins.Count]);
 			_context = context;
+			_parent = parent;
 		}
 
 		public override int ItemCount
@@ -55,48 +58,47 @@ namespace DayTomato.Droid
 				var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
 				vh.PinImage.SetImageBitmap(imageBitmap);
 			}
-
-			vh.PinImage.Click += async (sender, e) => 
+			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
 			{
-				await CrossMedia.Current.Initialize();
-				if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-				{
-					Toast.MakeText(_context, "No Camera available", ToastLength.Short);
-					return;
-				}
+				vh.PinImage.Click += async (sender, e) =>
+			   	{
+				   	await CrossMedia.Current.Initialize();
+				   	if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+				   	{
+					   	Toast.MakeText(_context, "No Camera available", ToastLength.Short);
+					   	return;
+				   	}
 
-				var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-				{
-					Directory = "DayTomato",
-					Name = string.Format("{0}.jpg", Guid.NewGuid()),
-					SaveToAlbum = true,
-					PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
-					CompressionQuality = 92
-				});
+				   	var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+				   	{
+					  	Directory = "DayTomato",
+					   	Name = string.Format("{0}.jpg", Guid.NewGuid()),
+					   	SaveToAlbum = true,
+					   	PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
+					   	CompressionQuality = 92
+				   	});
 
-				if (file == null)
-				{
-					return;
-				}
+				   	if (file == null)
+				   	{
+					   	return;
+				   	}
 
-				Toast.MakeText(_context, "Photo saved: " + file.Path, ToastLength.Short);
+				   	Toast.MakeText(_context, "Photo saved: " + file.Path, ToastLength.Short);
 
-				var options = new BitmapFactory.Options 
-				{ 
-					InJustDecodeBounds = true
+				   	vh.ProgressBar.Visibility = ViewStates.Visible;
+				   	var resizedBitmap = await DecodeByteArrayAsync(file.AlbumPath, 200, 200);
+
+				   	var stream = new MemoryStream();
+				   	resizedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+				   	var resizedImg = stream.ToArray();
+
+				   	var imgurl = await MainActivity.dayTomatoClient.UploadImage(resizedImg);
+				   	_pins[position].ImageURL = imgurl;
+				   	vh.PinImage.SetImageBitmap(resizedBitmap);
+				   	vh.ProgressBar.Visibility = ViewStates.Gone;
+					_parent.Update(_pins[position]);
 				};
-
-				//byte[] img = File.ReadAllBytes(file.AlbumPath);
-				MemoryStream imgstream = new MemoryStream();
-				var usersImage = await BitmapFactory.DecodeFileAsync(file.AlbumPath);
-				usersImage.Compress(Bitmap.CompressFormat.Jpeg, 50, imgstream);
-				usersImage = await BitmapFactory.DecodeStreamAsync(imgstream);
-				var imageHeight = options.OutHeight;
-				var imageWidth = options.OutWidth;
-				var imageType = options.OutMimeType;
-
-				vh.PinImage.SetImageBitmap(usersImage);
-			};
+			}
 
 			vh.PinName.Text = _pins[position].Name;
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
@@ -147,14 +149,12 @@ namespace DayTomato.Droid
 				vh.HideComments = !vh.HideComments;
 				if (vh.HideComments)
 				{
-					Console.WriteLine("Removing");
 					vh.CommentsListView.RemoveAllViews();
 					vh.CommentsListView.Visibility = ViewStates.Gone;
 					vh.ShowComments.Text = "show comments";
 				}
 				else
 				{
-					Console.WriteLine("Showing");
 					vh.CommentsListView.Visibility = ViewStates.Visible;
 					vh.ShowComments.Text = "hide comments";
 					vh.CommentsListView.RemoveAllViews();
@@ -236,6 +236,43 @@ namespace DayTomato.Droid
 			}
 		}
 
+		public static async Task<Bitmap> DecodeByteArrayAsync(string fileName, int requiredWidth, int requiredHeight)
+		{
+			byte[] imageBytes = File.ReadAllBytes(fileName);
+			var options = new BitmapFactory.Options { InJustDecodeBounds = true };
+			await BitmapFactory.DecodeByteArrayAsync(imageBytes, 0, imageBytes.Length, options);
+
+			options.InSampleSize = CalculateInSampleSize(options, requiredWidth, requiredHeight);
+			options.InJustDecodeBounds = false;
+
+			Bitmap resizedBitmap = await BitmapFactory.DecodeByteArrayAsync(imageBytes, 0, imageBytes.Length, options);
+
+			// Images are being saved in landscape, so rotate them back to portrait if they were taken in portrait
+			Matrix mtx = new Matrix();
+			ExifInterface exif = new ExifInterface(fileName);
+			string orientation = exif.GetAttribute(ExifInterface.TagOrientation);
+
+			switch (orientation)
+			{
+				case "6": // portrait
+					mtx.PreRotate(90);
+					resizedBitmap = Bitmap.CreateBitmap(resizedBitmap, 0, 0, resizedBitmap.Width, resizedBitmap.Height, mtx, false);
+					mtx.Dispose();
+					mtx = null;
+					break;
+				case "1": // landscape
+					break;
+				default:
+					mtx.PreRotate(90);
+					resizedBitmap = Bitmap.CreateBitmap(resizedBitmap, 0, 0, resizedBitmap.Width, resizedBitmap.Height, mtx, false);
+					mtx.Dispose();
+					mtx = null;
+					break;
+			}
+
+			return resizedBitmap;
+		}
+
 		public static int CalculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
 		{
 			// Raw height and width of image
@@ -280,7 +317,7 @@ namespace DayTomato.Droid
 		public ImageView ViewMenu { get; private set; }
 		public bool HideComments { get; set; }
 		public LinearLayout CommentsListView { get; set; }
-
+		public ProgressBar ProgressBar { get; set; }
 
 		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
 
@@ -302,6 +339,7 @@ namespace DayTomato.Droid
 			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.pin_view_holder_add_comment_button);
 			ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
 			ViewMenu = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_view_menu);
+			ProgressBar = itemView.FindViewById<ProgressBar>(Resource.Id.pin_view_progress_bar);
 			HideComments = true;
 		}
 

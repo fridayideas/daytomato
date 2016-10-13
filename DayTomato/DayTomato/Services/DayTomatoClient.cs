@@ -28,6 +28,10 @@ namespace DayTomato.Services
 		private readonly string GOOGLE_RANK_BY = "distance";
 		private readonly string GOOGLE_PHOTO_MAX_WIDTH = "256";
 
+		private readonly string IMGUR_BASE_URL = "https://api.imgur.com/3";
+		private readonly string IMGUR_CLIENT_ID = "1f30123ee30a53b";
+		private readonly string IMGUR_CLIENT_SECRET = "979732009beba54d18e67f6dc9f8c3fa79082d16";
+
         public DayTomatoClient()
         {
             httpClient = new HttpClient();
@@ -216,9 +220,30 @@ namespace DayTomato.Services
 			return response.IsSuccessStatusCode;
 		}
 
+
+		// Getting an image from a url
 		public async Task<byte[]> GetImageBitmapFromUrlAsync(string url)
 		{
 			return await httpClient.GetByteArrayAsync(url);
+		}
+
+		// Imgur post image
+		public async Task<string> UploadImage(byte[] img)
+		{
+			var parms = new JObject();
+			parms.Add("image", img);
+			var uri = new Uri(IMGUR_BASE_URL + "/image");
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", IMGUR_CLIENT_ID);
+			var content = new StringContent(parms.ToString(), Encoding.UTF8, "application/json");
+			var response = await httpClient.PostAsync(uri, content);
+			if (response.IsSuccessStatusCode)
+			{
+				var res = new JObject();
+				res = JObject.Parse(await response.Content.ReadAsStringAsync());
+				return (string)res["data"]["link"];
+			}
+			return "";
 		}
     }
 }

@@ -297,29 +297,6 @@ namespace DayTomato.Droid.Fragments
 			return address;
 		}
 
-		// Event listener, when the dialog is closed, this will get called
-		public async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
-		{
-			var account = MainActivity.GetAccount();
-			var pin = new Pin
-			{
-				Type = 0,
-				Name = e.Name,
-				Rating = e.Rating,
-				Description = e.Description,
-				Likes = 0,
-				Latitude = _selectLocation.Latitude,
-				Longitude = _selectLocation.Longitude,
-				LinkedAccount = account.Id,
-				Review = e.Review,
-                Cost = e.Cost,
-				CreateDate = e.CreateDate
-			};
-			_pins.Add(pin);
-			CreatePin(pin);
-			await MainActivity.dayTomatoClient.CreatePin(pin);
-		}
-
 		// When camera has finished moving, update the selected location
 		public async void OnCameraChange(CameraPosition position)
 		{
@@ -390,10 +367,49 @@ namespace DayTomato.Droid.Fragments
 				_markers.Remove(e.MarkerId);
 				_clusterManager.Cluster();
 			}
+			if (e.Update)
+			{
+				List<Pin> update = e.PinsToUpdate;
+				foreach (var u in update)
+				{
+					int r1 = _pins.FindIndex(p => p.Id.Equals(u.Id));
+					int r2 = _markerPins[e.MarkerId].FindIndex(p => p.Id.Equals(u.Id));
+					_pins.RemoveAt(r1);
+					_pins.Add(u);
+					_markerPins[e.MarkerId].RemoveAt(r2);
+					_markerPins[e.MarkerId].Add(u);
+					await MainActivity.dayTomatoClient.UpdatePin(u);
+				}
+				_clusterManager.Cluster();
+			}
 
 			// Switch button states
 			_createPin.Visibility = ViewStates.Visible;
 			_createPin.Enabled = true;
+		}
+
+		// Event listener, when the dialog is closed, this will get called
+		public async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
+		{
+			var account = MainActivity.GetAccount();
+			var pin = new Pin
+			{
+				Type = 0,
+				Name = e.Name,
+				Rating = e.Rating,
+				Description = e.Description,
+				Likes = 0,
+				Latitude = _selectLocation.Latitude,
+				Longitude = _selectLocation.Longitude,
+				LinkedAccount = account.Id,
+				Review = e.Review,
+				Cost = e.Cost,
+				CreateDate = e.CreateDate
+			};
+			_pins.Add(pin);
+			CreatePin(pin);
+			await MainActivity.dayTomatoClient.CreatePin(pin);
+			_clusterManager.Cluster();
 		}
 	}
 }
