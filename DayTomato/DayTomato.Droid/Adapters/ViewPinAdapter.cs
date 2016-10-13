@@ -98,6 +98,8 @@ namespace DayTomato.Droid
 				   	vh.PinImage.SetImageBitmap(resizedBitmap);
 				    pd.Hide();
 					_parent.Update(_pins[position]);
+					stream.Dispose();
+					GC.Collect();
 				};
 			}
 
