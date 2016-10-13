@@ -351,7 +351,7 @@ namespace DayTomato.Droid.Fragments
 			return true;
 		}
 
-		// Event listener, when the dialog is closed, this will get called
+		// Event listener, when the viewpin dialog is closed, this will get called
 		public async void OnViewPinDialogClosed(object sender, ViewPinDialogEventArgs e)
 		{
 			if (e.Create)
@@ -388,7 +388,7 @@ namespace DayTomato.Droid.Fragments
 			_createPin.Enabled = true;
 		}
 
-		// Event listener, when the dialog is closed, this will get called
+		// Event listener, when the createpin dialog is closed, this will get called
 		public async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
 		{
 			var account = MainActivity.GetAccount();
@@ -405,11 +405,15 @@ namespace DayTomato.Droid.Fragments
 				Review = e.Review,
 				Cost = e.Cost,
 				CreateDate = e.CreateDate,
-				ImageURL = e.ImageUrl
+				ImageURL = e.ImageUrl,
+				Comments = new List<Comment>()
 			};
+
+			pin.Id = await MainActivity.dayTomatoClient.CreatePin(pin);
+
 			_pins.Add(pin);
 			CreatePin(pin);
-			await MainActivity.dayTomatoClient.CreatePin(pin);
+
 			_clusterManager.Cluster();
 		}
 	}

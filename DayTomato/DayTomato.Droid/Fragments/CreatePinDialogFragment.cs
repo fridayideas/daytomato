@@ -105,6 +105,7 @@ namespace DayTomato.Droid
 				Log.Error(TAG, ex.Message);
 			}
 			_description.Text = Arguments.GetString("SELECTED_LOCATION_DESCRIPTION", "");
+			_imageUrl = "";
 		}
 
 		private void SetListeners()

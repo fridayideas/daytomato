@@ -118,13 +118,19 @@ namespace DayTomato.Services
 		}
 
 		// Create Pins
-		public async Task<bool> CreatePin(Pin pin)
+		public async Task<string> CreatePin(Pin pin)
 		{
 			var uri = new Uri(BASE_URL + "/api/pins");
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			var content = new StringContent(JsonConvert.SerializeObject(pin), Encoding.UTF8, "application/json");
 			var response = await httpClient.PostAsync(uri, content);
-			return response.IsSuccessStatusCode;
+			if (response.IsSuccessStatusCode)
+			{
+				var res = new JObject();
+				res = JObject.Parse(await response.Content.ReadAsStringAsync());
+				return (string)res["_id"];
+			}
+			return "";
 		}
 
 		// Delete Pin
