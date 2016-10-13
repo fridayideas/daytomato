@@ -63,6 +63,22 @@ namespace DayTomato.Services
 			return place;
 		}
 
+		// Get All Trips
+		public async Task<List<Trip>> GetTrips()
+		{
+			List<Trip> trips = new List<Trip>();
+			var uri = new Uri(BASE_URL + "/api/trips");
+			var response = await httpClient.GetAsync(uri);
+			if (response.IsSuccessStatusCode)
+			{
+				string content = await response.Content.ReadAsStringAsync();
+				trips = JsonConvert.DeserializeObject<List<Trip>>(content);
+				return trips;
+			}
+
+			return null;
+		}
+
         // Get Pins
         public async Task<List<Pin>> GetPins()
         {
