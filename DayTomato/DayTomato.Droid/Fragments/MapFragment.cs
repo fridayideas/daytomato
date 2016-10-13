@@ -404,7 +404,8 @@ namespace DayTomato.Droid.Fragments
 				LinkedAccount = account.Id,
 				Review = e.Review,
 				Cost = e.Cost,
-				CreateDate = e.CreateDate
+				CreateDate = e.CreateDate,
+				ImageURL = e.ImageUrl
 			};
 			_pins.Add(pin);
 			CreatePin(pin);

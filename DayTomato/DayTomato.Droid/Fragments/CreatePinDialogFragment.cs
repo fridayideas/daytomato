@@ -7,9 +7,10 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Android.Gms.Maps.Model;
-using DayTomato.Droid.Fragments;
 using Android.Graphics;
 using Android.Util;
+using Plugin.Media;
+using System.IO;
 
 namespace DayTomato.Droid
 {
@@ -27,7 +28,8 @@ namespace DayTomato.Droid
 		private RatingBar _rating;                                      // Rating user will give
 		private EditText _review;										// Review user will give
         private EditText _cost;                                         // Amount user spent
-		private bool _createPin;										// Check if they pressed create or not
+		private bool _createPin;                                        // Check if they pressed create or not
+		private string _imageUrl;
 
 		public static CreatePinDialogFragment NewInstance(Bundle bundle)
 		{
@@ -79,7 +81,8 @@ namespace DayTomato.Droid
 					Cost = Convert.ToDouble(_cost.Text),
 					Location = new LatLng(Arguments.GetDouble("SELECTED_LOCATION_LATITUDE"),
 										  Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")),
-					CreateDate = DateTime.Today
+					CreateDate = DateTime.Today,
+					ImageUrl = _imageUrl
 				});
 
 				MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
@@ -118,7 +121,46 @@ namespace DayTomato.Droid
 				_createPin = false;
 				Dialog.Dismiss();
 			};
-				
+			_image.Click += async (sender, e) => 
+			{
+				await CrossMedia.Current.Initialize();
+				if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+				{
+					Toast.MakeText(this.Activity, "No Camera available", ToastLength.Short);
+					return;
+				}
+
+				Android.App.ProgressDialog pd = new Android.App.ProgressDialog(this.Activity);
+				pd.Show();
+				pd.SetMessage("Loading...");
+
+				var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+				{
+					Directory = "DayTomato",
+					Name = string.Format("{0}.jpg", Guid.NewGuid()),
+					SaveToAlbum = true,
+					PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
+					CompressionQuality = 92
+				});
+
+				if (file == null)
+				{
+					return;
+				}
+
+				Toast.MakeText(this.Activity, "Photo saved: " + file.Path, ToastLength.Short);
+
+				var resizedBitmap = await PictureUtil.DecodeByteArrayAsync(file.AlbumPath, 200, 200);
+
+				var stream = new MemoryStream();
+				resizedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+				var resizedImg = stream.ToArray();
+
+				var imgurl = await MainActivity.dayTomatoClient.UploadImage(resizedImg);
+				_imageUrl = imgurl;
+				_image.SetImageBitmap(resizedBitmap);
+				pd.Hide();
+			};	
 		}
 	}
 
@@ -131,5 +173,6 @@ namespace DayTomato.Droid
 		public string Review { get; set; }
         public double Cost { get; set; }
 		public DateTime CreateDate { get; set; }
+		public string ImageUrl { get; set; }
 	}
 }
