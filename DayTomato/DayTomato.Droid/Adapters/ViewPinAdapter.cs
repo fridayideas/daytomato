@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
+using Plugin.Media;
 
 namespace DayTomato.Droid
 {
@@ -46,12 +49,54 @@ namespace DayTomato.Droid
 
 			// Pin imageURL 
 			var imageUrl = _pins[position].ImageURL;
-			if (!imageUrl.Equals("none") && !imageUrl.Equals(""))
+			if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
 			{
 				var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
 				var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
 				vh.PinImage.SetImageBitmap(imageBitmap);
 			}
+
+			vh.PinImage.Click += async (sender, e) => 
+			{
+				await CrossMedia.Current.Initialize();
+				if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+				{
+					Toast.MakeText(_context, "No Camera available", ToastLength.Short);
+					return;
+				}
+
+				var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+				{
+					Directory = "DayTomato",
+					Name = string.Format("{0}.jpg", Guid.NewGuid()),
+					SaveToAlbum = true,
+					PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
+					CompressionQuality = 92
+				});
+
+				if (file == null)
+				{
+					return;
+				}
+
+				Toast.MakeText(_context, "Photo saved: " + file.Path, ToastLength.Short);
+
+				var options = new BitmapFactory.Options 
+				{ 
+					InJustDecodeBounds = true
+				};
+
+				//byte[] img = File.ReadAllBytes(file.AlbumPath);
+				MemoryStream imgstream = new MemoryStream();
+				var usersImage = await BitmapFactory.DecodeFileAsync(file.AlbumPath);
+				usersImage.Compress(Bitmap.CompressFormat.Jpeg, 50, imgstream);
+				usersImage = await BitmapFactory.DecodeStreamAsync(imgstream);
+				var imageHeight = options.OutHeight;
+				var imageWidth = options.OutWidth;
+				var imageType = options.OutMimeType;
+
+				vh.PinImage.SetImageBitmap(usersImage);
+			};
 
 			vh.PinName.Text = _pins[position].Name;
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
@@ -189,6 +234,28 @@ namespace DayTomato.Droid
 					menu.Show();
 				};
 			}
+		}
+
+		public static int CalculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+		{
+			// Raw height and width of image
+			float height = options.OutHeight;
+			float width = options.OutWidth;
+			double inSampleSize = 1D;
+
+			if (height > reqHeight || width > reqWidth)
+			{
+				int halfHeight = (int)(height / 2);
+				int halfWidth = (int)(width / 2);
+
+				// Calculate a inSampleSize that is a power of 2 - the decoder will use a value that is a power of two anyway.
+				while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth)
+				{
+					inSampleSize *= 2;
+				}
+			}
+
+			return (int)inSampleSize;
 		}
 	}
 
