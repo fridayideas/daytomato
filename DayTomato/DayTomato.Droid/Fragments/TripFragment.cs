@@ -9,6 +9,7 @@ using DayTomato.Models;
 using Java.Lang;
 using System.Collections.Generic;
 using Android.Support.V7.Widget;
+using Newtonsoft.Json;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -56,6 +57,7 @@ namespace DayTomato.Droid.Fragments
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
 			_adapter = new TripSuggestionAdapter(_suggestions);
+			_adapter.HandleClick += OnHandleClick;
 			_recyclerView.SetAdapter(_adapter);
 
 			_currentLocation = await MainActivity.GetUserLocation();
@@ -78,6 +80,39 @@ namespace DayTomato.Droid.Fragments
 				}
 			}
 			_userLocation.Text = address;
+
+		}
+
+		private void OnHandleClick(object sender, int position)
+		{
+			var tripData = JsonConvert.SerializeObject(_suggestions[position]);
+
+			var fm = FragmentManager;
+			var ft = fm.BeginTransaction();
+
+			//Remove fragment else it will crash as it is already added to backstack
+			var prev = fm.FindFragmentByTag("ViewTripDialog");
+			if (prev != null)
+			{
+				ft.Remove(prev);
+			}
+
+			ft.AddToBackStack(null);
+
+			// Create and show the dialog.
+			var bundle = new Bundle();
+			bundle.PutString("VIEW_TRIP_TITLE", _suggestions[position].Name);
+			bundle.PutString("VIEW_TRIP_DATA", tripData);
+
+			var viewTripDialogFragment = ViewTripDialogFragment.NewInstance(bundle);
+			viewTripDialogFragment.ViewTripDialogClosed += OnViewTripDialogClosed;
+
+			//Add fragment
+			viewTripDialogFragment.Show(fm, "ViewTripDialog");
+		}
+
+		private void OnViewTripDialogClosed(object sender, ViewTripDialogEventArgs e)
+		{
 		}
 	}
 }

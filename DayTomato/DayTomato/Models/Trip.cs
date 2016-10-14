@@ -47,7 +47,7 @@ namespace DayTomato.Models
 				JArray ja = (JArray)jo["pins"];
 				for (int i = 0; i < ja.Count; ++i)
 				{
-					Pin pin = JsonConvert.DeserializeObject<Pin>((string)ja[i]);
+					Pin pin = JsonConvert.DeserializeObject<Pin>(ja[i].ToString());
 					trip.Pins.Add(pin);
 				}
 			}

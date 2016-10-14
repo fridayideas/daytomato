@@ -144,6 +144,8 @@
     <Compile Include="Util\ClusterPin.cs" />
     <Compile Include="Fragments\ViewPinDialogFragment.cs" />
     <Compile Include="Adapters\ViewPinCommentsAdapter.cs" />
+    <Compile Include="Adapters\ViewTripAdapter.cs" />
+    <Compile Include="Fragments\ViewTripDialogFragment.cs" />
     <Compile Include="Util\PictureUtil.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +192,8 @@
     <AndroidResource Include="Resources\menu\view_pin_popup_menu.xml" />
     <AndroidResource Include="Resources\layout\home_feed_pins_view_holder.axml" />
     <AndroidResource Include="Resources\drawable\ic_directions_black_48px.xml" />
+    <AndroidResource Include="Resources\layout\view_trip_dialog_fragment.axml" />
+    <AndroidResource Include="Resources\layout\trip_pin_view_holder.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
