@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DayTomato.Models;
+using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -62,7 +62,7 @@ namespace DayTomato
 					}
 					catch (Exception ex)
 					{
-						//TODO: Catch exception
+						Debug.WriteLine(ex.Message);
 					}
 
 					if (place.Name != null) break;

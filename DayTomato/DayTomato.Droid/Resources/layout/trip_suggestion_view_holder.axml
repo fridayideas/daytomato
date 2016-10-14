@@ -20,14 +20,53 @@
             android:padding="8dp">
             <TextView
                 android:text="Trip name"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/trip_suggestion_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black" />
             <TextView
                 android:text="Trip type"
+                android:textColor="@color/black"
                 android:id="@+id/trip_suggestion_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:text="Pins"
+                android:textColor="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/trip_suggestion_pins"
+                android:layout_marginTop="8dp" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:text="Created"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#E0E0E0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/trip_suggestion_createdate"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:text="Author"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#E0E0E0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/trip_suggestion_author"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

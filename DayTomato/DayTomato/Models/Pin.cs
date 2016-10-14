@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace DayTomato.Models
 {
@@ -73,9 +75,9 @@ namespace DayTomato.Models
 				pin.CreateDate = (DateTime)jo["createDate"];               // Pin create date
 				pin.ImageURL = (string)jo["image"];						   // Pin image url
 			}
-			catch
+			catch (Exception ex)
 			{
-				// TODO:Catch error here
+				Debug.WriteLine(ex.Message);
 			}
 
 			/* Comments
@@ -94,8 +96,9 @@ namespace DayTomato.Models
 					pin.Comments.Add(new Comment(account, text, date));
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				Debug.WriteLine(ex.Message);
 			}	
 
 			return pin;
