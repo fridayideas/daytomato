@@ -194,6 +194,7 @@
     <AndroidResource Include="Resources\drawable\ic_directions_black_48px.xml" />
     <AndroidResource Include="Resources\layout\view_trip_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\trip_pin_view_holder.axml" />
+    <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
