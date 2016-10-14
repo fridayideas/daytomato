@@ -60,6 +60,7 @@ namespace DayTomato.Droid
 			_account.Id = "100";
 			_account.Pins = 0;
 			_account.Seeds = 0;
+			_account.Privilege = Account.SeedLevels.GOD;
 			return _account;
 		}
 

@@ -223,7 +223,7 @@ namespace DayTomato.Droid.Fragments
 				sel.Latitude = _selectLocation.Latitude;
 				sel.Longitude = _selectLocation.Longitude;
 
-				if (curr.DistanceTo(sel) > 100 && (MainActivity.GetAccount().Seeds < 200))
+				if (curr.DistanceTo(sel) > 100 && (MainActivity.GetAccount().Privilege > Account.SeedLevels.TRUSTED))
 				{
 					AlertDialog.Builder alert = new AlertDialog.Builder(Context);
 					alert.SetTitle("You're too far away!");
@@ -359,6 +359,9 @@ namespace DayTomato.Droid.Fragments
 		// Event listener, when the viewpin dialog is closed, this will get called
 		public async void OnViewPinDialogClosed(object sender, ViewPinDialogEventArgs e)
 		{
+			// To fix issue when pressing "Add" in ViewPin was crashing
+			_selectLocation = _markers[e.MarkerId].Position;
+
 			if (e.Create)
 			{
 				CreatePinDialog();
