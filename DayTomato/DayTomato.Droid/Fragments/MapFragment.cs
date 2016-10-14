@@ -223,7 +223,7 @@ namespace DayTomato.Droid.Fragments
 				sel.Latitude = _selectLocation.Latitude;
 				sel.Longitude = _selectLocation.Longitude;
 
-				if (curr.DistanceTo(sel) > 100 && (MainActivity.GetAccount().Privilege > Account.SeedLevels.TRUSTED))
+				if (curr.DistanceTo(sel) > 100 && (MainActivity.GetAccount().Privilege <= Account.SeedLevels.TRUSTED))
 				{
 					AlertDialog.Builder alert = new AlertDialog.Builder(Context);
 					alert.SetTitle("You're too far away!");
