@@ -147,6 +147,7 @@
     <Compile Include="Adapters\ViewTripAdapter.cs" />
     <Compile Include="Fragments\ViewTripDialogFragment.cs" />
     <Compile Include="Util\PictureUtil.cs" />
+    <Compile Include="Activities\SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -188,23 +189,24 @@
     <None Include="DLL\GoogleMapsUtilityBinding.dll" />
     <AndroidResource Include="Resources\layout\pin_comment_view_holder.axml" />
     <AndroidResource Include="Resources\drawable\three_dots.png" />
-    <AndroidResource Include="Resources\drawable\more.png" />
+    <AndroidResource Include="Resources\drawable\dots.png" />
     <AndroidResource Include="Resources\menu\view_pin_popup_menu.xml" />
     <AndroidResource Include="Resources\layout\home_feed_pins_view_holder.axml" />
     <AndroidResource Include="Resources\drawable\ic_directions_black_48px.xml" />
     <AndroidResource Include="Resources\layout\view_trip_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\trip_pin_view_holder.axml" />
-    <AndroidResource Include="Resources\drawable\icon.png" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
+    <AndroidResource Include="Resources\drawable\playstore_icon.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable-hdpi\Icon.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\Icon.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\Icon.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\Icon.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\colors.xml">

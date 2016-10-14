@@ -2161,55 +2161,61 @@ namespace DayTomato.Droid
 			public const int design_snackbar_background = 2130837624;
 			
 			// aapt resource value: 0x7f020079
-			public const int down_arrow_filled = 2130837625;
+			public const int dots = 2130837625;
 			
 			// aapt resource value: 0x7f02007a
-			public const int down_arrow_unfilled = 2130837626;
+			public const int down_arrow_filled = 2130837626;
 			
 			// aapt resource value: 0x7f02007b
-			public const int ic_add_location_white_18dp = 2130837627;
+			public const int down_arrow_unfilled = 2130837627;
 			
 			// aapt resource value: 0x7f02007c
-			public const int ic_directions_black_48px = 2130837628;
+			public const int ic_add_location_white_18dp = 2130837628;
 			
 			// aapt resource value: 0x7f02007d
-			public const int ic_directions_walk_white_24px = 2130837629;
+			public const int ic_directions_black_48px = 2130837629;
 			
 			// aapt resource value: 0x7f02007e
-			public const int ic_home_white_24dp = 2130837630;
+			public const int ic_directions_walk_white_24px = 2130837630;
 			
 			// aapt resource value: 0x7f02007f
-			public const int ic_insert_photo_black_48dp = 2130837631;
+			public const int ic_home_white_24dp = 2130837631;
 			
 			// aapt resource value: 0x7f020080
-			public const int ic_person_black_24dp = 2130837632;
+			public const int ic_insert_photo_black_48dp = 2130837632;
 			
 			// aapt resource value: 0x7f020081
-			public const int ic_place_black_24dp = 2130837633;
+			public const int ic_person_black_24dp = 2130837633;
 			
 			// aapt resource value: 0x7f020082
-			public const int ic_place_white_24dp = 2130837634;
+			public const int ic_place_black_24dp = 2130837634;
 			
 			// aapt resource value: 0x7f020083
-			public const int icon = 2130837635;
+			public const int ic_place_white_24dp = 2130837635;
 			
 			// aapt resource value: 0x7f020084
-			public const int more = 2130837636;
+			public const int icon = 2130837636;
 			
-			// aapt resource value: 0x7f020089
-			public const int notification_template_icon_bg = 2130837641;
+			// aapt resource value: 0x7f02008b
+			public const int notification_template_icon_bg = 2130837643;
 			
 			// aapt resource value: 0x7f020085
-			public const int select_location_pin = 2130837637;
+			public const int playstore_icon = 2130837637;
 			
 			// aapt resource value: 0x7f020086
-			public const int three_dots = 2130837638;
+			public const int select_location_pin = 2130837638;
 			
 			// aapt resource value: 0x7f020087
-			public const int up_arrow_filled = 2130837639;
+			public const int splash_screen = 2130837639;
 			
 			// aapt resource value: 0x7f020088
-			public const int up_arrow_unfilled = 2130837640;
+			public const int three_dots = 2130837640;
+			
+			// aapt resource value: 0x7f020089
+			public const int up_arrow_filled = 2130837641;
+			
+			// aapt resource value: 0x7f02008a
+			public const int up_arrow_unfilled = 2130837642;
 			
 			static Drawable()
 			{
@@ -3493,9 +3499,6 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b015e
 			public const int AppTheme_Base = 2131427678;
 			
-			// aapt resource value: 0x7f0b0160
-			public const int AppTheme_Splash = 2131427680;
-			
 			// aapt resource value: 0x7f0b008e
 			public const int Base_AlertDialog_AppCompat = 2131427470;
 			
@@ -3945,6 +3948,9 @@ namespace DayTomato.Droid
 			
 			// aapt resource value: 0x7f0b015d
 			public const int ClusterIcon_TextAppearance = 2131427677;
+			
+			// aapt resource value: 0x7f0b0160
+			public const int MyTheme_Splash = 2131427680;
 			
 			// aapt resource value: 0x7f0b001b
 			public const int Platform_AppCompat = 2131427355;
