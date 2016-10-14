@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 using Plugin.Geolocator;
 using Android.Util;
 using DayTomato.Models;
-using System;
+using Java.IO;
+using Android.Graphics;
 
 namespace DayTomato.Droid
 {
@@ -202,6 +203,13 @@ namespace DayTomato.Droid
             }
         }
     }
+
+	public static class Picture
+	{
+		public static File File { get; set; }
+		public static File Dir { get; set; }
+		public static Bitmap Bitmap { get; set; }
+	}
 }
 
 
