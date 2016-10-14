@@ -21,11 +21,9 @@ On the Map tab, you can see all the pins that users have placed. Tap any to view
 
 ### Documentation
 [Architectural Overview](https://docs.google.com/presentation/d/1t4Ov2VW7ZXqcUSvIqzzz1BZWfQ8kaZPr_QZloVf0Y1k/edit?usp=sharing)  
-<!--[Authentication Workflow]()--> 
 [Main Features](https://github.com/fridayideas/daytomato/wiki/Features-List)  
 [Main Use Cases](https://drive.google.com/open?id=0B6iCv6f-iYt0OG1GeVFJdlV0SWM)  
 [Public REST API](https://github.com/fridayideas/daytomatoserver)  
-<!--[Third Party Libraries]()-->
 [User Guide](https://github.com/fridayideas/daytomato/wiki/User-Guide)
 
 ---
