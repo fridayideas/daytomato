@@ -29,7 +29,7 @@
                 android:id="@+id/relativeLayout1"
                 android:layout_gravity="right">
                 <ImageView xmlns:tools="http://schemas.android.com/tools"
-                    android:src="@drawable/more"
+                    android:src="@drawable/dots"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/pin_view_holder_view_menu"
