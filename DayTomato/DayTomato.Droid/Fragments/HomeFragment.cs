@@ -69,6 +69,10 @@ namespace DayTomato.Droid.Fragments
 
 		private async void InitInstances()
 		{
+			Android.App.ProgressDialog pd = new Android.App.ProgressDialog(Activity);
+			pd.Show();
+			pd.SetMessage("Loading...");
+
 			while (_account == null)
 			{
 				_account = MainActivity.GetAccount();
@@ -100,6 +104,7 @@ namespace DayTomato.Droid.Fragments
 				});
 			}
 			_adapter.NotifyDataSetChanged();
+			pd.Hide();
 		}
     }
 }

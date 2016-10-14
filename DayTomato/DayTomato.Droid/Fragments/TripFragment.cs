@@ -80,7 +80,6 @@ namespace DayTomato.Droid.Fragments
 				}
 			}
 			_userLocation.Text = address;
-
 		}
 
 		private void OnHandleClick(object sender, int position)
