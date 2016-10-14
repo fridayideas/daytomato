@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace DayTomato.Services
 {
@@ -246,7 +247,29 @@ namespace DayTomato.Services
 		// Getting an image from a url
 		public async Task<byte[]> GetImageBitmapFromUrlAsync(string url)
 		{
-			return await httpClient.GetByteArrayAsync(url);
+			using (var client = new HttpClient())
+			{
+				client.MaxResponseContentBufferSize = 256000;
+				try
+				{
+					var result = await client.GetAsync(url);
+					if (result.IsSuccessStatusCode)
+					{
+						return await result.Content.ReadAsByteArrayAsync();
+					}
+					else
+					{
+						Debug.WriteLine(result.StatusCode);
+						return null;
+					}
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine(ex.Message);
+					return null;
+				}
+			}
+
 		}
 
 		// Imgur post image

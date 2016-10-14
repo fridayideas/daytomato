@@ -4,6 +4,7 @@ using System.IO;
 using Android.App;
 using Android.Graphics;
 using Android.Support.V7.Widget;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
@@ -13,6 +14,7 @@ namespace DayTomato.Droid
 {
 	public class ViewPinAdapter : RecyclerView.Adapter
 	{
+		private readonly string TAG = "VIEW_PIN_ADAPTER";
 		private List<Pin> _pins;
 		private List<bool> _pinLiked;
 		private List<bool> _pinDisliked;
@@ -52,9 +54,16 @@ namespace DayTomato.Droid
 			var imageUrl = _pins[position].ImageURL;
 			if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
 			{
-				var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
-				var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-				vh.PinImage.SetImageBitmap(imageBitmap);
+				try
+				{
+					var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
+					var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+					vh.PinImage.SetImageBitmap(imageBitmap);
+				}
+				catch(Exception ex)
+				{
+					Log.Error(TAG, ex.Message);
+				}
 			}
 			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
 			{
@@ -242,8 +251,6 @@ namespace DayTomato.Droid
 
 	public class ViewPinViewHolder : RecyclerView.ViewHolder
 	{
-		private Action<int> _listener;
-
 		public ImageView PinImage { get; private set; }
 		public TextView PinName { get; private set; }
 		public ImageView UpButton { get; private set; }
@@ -283,27 +290,6 @@ namespace DayTomato.Droid
 			ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
 			ViewMenu = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_view_menu);
 			HideComments = true;
-		}
-
-		public void SetClickListener(Action<int> listener)
-		{
-			_listener = listener;
-			ItemView.Click += HandleClick;
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-			if (ItemView != null)
-			{
-				ItemView.Click -= HandleClick;
-			}
-			_listener = null;
-		}
-
-		void HandleClick(object sender, EventArgs e)
-		{
-			_listener?.Invoke(base.AdapterPosition);
 		}
 	}
 }

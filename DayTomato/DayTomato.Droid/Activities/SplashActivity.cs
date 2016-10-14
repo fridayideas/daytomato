@@ -3,7 +3,6 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Content;
 using System.Threading.Tasks;
-using Java.Lang;
 
 namespace DayTomato.Droid
 {
@@ -14,8 +13,6 @@ namespace DayTomato.Droid
 		NoHistory = true)]
 	public class SplashActivity : AppCompatActivity
 	{
-		static readonly string TAG = "SPLASHSCREEN:" + typeof(SplashActivity).Name;
-
 		public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
 		{
 			base.OnCreate(savedInstanceState, persistentState);
