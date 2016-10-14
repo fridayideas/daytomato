@@ -30,7 +30,7 @@
                 android:id="@+id/relativeLayout1"
                 android:layout_gravity="right">
                 <ImageView xmlns:tools="http://schemas.android.com/tools"
-                    android:src="@drawable/more"
+                    android:src="@drawable/dots"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/pin_view_holder_view_menu"
@@ -85,7 +85,7 @@
                     android:layout_height="200dp"
                     android:id="@+id/pin_view_holder_pin_image"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icon"
+                    android:src="@drawable/icon1"
                     android:layout_gravity="center"
                     android:layout_marginRight="16dp" />
                 <TextView

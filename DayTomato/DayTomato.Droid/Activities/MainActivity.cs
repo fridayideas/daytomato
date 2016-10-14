@@ -17,7 +17,7 @@ using System;
 
 namespace DayTomato.Droid
 {
-    [Activity(MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Icon = "@drawable/icon")]
     public class MainActivity : FragmentActivity, ViewPager.IOnPageChangeListener
 	{
 		private static readonly string TAG = "MAIN_ACTIVITY";
