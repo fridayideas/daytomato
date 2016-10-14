@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Android.App;
 using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
+using Plugin.Media;
 
 namespace DayTomato.Droid
 {
@@ -15,13 +17,15 @@ namespace DayTomato.Droid
 		private List<bool> _pinLiked;
 		private List<bool> _pinDisliked;
 		private Activity _context;
+		private ViewPinDialogFragment _parent;
 
-		public ViewPinAdapter(List<Pin> pins, Activity context)
+		public ViewPinAdapter(List<Pin> pins, Activity context, ViewPinDialogFragment parent)
 		{
 			_pins = pins;
 			_pinLiked = new List<bool>(new bool[pins.Count]);
 			_pinDisliked = new List<bool>(new bool[pins.Count]);
 			_context = context;
+			_parent = parent;
 		}
 
 		public override int ItemCount
@@ -46,11 +50,57 @@ namespace DayTomato.Droid
 
 			// Pin imageURL 
 			var imageUrl = _pins[position].ImageURL;
-			if (!imageUrl.Equals("none") && !imageUrl.Equals(""))
+			if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
 			{
 				var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
 				var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
 				vh.PinImage.SetImageBitmap(imageBitmap);
+			}
+			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
+			{
+				vh.PinImage.Click += async (sender, e) =>
+			   	{
+				   	await CrossMedia.Current.Initialize();
+				   	if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+				   	{
+					   	Toast.MakeText(_context, "No Camera available", ToastLength.Short);
+					   	return;
+				   	}
+
+					ProgressDialog pd = new ProgressDialog(_context);
+				    pd.Show();
+					pd.SetMessage("Loading...");
+
+				   	var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+				   	{
+					  	Directory = "DayTomato",
+					   	Name = string.Format("{0}.jpg", Guid.NewGuid()),
+					   	SaveToAlbum = true,
+					   	PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
+					   	CompressionQuality = 92
+				   	});
+
+				   	if (file == null)
+				   	{
+					   	return;
+				   	}
+
+				   	Toast.MakeText(_context, "Photo saved: " + file.Path, ToastLength.Short);
+
+				   	var resizedBitmap = await PictureUtil.DecodeByteArrayAsync(file.AlbumPath, 200, 200);
+
+				   	var stream = new MemoryStream();
+				   	resizedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+				   	var resizedImg = stream.ToArray();
+
+				   	var imgurl = await MainActivity.dayTomatoClient.UploadImage(resizedImg);
+				   	_pins[position].ImageURL = imgurl;
+				   	vh.PinImage.SetImageBitmap(resizedBitmap);
+				    pd.Hide();
+					_parent.Update(_pins[position]);
+					stream.Dispose();
+					GC.Collect();
+				};
 			}
 
 			vh.PinName.Text = _pins[position].Name;
@@ -102,14 +152,12 @@ namespace DayTomato.Droid
 				vh.HideComments = !vh.HideComments;
 				if (vh.HideComments)
 				{
-					Console.WriteLine("Removing");
 					vh.CommentsListView.RemoveAllViews();
 					vh.CommentsListView.Visibility = ViewStates.Gone;
 					vh.ShowComments.Text = "show comments";
 				}
 				else
 				{
-					Console.WriteLine("Showing");
 					vh.CommentsListView.Visibility = ViewStates.Visible;
 					vh.ShowComments.Text = "hide comments";
 					vh.CommentsListView.RemoveAllViews();
@@ -213,7 +261,6 @@ namespace DayTomato.Droid
 		public ImageView ViewMenu { get; private set; }
 		public bool HideComments { get; set; }
 		public LinearLayout CommentsListView { get; set; }
-
 
 		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
 

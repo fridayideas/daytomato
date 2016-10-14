@@ -39,6 +39,7 @@ namespace DayTomato.Droid.Fragments
 		private Dictionary<long, Polygon> _markerPolygons;
 		private Dictionary<long, ClusterPin> _markers;
 		private ClusterManager _clusterManager;
+		private bool _lock;
 
 		private const double POLY_RADIUS = 0.0001;
 
@@ -47,7 +48,7 @@ namespace DayTomato.Droid.Fragments
             base.OnCreateView(inflater, container, savedInstanceState);
 
             var view = inflater.Inflate(Resource.Layout.map_fragment, container, false);
-
+			_lock = false;
 			_pins = new List<Pin>();
 			_markerPins = new Dictionary<long, List<Pin>>();
 			_markerPolygons = new Dictionary<long, Polygon>();
@@ -72,14 +73,16 @@ namespace DayTomato.Droid.Fragments
 			{
 				((SupportMapFragment)ChildFragmentManager.FindFragmentById(Resource.Id.map)).GetMapAsync(this);
 			}
+			if (!_lock)
+			{
+	            // Get pins
+	            // TODO can we do this progressively?
+				_pins = await MainActivity.dayTomatoClient.GetPins();
 
-            // Get pins
-            // TODO can we do this progressively?
-			_pins = await MainActivity.dayTomatoClient.GetPins();
-
-			// Load pins onto map
-            UpdateMap();
-            _clusterManager.Cluster();
+				// Load pins onto map
+				UpdateMap();
+				_clusterManager.Cluster();
+			}
         }
 
 		// Can only be called if map is ready!
@@ -240,6 +243,7 @@ namespace DayTomato.Droid.Fragments
 
 		async void CreatePinDialog()
 		{
+			_lock = true;
 			var fm = FragmentManager;
 			var ft = fm.BeginTransaction();
 
@@ -297,29 +301,6 @@ namespace DayTomato.Droid.Fragments
 			return address;
 		}
 
-		// Event listener, when the dialog is closed, this will get called
-		public async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
-		{
-			var account = MainActivity.GetAccount();
-			var pin = new Pin
-			{
-				Type = 0,
-				Name = e.Name,
-				Rating = e.Rating,
-				Description = e.Description,
-				Likes = 0,
-				Latitude = _selectLocation.Latitude,
-				Longitude = _selectLocation.Longitude,
-				LinkedAccount = account.Id,
-				Review = e.Review,
-                Cost = e.Cost,
-				CreateDate = e.CreateDate
-			};
-			_pins.Add(pin);
-			CreatePin(pin);
-			await MainActivity.dayTomatoClient.CreatePin(pin);
-		}
-
 		// When camera has finished moving, update the selected location
 		public async void OnCameraChange(CameraPosition position)
 		{
@@ -333,6 +314,7 @@ namespace DayTomato.Droid.Fragments
 
 		public bool OnClusterItemClick(Java.Lang.Object marker)
 		{
+			_lock = true;
 			// Get pins and sort them based on # of likes
 			var pins = _markerPins[((ClusterPin)marker).Id];
 			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
@@ -374,7 +356,7 @@ namespace DayTomato.Droid.Fragments
 			return true;
 		}
 
-		// Event listener, when the dialog is closed, this will get called
+		// Event listener, when the viewpin dialog is closed, this will get called
 		public async void OnViewPinDialogClosed(object sender, ViewPinDialogEventArgs e)
 		{
 			if (e.Create)
@@ -390,10 +372,56 @@ namespace DayTomato.Droid.Fragments
 				_markers.Remove(e.MarkerId);
 				_clusterManager.Cluster();
 			}
+			if (e.Update)
+			{
+				List<Pin> update = e.PinsToUpdate;
+				for (int i = 0; i < update.Count; i++)
+				{
+					// This really sucks, but I cannot figure out why its creating multiple of the same pins here
+					_markerPins[e.MarkerId].RemoveAll(p => p.Id.Equals(update[i].Id));
+					int r1 = _pins.FindIndex(p => p.Id.Equals(update[i].Id));
+					_pins.RemoveAt(r1);
+					_pins.Add(update[i]);
+					_markerPins[e.MarkerId].Add(update[i]);
+					await MainActivity.dayTomatoClient.UpdatePin(update[i]);
+				}
+				_clusterManager.Cluster();
+			}
 
 			// Switch button states
 			_createPin.Visibility = ViewStates.Visible;
 			_createPin.Enabled = true;
+			_lock = false;
+		}
+
+		// Event listener, when the createpin dialog is closed, this will get called
+		public async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
+		{
+			_lock = false;
+			var account = MainActivity.GetAccount();
+			var pin = new Pin
+			{
+				Type = 0,
+				Name = e.Name,
+				Rating = e.Rating,
+				Description = e.Description,
+				Likes = 0,
+				Latitude = _selectLocation.Latitude,
+				Longitude = _selectLocation.Longitude,
+				LinkedAccount = account.Id,
+				Review = e.Review,
+				Cost = e.Cost,
+				CreateDate = e.CreateDate,
+				ImageURL = e.ImageUrl,
+				Comments = new List<Comment>()
+			};
+
+			pin.Id = await MainActivity.dayTomatoClient.CreatePin(pin);
+
+			_pins.Add(pin);
+			CreatePin(pin);
+
+			_clusterManager.Cluster();
 		}
 	}
 }

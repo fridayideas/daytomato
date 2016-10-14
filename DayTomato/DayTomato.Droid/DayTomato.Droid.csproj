@@ -116,6 +116,12 @@
     <Reference Include="GoogleMapsUtilityBinding">
       <HintPath>DLL\GoogleMapsUtilityBinding.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.Media.Abstractions">
+      <HintPath>..\..\packages\Xam.Plugin.Media.2.6.0.4-beta\lib\MonoAndroid10\Plugin.Media.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media">
+      <HintPath>..\..\packages\Xam.Plugin.Media.2.6.0.4-beta\lib\MonoAndroid10\Plugin.Media.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DayTomato\DayTomato.csproj">
@@ -134,10 +140,11 @@
     <Compile Include="Fragments\TripFragment.cs" />
     <Compile Include="Adapters\HomeFeedAdapter.cs" />
     <Compile Include="Adapters\TripSuggestionAdapter.cs" />
-    <Compile Include="MapUtil\PolyUtil.cs" />
-    <Compile Include="MapUtil\ClusterPin.cs" />
+    <Compile Include="Util\PolyUtil.cs" />
+    <Compile Include="Util\ClusterPin.cs" />
     <Compile Include="Fragments\ViewPinDialogFragment.cs" />
     <Compile Include="Adapters\ViewPinCommentsAdapter.cs" />
+    <Compile Include="Util\PictureUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -271,7 +278,7 @@
     <Folder Include="Resources\drawable\" />
     <Folder Include="Activities\" />
     <Folder Include="Adapters\" />
-    <Folder Include="MapUtil\" />
+    <Folder Include="Util\" />
     <Folder Include="Resources\menu\" />
   </ItemGroup>
   <ItemGroup>
