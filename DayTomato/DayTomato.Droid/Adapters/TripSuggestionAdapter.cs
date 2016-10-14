@@ -9,6 +9,9 @@ namespace DayTomato.Droid
 {
 	public class TripSuggestionAdapter : RecyclerView.Adapter
 	{
+		//Create an Event so that our our clients can act when a user clicks
+		//on each individual item.
+		public event EventHandler<int> HandleClick;
 		private List<Trip> _suggestions;
 
 		public TripSuggestionAdapter(List<Trip> suggestions)
@@ -28,7 +31,7 @@ namespace DayTomato.Droid
 						Inflate(Resource.Layout.trip_suggestion_view_holder, parent, false);
 
 			// Create a ViewHolder to hold view references inside the CardView
-			TripSuggestionViewHolder vh = new TripSuggestionViewHolder(itemView);
+			TripSuggestionViewHolder vh = new TripSuggestionViewHolder(itemView, OnClick);
 			return vh;
 		}
 
@@ -44,46 +47,35 @@ namespace DayTomato.Droid
 			vh.CreateDate.Text = "created " + _suggestions[position].CreateDate.ToLongDateString();
 			vh.Author.Text = _suggestions[position].LinkedAccount;
 		}
+
+		//This will fire any event handlers that are registered with our ItemClick
+		//event.
+		private void OnClick(int position)
+		{
+			if (HandleClick != null)
+			{
+				HandleClick(this, position);
+			}
+		}
 	}
 
 	public class TripSuggestionViewHolder : RecyclerView.ViewHolder
 	{
-		private Action<int> _listener;
-
 		public TextView Name { get; private set; }
 		public TextView Type { get; private set; }
 		public TextView Pins { get; private set; }
 		public TextView CreateDate { get; private set; }
 		public TextView Author { get; private set; }
 
-		public TripSuggestionViewHolder(View itemView) : base(itemView)
+		public TripSuggestionViewHolder(View itemView, Action<int> listener) : base(itemView)
 		{
 			Name = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_name);
 			Type = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_type);
 			Pins = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_pins);
 			CreateDate = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_createdate);
 			Author = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_author);
-		}
 
-		public void SetClickListener(Action<int> listener)
-		{
-			_listener = listener;
-			ItemView.Click += HandleClick;
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-			if (ItemView != null)
-			{
-				ItemView.Click -= HandleClick;
-			}
-			_listener = null;
-		}
-
-		void HandleClick(object sender, EventArgs e)
-		{
-			_listener?.Invoke(base.AdapterPosition);
+			itemView.Click += (sender, e) => listener(AdapterPosition);
 		}
 	}
 }
