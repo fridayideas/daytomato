@@ -9,6 +9,8 @@ When you open the application and sign in, you are taken to the home page. Here 
 
 On the Map tab, you can see all the pins that users have placed. Tap any to view them, give it a like or dislike, create your trip directly from the Map tab, or create your own pin!
 
+---
+
 ### Our Team
 [Ryan Samarajeewa](https://github.com/ryansama)<br />
 [James Woo](https://github.com/james-woo)<br />
@@ -18,15 +20,15 @@ On the Map tab, you can see all the pins that users have placed. Tap any to view
 [Alix Voorthuyzen](https://github.com/alixvoor)<br />
 
 ### Documentation
-[Architectural Overview]()  
-[Authentication Workflow]()  
-[Main Features](https://github.com/fridayideas/daytomato/wiki/Features)  
+[Architectural Overview](https://docs.google.com/presentation/d/1t4Ov2VW7ZXqcUSvIqzzz1BZWfQ8kaZPr_QZloVf0Y1k/edit?usp=sharing)  
+<!--[Authentication Workflow]()--> 
+[Main Features](https://github.com/fridayideas/daytomato/wiki/Features-List)  
 [Main Use Cases](https://drive.google.com/open?id=0B6iCv6f-iYt0OG1GeVFJdlV0SWM)  
 [Public REST API](https://github.com/fridayideas/daytomatoserver)  
-[Third Party Libraries]()  
-[Tool & Installation Instructions]()  
-[User Guide]() 
+<!--[Third Party Libraries]()-->
+[User Guide](https://github.com/fridayideas/daytomato/wiki/User-Guide)
 
+---
 
     Copyright 2016 FridayIdeas
 
