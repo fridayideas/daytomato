@@ -15,7 +15,7 @@ using Org.W3c.Dom;
 
 namespace DayTomato.Droid.Activities
 {
-    [Activity(MainLauncher = true, Label = "DayTomato")]
+    [Activity(Label = "DayTomato")]
     public class LoginActivity : Activity
     {
         private readonly string _domain = "fridayideas.auth0.com";
@@ -29,17 +29,26 @@ namespace DayTomato.Droid.Activities
                 _domain,
                 _clientId);
 
-            var auth0user = await Login(auth0);
+            var auth0User = await Login(auth0);
 
-            /*
-            - get user email => auth0user.Profile["email"].ToString()
-            - get facebook/google/twitter/etc access token => auth0user.Profile["identities"][0]["access_token"]
-            - get Windows Azure AD groups => auth0user.Profile["groups"]
-            - etc.
-            */
-
+            //Start MainActivity with user data
+            var mainActivityIntent = new Intent(this, typeof(MainActivity));
+            mainActivityIntent.PutExtra("GivenName", auth0User.Profile["given_name"].ToString());
+            StartActivity(mainActivityIntent);
         }
 
+        /// <summary>
+        /// Usage:
+        /// Auth0User user = await Login(AUTH0_CLIENT);
+        /// 
+        /// Examples:
+        /// -get user email => auth0user.Profile["email"].ToString()
+        /// -get facebook/google/twitter/etc access token => auth0user.Profile["identities"][0]["access_token"]
+        /// -get Windows Azure AD groups => auth0user.Profile["groups"]
+        /// 
+        /// </summary>
+        /// <param name="auth0"></param>
+        /// <returns></returns>
         private async Task<Auth0User> Login(Auth0Client auth0)
         {
             // 'this' could be a Context object (Android) or UIViewController, UIView, UIBarButtonItem (iOS)

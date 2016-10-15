@@ -207,9 +207,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon.png" />
-    <AndroidResource Include="Resources\layout\user_info.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

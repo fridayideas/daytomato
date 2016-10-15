@@ -3,16 +3,14 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Content;
 using System.Threading.Tasks;
+using DayTomato.Droid.Activities;
 
 namespace DayTomato.Droid
 {
 
-  //  [Activity(
-		//Theme = "@style/MyTheme.Splash", 
-		//MainLauncher = true, 
-		//NoHistory = true)]
     [Activity(
         Theme = "@style/MyTheme.Splash",
+        MainLauncher = true,
         NoHistory = true)]
     public class SplashActivity : AppCompatActivity
 	{
@@ -33,7 +31,7 @@ namespace DayTomato.Droid
 			startupWork.ContinueWith(t =>
 			{
 				// Should get users location here and other long loading things
-				StartActivity(new Intent(Application.Context, typeof(MainActivity)));
+				StartActivity(new Intent(Application.Context, typeof(LoginActivity)));
 			}, 
             TaskScheduler.FromCurrentSynchronizationContext());
 			startupWork.Start();

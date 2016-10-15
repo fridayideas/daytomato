@@ -52,11 +52,11 @@ namespace DayTomato.Droid
             InitTabLayout();
         }
 
-		public static async Task<Account> GetUserAccount()
+		public async Task<Account> GetUserAccount()
 		{
 			//_account = await dayTomatoClient.GetAccount();
 			_account = new Account();
-			_account.Username = "admin";
+			_account.Username = Intent.GetStringExtra("GivenName") ?? "null"; ;
 			_account.Id = "100";
 			_account.Pins = 0;
 			_account.Seeds = 0;
