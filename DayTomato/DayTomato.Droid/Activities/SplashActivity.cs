@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 namespace DayTomato.Droid
 {
 
+  //  [Activity(
+		//Theme = "@style/MyTheme.Splash", 
+		//MainLauncher = true, 
+		//NoHistory = true)]
     [Activity(
-		Theme = "@style/MyTheme.Splash", 
-		MainLauncher = true, 
-		NoHistory = true)]
-	public class SplashActivity : AppCompatActivity
+        Theme = "@style/MyTheme.Splash",
+        NoHistory = true)]
+    public class SplashActivity : AppCompatActivity
 	{
 		public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
 		{
