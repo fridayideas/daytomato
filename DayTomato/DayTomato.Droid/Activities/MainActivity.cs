@@ -15,6 +15,7 @@ using Android.Util;
 using DayTomato.Models;
 using Java.IO;
 using Android.Graphics;
+using Newtonsoft.Json.Linq;
 
 namespace DayTomato.Droid
 {
@@ -54,14 +55,25 @@ namespace DayTomato.Droid
 
 		public async Task<Account> GetUserAccount()
 		{
-			//_account = await dayTomatoClient.GetAccount();
-			_account = new Account();
-			_account.Username = Intent.GetStringExtra("GivenName") ?? "null"; ;
-			_account.Id = "100";
-			_account.Pins = 0;
-			_account.Seeds = 0;
-			_account.Privilege = Account.SeedLevels.GOD;
-			return _account;
+            //TODO: Parse and/or filter Auth0User info in DayTomatoClient
+            //_account = await dayTomatoClient.GetAccount();
+		    _account = new Account
+		    {
+		        Id = "100",
+		        Pins = 0,
+		        Seeds = 0,
+		        Privilege = Account.SeedLevels.GOD,
+		        UserJson = Intent.GetStringExtra("AuthUserJSON"),
+		        AccessToken = Intent.GetStringExtra("AuthAccessToken"),
+		        IdToken = Intent.GetStringExtra("AuthIdToken"),
+		        RefreshToken = Intent.GetStringExtra("RefreshToken")
+		    };
+
+            //TODO: 
+		    JObject jo = JObject.Parse(_account.UserJson);
+		    _account.Username = (string)jo["given_name"];
+
+		    return _account;
 		}
 
 		public static async Task<LatLng> GetUserLocation()
