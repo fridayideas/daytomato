@@ -200,7 +200,7 @@ namespace DayTomato.Services
 
 		// Delete a comment 
 		// Need to pass the pin and account ID
-		public async Task<bool> DeleteReviewFromPin(Pin pin, string accountId)
+		public async Task<bool> DeleteCommentFromPin(Pin pin, string accountId)
 		{
 			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/comments/" + accountId);
 			var response = await httpClient.DeleteAsync(uri);
