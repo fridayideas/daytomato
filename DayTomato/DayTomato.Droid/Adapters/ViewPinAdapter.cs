@@ -46,6 +46,17 @@ namespace DayTomato.Droid
 			return vh;
 		}
 
+		public void RefreshComments(LinearLayout ll, ViewPinCommentsAdapter ca)
+		{
+			ll.RemoveAllViews();
+			for (int i = 0; i < ca.Count; i++)
+			{
+				View v = ca.GetView(i, null, ll);
+				ll.AddView(v);
+			}
+			ca.NotifyDataSetChanged();
+		}
+
 		public async override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
 			ViewPinViewHolder vh = holder as ViewPinViewHolder;
@@ -125,14 +136,9 @@ namespace DayTomato.Droid
 			// Initializing listview
 			vh.CommentsAdapter = new ViewPinCommentsAdapter(_context, _pins[position].Comments);
 			// Make sure we can see the comments
-			vh.CommentsListView.RemoveAllViews();
 			if (!vh.HideComments)
 			{
-				for (int i = 0; i < vh.CommentsAdapter.Count; i++)
-				{
-					View v = vh.CommentsAdapter.GetView(i, null, vh.CommentsListView);
-					vh.CommentsListView.AddView(v);
-				}
+				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 			}
 
 			// When clicking add comment, show an edit text
@@ -149,11 +155,17 @@ namespace DayTomato.Droid
 				vh.AddCommentButton.Visibility = ViewStates.Gone;
 
 				Account account = MainActivity.GetAccount();
-				await MainActivity.dayTomatoClient.AddCommentToPin(_pins[position],
-				                                                   vh.AddCommentInput.Text,
-				                                                   account.Id);
+				if (_pins[position].Comments.Count > 0 && _pins[position].Comments[_pins[position].Comments.Count - 1].Text == vh.AddCommentInput.Text)
+					return; 
 				_pins[position].Comments.Add(new Comment(account.Id, vh.AddCommentInput.Text, DateTime.Today));
-				this.NotifyDataSetChanged();
+				await MainActivity.dayTomatoClient.AddCommentToPin(_pins[position],
+																   vh.AddCommentInput.Text,
+																   account.Id);
+				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
+				vh.HideComments = !vh.HideComments;
+				vh.CommentsListView.Visibility = ViewStates.Visible;
+				vh.ShowComments.Text = "hide comments";
+				vh.AddCommentInput.Text = "";
 			};
 
 			vh.ShowComments.Click += (sender, e) => 
@@ -164,17 +176,13 @@ namespace DayTomato.Droid
 					vh.CommentsListView.RemoveAllViews();
 					vh.CommentsListView.Visibility = ViewStates.Gone;
 					vh.ShowComments.Text = "show comments";
+					vh.CommentsAdapter.NotifyDataSetChanged();
 				}
 				else
 				{
 					vh.CommentsListView.Visibility = ViewStates.Visible;
 					vh.ShowComments.Text = "hide comments";
-					vh.CommentsListView.RemoveAllViews();
-					for (int i = 0; i < vh.CommentsAdapter.Count; i++)
-					{
-						View v = vh.CommentsAdapter.GetView(i, null, vh.CommentsListView);
-						vh.CommentsListView.AddView(v);
-					}
+					RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 				}
 			};
 
@@ -268,7 +276,6 @@ namespace DayTomato.Droid
 		public ImageView ViewMenu { get; private set; }
 		public bool HideComments { get; set; }
 		public LinearLayout CommentsListView { get; set; }
-
 		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
 
 		public ViewPinViewHolder(View itemView) : base(itemView)

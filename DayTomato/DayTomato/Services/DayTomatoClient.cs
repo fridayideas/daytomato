@@ -184,7 +184,7 @@ namespace DayTomato.Services
 			return response.IsSuccessStatusCode;
 		}
 
-		// Add a review 
+		// Add a comment 
 		// Need to pass {text:<string>, linkedAccount:<string>}
 		public async Task<bool> AddCommentToPin(Pin pin, string text, string linkedAccount)
 		{
@@ -198,7 +198,7 @@ namespace DayTomato.Services
 			return response.IsSuccessStatusCode;
 		}
 
-		// Delete a review 
+		// Delete a comment 
 		// Need to pass the pin and account ID
 		public async Task<bool> DeleteReviewFromPin(Pin pin, string accountId)
 		{
