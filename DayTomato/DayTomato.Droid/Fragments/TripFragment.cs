@@ -1,6 +1,7 @@
 ﻿using Android.Gms.Maps.Model;
 using Android.Locations;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
@@ -17,7 +18,10 @@ namespace DayTomato.Droid.Fragments
 	{
 		private readonly static string TAG = "TRIP_FRAGMENT";
 
-		private List<Trip> _suggestions;
+        // Button to create new pin
+        private FloatingActionButton _createTrip;
+
+        private List<Trip> _suggestions;
 
 		private LatLng _currentLocation;
 		private TextView _userLocation;
@@ -26,7 +30,9 @@ namespace DayTomato.Droid.Fragments
 		private RecyclerView.LayoutManager _layoutManager;
 		private TripSuggestionAdapter _adapter;
 
-		public override void OnCreate(Bundle savedInstanceState)
+        private bool _lock;
+
+        public override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
 		}
@@ -110,8 +116,62 @@ namespace DayTomato.Droid.Fragments
 			viewTripDialogFragment.Show(fm, "ViewTripDialog");
 		}
 
-		private void OnViewTripDialogClosed(object sender, ViewTripDialogEventArgs e)
+        private void SetListeners()
+        {
+            _createTrip.Click += (sender, args) =>
+            {
+                // Switch button states
+                _createTrip.Visibility = ViewStates.Invisible;
+                _createTrip.Enabled = false;
+                CreatePinDialog();
+
+            };
+        }
+
+        async void CreatePinDialog()
+        {
+            _lock = true;
+            var fm = FragmentManager;
+            var ft = fm.BeginTransaction();
+
+            //Remove fragment else it will crash as it is already added to backstack
+            var prev = fm.FindFragmentByTag("CreateTripDialog");
+            if (prev != null)
+            {
+                ft.Remove(prev);
+            }
+
+            ft.AddToBackStack(null);
+
+            // Switch button states
+            _createTrip.Visibility = ViewStates.Visible;
+            _createTrip.Enabled = true;
+
+            var createTripDialogFragment = CreateTripDialogFragment.NewInstance();
+            createTripDialogFragment.CreateTripDialogClosed += OnCreateTripDialogClosed;
+
+            //Add fragment
+            createTripDialogFragment.Show(fm, "CreateTripDialog");
+        }
+
+        private void OnViewTripDialogClosed(object sender, ViewTripDialogEventArgs e)
 		{
 		}
-	}
+
+        // Event listener, when the createpin dialog is closed, this will get called
+        public async void OnCreateTripDialogClosed(object sender, CreatePinDialogEventArgs e)
+        {
+            _lock = false;
+            var account = MainActivity.GetAccount();
+            var trip = new Trip
+            {
+                Type = e.Type,
+                Name = e.Name,
+                LinkedAccount = account.Id,
+                CreateDate = e.CreateDate
+            };
+
+            trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
+        }
+    }
 }
