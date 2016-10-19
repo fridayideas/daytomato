@@ -21,6 +21,7 @@ namespace DayTomato.Droid
         private Button _createTripButton;                                // Create pin button
         private Button _cancelButton;                                   // Cancel create trip button
         private EditText _name;                                         // Name user will put
+        private EditText _type;                                         // Type of trip
         private EditText _description;                                  // Description user will put
         private EditText _cost;                                         // Amount user spent
         private bool _createTrip;                                        // Check if they pressed create or not
@@ -37,6 +38,7 @@ namespace DayTomato.Droid
             _createTripButton = (Button)view.FindViewById(Resource.Id.create_trip_dialog_create_button);
             _cancelButton = (Button)view.FindViewById(Resource.Id.create_trip_dialog_cancel_button);
             _name = (EditText)view.FindViewById(Resource.Id.create_trip_dialog_name);
+            _type = (EditText)view.FindViewById(Resource.Id.create_trip_dialog_type);
             _description = (EditText)view.FindViewById(Resource.Id.create_trip_dialog_text_description);
             _cost = (EditText)view.FindViewById(Resource.Id.create_trip_dialog_cost);
 
@@ -65,6 +67,7 @@ namespace DayTomato.Droid
                 CreateTripDialogClosed(this, new CreateTripDialogEventArgs
                 {
                     Name = _name.Text,
+                    Type = _type.Text,
                     Description = _description.Text,
                     Cost = Convert.ToDouble(_cost.Text),
                     CreateDate = DateTime.Today,
@@ -93,6 +96,7 @@ namespace DayTomato.Droid
     public class CreateTripDialogEventArgs
     {
         public string Name { get; set; }
+        public string Type { get; set; }
         public string Description { get; set; }
         public double Cost { get; set; }
         public DateTime CreateDate { get; set; }

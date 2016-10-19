@@ -19,7 +19,7 @@ namespace DayTomato.Droid.Fragments
 		private readonly static string TAG = "TRIP_FRAGMENT";
 
         // Button to create new pin
-        private FloatingActionButton _createTrip;
+        private Button _createTripButton;
 
         private List<Trip> _suggestions;
 
@@ -45,8 +45,9 @@ namespace DayTomato.Droid.Fragments
 
 			_userLocation = (TextView)view.FindViewById(Resource.Id.trip_current_location);
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.trip_recycler_view);
+            _createTripButton = (Button)view.FindViewById(Resource.Id.create_trip_select_button);
 
-			InitInstances();
+            InitInstances();
 
 			return view;
 		}
@@ -118,11 +119,11 @@ namespace DayTomato.Droid.Fragments
 
         private void SetListeners()
         {
-            _createTrip.Click += (sender, args) =>
+            _createTripButton.Click += (sender, args) =>
             {
                 // Switch button states
-                _createTrip.Visibility = ViewStates.Invisible;
-                _createTrip.Enabled = false;
+                _createTripButton.Visibility = ViewStates.Invisible;
+                _createTripButton.Enabled = false;
                 CreatePinDialog();
 
             };
@@ -144,8 +145,8 @@ namespace DayTomato.Droid.Fragments
             ft.AddToBackStack(null);
 
             // Switch button states
-            _createTrip.Visibility = ViewStates.Visible;
-            _createTrip.Enabled = true;
+            _createTripButton.Visibility = ViewStates.Visible;
+            _createTripButton.Enabled = true;
 
             var createTripDialogFragment = CreateTripDialogFragment.NewInstance();
             createTripDialogFragment.CreateTripDialogClosed += OnCreateTripDialogClosed;
@@ -159,7 +160,7 @@ namespace DayTomato.Droid.Fragments
 		}
 
         // Event listener, when the createpin dialog is closed, this will get called
-        public async void OnCreateTripDialogClosed(object sender, CreatePinDialogEventArgs e)
+        public async void OnCreateTripDialogClosed(object sender, CreateTripDialogEventArgs e)
         {
             _lock = false;
             var account = MainActivity.GetAccount();
@@ -171,7 +172,7 @@ namespace DayTomato.Droid.Fragments
                 CreateDate = e.CreateDate
             };
 
-            trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
+            //trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
         }
     }
 }

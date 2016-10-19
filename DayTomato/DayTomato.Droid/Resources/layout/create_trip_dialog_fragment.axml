@@ -37,6 +37,17 @@
             android:hint="Name of the place"
             android:textColor="@color/black" />
         <TextView
+            android:text="Type"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_trip_dialog_type"
+            android:hint="Foodie? Relax? Sight-see?" />
+        <TextView
             android:text="Description"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
