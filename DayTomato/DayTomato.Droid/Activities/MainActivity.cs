@@ -184,7 +184,9 @@ namespace DayTomato.Droid
 			}
 		}
 
-		public class TabsFragmentPagerAdapter : FragmentPagerAdapter
+	    public override void OnBackPressed(){}//Do nothing when back button pressed
+
+	    public class TabsFragmentPagerAdapter : FragmentPagerAdapter
         {
             private readonly Android.Support.V4.App.Fragment[] fragments;
 

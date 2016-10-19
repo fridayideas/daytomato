@@ -15,7 +15,7 @@ using Org.W3c.Dom;
 
 namespace DayTomato.Droid.Activities
 {
-    [Activity(Label = "DayTomato")]
+    [Activity(Label = "DayTomato", NoHistory = true)]
     public class LoginActivity : Activity
     {
         private readonly string _domain = "fridayideas.auth0.com";
@@ -32,7 +32,16 @@ namespace DayTomato.Droid.Activities
                 _domain,
                 _clientId);
 
-            var auth0User = await Login(auth0);
+            Auth0User auth0User;
+
+            try
+            {
+                auth0User = await Login(auth0);
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
 
             //Pass account info to MainActivity and start MainActivity
             var mainActivityIntent = new Intent(this, typeof(MainActivity));
@@ -61,5 +70,6 @@ namespace DayTomato.Droid.Activities
             // 'this' could be a Context object (Android) or UIViewController, UIView, UIBarButtonItem (iOS)
             return await auth0.LoginAsync(this, withRefreshToken:true);
         }
+
     }
 }
