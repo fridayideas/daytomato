@@ -129,7 +129,6 @@ namespace DayTomato.Droid
 			_viewPager.AddOnPageChangeListener(this);
             // Give the TabLayout the ViewPager 
             _tabLayout.SetupWithViewPager(_viewPager);
-			//_tabLayout.SetOnTabSelectedListener(this);
             SetIcons();
         }
 
