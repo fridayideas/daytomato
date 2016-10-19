@@ -17,13 +17,14 @@ namespace DayTomato.Services
         HttpClient httpClient;
 
 #if DEBUG
-		private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
-		//private readonly string BASE_URL = "http://10.0.2.2:8080";
+        //private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
+        //private readonly string BASE_URL = "http://10.0.2.2:8080";
 #else
-		private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
+		//private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
 #endif
+        private readonly string BASE_URL = "http://10.0.2.2:8080";
 
-		private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
+        private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
 		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
 		private readonly string GOOGLE_PLACES_PHOTO_BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?";
 		private readonly string GOOGLE_RANK_BY = "distance";
@@ -35,15 +36,22 @@ namespace DayTomato.Services
 
         private string ID_TOKEN;
 
-        public DayTomatoClient(string idToken)
+        public DayTomatoClient()
         {
             httpClient = new HttpClient();
             httpClient.MaxResponseContentBufferSize = 256000;
-            ID_TOKEN = idToken;
         }
 
-		// Get Place
-		public async Task<Place> GetPlace(double lat, double lng)
+        public DayTomatoClient(string idToken)
+        {
+            ID_TOKEN = idToken;
+            httpClient = new HttpClient();
+            httpClient.MaxResponseContentBufferSize = 256000;
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ID_TOKEN);
+        }
+
+        // Get Place
+        public async Task<Place> GetPlace(double lat, double lng)
 		{
 			Place place = new Place();
 			string result = "";
@@ -293,5 +301,6 @@ namespace DayTomato.Services
 			}
 			return "";
 		}
+
     }
 }

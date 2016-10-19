@@ -40,15 +40,16 @@ namespace DayTomato.Droid
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
             toolbar.SetTitle(Resource.String.application_name);
 
-			// REST API Client
-			dayTomatoClient = new DayTomatoClient(Intent.GetStringExtra("AuthIdToken"));
+            // REST API Client
+            dayTomatoClient = new DayTomatoClient(Intent.GetStringExtra("AuthIdToken"));
 
-			// Get location
-			_currentLocation = await GetUserLocation();
+            // Get location
+            _currentLocation = await GetUserLocation();
+
 			// Get user account
 			_account = await GetUserAccount();
 
-			// Tabs
+            // Tabs
             _tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
             InitTabLayout();
         }
@@ -69,7 +70,6 @@ namespace DayTomato.Droid
 		        RefreshToken = Intent.GetStringExtra("RefreshToken")
 		    };
 
-            //TODO: 
 		    JObject jo = JObject.Parse(_account.UserJson);
 		    _account.Username = (string)jo["given_name"];
 
