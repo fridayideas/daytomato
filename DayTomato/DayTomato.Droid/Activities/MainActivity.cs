@@ -15,6 +15,7 @@ using Android.Util;
 using DayTomato.Models;
 using Java.IO;
 using Android.Graphics;
+using Newtonsoft.Json.Linq;
 
 namespace DayTomato.Droid
 {
@@ -39,29 +40,40 @@ namespace DayTomato.Droid
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
             toolbar.SetTitle(Resource.String.application_name);
 
-			// REST API Client
-			dayTomatoClient = new DayTomatoClient();
+            // REST API Client
+            dayTomatoClient = new DayTomatoClient(Intent.GetStringExtra("AuthIdToken"));
 
-			// Get location
-			_currentLocation = await GetUserLocation();
+            // Get location
+            _currentLocation = await GetUserLocation();
+
 			// Get user account
 			_account = await GetUserAccount();
 
-			// Tabs
+            // Tabs
             _tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
             InitTabLayout();
         }
 
-		public static async Task<Account> GetUserAccount()
+		public async Task<Account> GetUserAccount()
 		{
-			//_account = await dayTomatoClient.GetAccount();
-			_account = new Account();
-			_account.Username = "admin";
-			_account.Id = "100";
-			_account.Pins = 0;
-			_account.Seeds = 0;
-			_account.Privilege = Account.SeedLevels.GOD;
-			return _account;
+            //TODO: Parse and/or filter Auth0User info in DayTomatoClient
+            //_account = await dayTomatoClient.GetAccount();
+		    _account = new Account
+		    {
+		        Id = "100",
+		        Pins = 0,
+		        Seeds = 0,
+		        Privilege = Account.SeedLevels.GOD,
+		        UserJson = Intent.GetStringExtra("AuthUserJSON"),
+		        AccessToken = Intent.GetStringExtra("AuthAccessToken"),
+		        IdToken = Intent.GetStringExtra("AuthIdToken"),
+		        RefreshToken = Intent.GetStringExtra("RefreshToken")
+		    };
+
+		    JObject jo = JObject.Parse(_account.UserJson);
+		    _account.Username = (string)jo["given_name"];
+
+		    return _account;
 		}
 
 		public static async Task<LatLng> GetUserLocation()
@@ -172,7 +184,9 @@ namespace DayTomato.Droid
 			}
 		}
 
-		public class TabsFragmentPagerAdapter : FragmentPagerAdapter
+	    public override void OnBackPressed(){}//Do nothing when back button pressed
+
+	    public class TabsFragmentPagerAdapter : FragmentPagerAdapter
         {
             private readonly Android.Support.V4.App.Fragment[] fragments;
 

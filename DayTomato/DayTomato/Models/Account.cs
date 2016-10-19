@@ -20,6 +20,10 @@ namespace DayTomato.Models
 		public int Pins { get; set; }
 		public Byte[] ProfilePicture { get; set; }
 		public SeedLevels Privilege { get; set; }
+	    public string UserJson { get; set; }
+        public string AccessToken { get; set; }
+        public string IdToken { get; set; }
+        public string RefreshToken { get; set; }
 
 		public SeedLevels GetAccountPrivileges()
 		{
@@ -44,6 +48,7 @@ namespace DayTomato.Models
                 return (objectType == typeof(Pin));
             }
 
+            //Read REST API Json
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
                 JObject jo = JObject.Load(reader);
