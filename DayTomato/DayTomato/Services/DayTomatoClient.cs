@@ -17,11 +17,10 @@ namespace DayTomato.Services
         HttpClient httpClient;
 
 #if DEBUG
-        //private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
+        private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
 #else
 		private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
 #endif
-        private readonly string BASE_URL = "http://192.168.0.6:8080";
 
         private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
 		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
