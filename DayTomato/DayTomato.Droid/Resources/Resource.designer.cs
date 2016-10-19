@@ -2384,7 +2384,7 @@ namespace DayTomato.Droid
 			public const int create_trip_dialog_type = 2131361923;
 			
 			// aapt resource value: 0x7f0a00ce
-			public const int create_trip_select_button = 2131361998;
+			public const int create_trip_fab = 2131361998;
 			
 			// aapt resource value: 0x7f0a005c
 			public const int custom = 2131361884;

@@ -19,7 +19,7 @@ namespace DayTomato.Droid.Fragments
 		private readonly static string TAG = "TRIP_FRAGMENT";
 
         // Button to create new pin
-        private Button _createTripButton;
+        private FloatingActionButton _createTripButton;
 
         private List<Trip> _suggestions;
 
@@ -42,12 +42,14 @@ namespace DayTomato.Droid.Fragments
 			base.OnCreateView(inflater, container, savedInstanceState);
 
 			var view = inflater.Inflate(Resource.Layout.trip_fragment, container, false);
-
-			_userLocation = (TextView)view.FindViewById(Resource.Id.trip_current_location);
+            _lock = false;
+			_createTripButton = (FloatingActionButton)view.FindViewById(Resource.Id.create_trip_fab);
+            _userLocation = (TextView)view.FindViewById(Resource.Id.trip_current_location);
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.trip_recycler_view);
-            _createTripButton = (Button)view.FindViewById(Resource.Id.create_trip_select_button);
+            
 
             InitInstances();
+            SetListeners();
 
 			return view;
 		}

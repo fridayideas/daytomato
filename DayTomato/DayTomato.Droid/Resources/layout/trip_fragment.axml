@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -36,17 +36,11 @@
             android:id="@+id/trip_recycler_view"
             android:layout_marginBottom="30dp" />
     </LinearLayout>
-    <Button
-        android:text="@android:string/ok"
-        android:layout_width="110.5dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/create_trip_select_button"
-        android:layout_weight="0.5"
-        android:layout_gravity="right"
-        android:enabled="false"
-        android:visibility="invisible"
-        android:textColor="@color/colorPrimary"
-        android:background="@color/white"
-        android:layout_marginBottom="0.0dp"
-        android:layout_marginRight="0.0dp" />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/create_trip_fab"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_gravity="bottom" />
 </LinearLayout>
