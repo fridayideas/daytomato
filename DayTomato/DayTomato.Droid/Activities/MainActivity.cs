@@ -41,7 +41,7 @@ namespace DayTomato.Droid
             toolbar.SetTitle(Resource.String.application_name);
 
 			// REST API Client
-			dayTomatoClient = new DayTomatoClient();
+			dayTomatoClient = new DayTomatoClient(Intent.GetStringExtra("AuthIdToken"));
 
 			// Get location
 			_currentLocation = await GetUserLocation();

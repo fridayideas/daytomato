@@ -33,10 +33,13 @@ namespace DayTomato.Services
 		private readonly string IMGUR_CLIENT_ID = "1f30123ee30a53b";
 		private readonly string IMGUR_CLIENT_SECRET = "979732009beba54d18e67f6dc9f8c3fa79082d16";
 
-        public DayTomatoClient()
+        private string ID_TOKEN;
+
+        public DayTomatoClient(string idToken)
         {
             httpClient = new HttpClient();
             httpClient.MaxResponseContentBufferSize = 256000;
+            ID_TOKEN = idToken;
         }
 
 		// Get Place
