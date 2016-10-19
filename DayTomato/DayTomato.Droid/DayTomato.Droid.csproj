@@ -50,6 +50,10 @@
     <DebugSymbols>False</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Auth0Client.Android, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Auth0Client-0.5.0\lib\android\Auth0Client.Android.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -130,6 +134,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Fragments\MapFragment.cs" />
     <Compile Include="Fragments\HomeFragment.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -279,13 +284,7 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_insert_photo_black_48dp.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\drawable\" />
-    <Folder Include="Activities\" />
-    <Folder Include="Adapters\" />
-    <Folder Include="Util\" />
-    <Folder Include="Resources\menu\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <AndroidResource Include="Resources\values-v21\styles.xml" />
   </ItemGroup>
@@ -303,6 +302,13 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_add_location_white_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <XamarinComponentReference Include="Auth0Client">
+      <Visible>False</Visible>
+      <Version>0.5.0</Version>
+      <InstallationInProgress>True</InstallationInProgress>
+    </XamarinComponentReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.4.0.1\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.4.0.1\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
