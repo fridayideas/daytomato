@@ -18,11 +18,10 @@ namespace DayTomato.Services
 
 #if DEBUG
         //private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
-        //private readonly string BASE_URL = "http://10.0.2.2:8080";
 #else
-		//private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
+		private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
 #endif
-        private readonly string BASE_URL = "http://10.0.2.2:8080";
+        private readonly string BASE_URL = "http://192.168.0.6:8080";
 
         private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
 		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
@@ -34,8 +33,6 @@ namespace DayTomato.Services
 		private readonly string IMGUR_CLIENT_ID = "1f30123ee30a53b";
 		private readonly string IMGUR_CLIENT_SECRET = "979732009beba54d18e67f6dc9f8c3fa79082d16";
 
-        private string ID_TOKEN;
-
         public DayTomatoClient()
         {
             httpClient = new HttpClient();
@@ -44,10 +41,9 @@ namespace DayTomato.Services
 
         public DayTomatoClient(string idToken)
         {
-            ID_TOKEN = idToken;
             httpClient = new HttpClient();
             httpClient.MaxResponseContentBufferSize = 256000;
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ID_TOKEN);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", idToken);
         }
 
         // Get Place
