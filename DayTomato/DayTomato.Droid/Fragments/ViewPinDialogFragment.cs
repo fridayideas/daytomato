@@ -46,7 +46,7 @@ namespace DayTomato.Droid
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_pin_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins, Activity, this);
+			_adapter = new ViewPinAdapter(_pins, Activity);
 			_recyclerView.SetAdapter(_adapter);
 
 			this.Dialog.SetCancelable(true);
@@ -75,7 +75,7 @@ namespace DayTomato.Droid
 					Create = _create,
 					Delete = _delete,
 					Update = _update,
-					PinsToUpdate = _pinsToUpdate,
+					PinsToUpdate = PinsToUpdate(),
 					MarkerId = Arguments.GetLong("VIEW_PIN_MARKER")
 				});
 			}
@@ -114,10 +114,16 @@ namespace DayTomato.Droid
 			};
 		}
 
-		public void Update(Pin pin)
+		public List<Pin> PinsToUpdate()
 		{
-			_pinsToUpdate.Add(pin);
-			_update = true;
+			foreach (var p in _adapter.GetItems())
+			{
+				if (!_pins.Contains(p))
+				{
+					_pinsToUpdate.Add(p);
+				}
+			}
+			return _pinsToUpdate;
 		}
 	}
 

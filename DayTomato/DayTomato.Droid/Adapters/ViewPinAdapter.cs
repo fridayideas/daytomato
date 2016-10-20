@@ -21,13 +21,17 @@ namespace DayTomato.Droid
 		private Activity _context;
 		private ViewPinDialogFragment _parent;
 
-		public ViewPinAdapter(List<Pin> pins, Activity context, ViewPinDialogFragment parent)
+		public ViewPinAdapter(List<Pin> pins, Activity context)
 		{
 			_pins = pins;
 			_pinLiked = new List<bool>(new bool[pins.Count]);
 			_pinDisliked = new List<bool>(new bool[pins.Count]);
 			_context = context;
-			_parent = parent;
+		}
+
+		public List<Pin> GetItems()
+		{
+			return _pins;
 		}
 
 		public override int ItemCount
@@ -46,7 +50,7 @@ namespace DayTomato.Droid
 			return vh;
 		}
 
-		public void RefreshComments(LinearLayout ll, ViewPinCommentsAdapter ca)
+		public void RefreshComments(LinearLayout ll, CommentsAdapter ca)
 		{
 			ll.RemoveAllViews();
 			for (int i = 0; i < ca.Count; i++)
@@ -117,7 +121,6 @@ namespace DayTomato.Droid
 				   	_pins[position].ImageURL = imgurl;
 				   	vh.PinImage.SetImageBitmap(resizedBitmap);
 				    pd.Hide();
-					_parent.Update(_pins[position]);
 					stream.Dispose();
 					GC.Collect();
 				};
@@ -134,7 +137,7 @@ namespace DayTomato.Droid
 			vh.PinCost.Text = "Cost: $" + cost;
 
 			// Initializing listview
-			vh.CommentsAdapter = new ViewPinCommentsAdapter(_context, _pins[position].Comments);
+			vh.CommentsAdapter = new CommentsAdapter(_context, _pins[position].Comments);
 			// Make sure we can see the comments
 			if (!vh.HideComments)
 			{
@@ -276,7 +279,7 @@ namespace DayTomato.Droid
 		public ImageView ViewMenu { get; private set; }
 		public bool HideComments { get; set; }
 		public LinearLayout CommentsListView { get; set; }
-		public ViewPinCommentsAdapter CommentsAdapter { get; set; }
+		public CommentsAdapter CommentsAdapter { get; set; }
 
 		public ViewPinViewHolder(View itemView) : base(itemView)
 		{

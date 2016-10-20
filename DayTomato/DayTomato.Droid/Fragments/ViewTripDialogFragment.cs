@@ -20,7 +20,7 @@ namespace DayTomato.Droid
 		private Trip _trip;
 		private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
-		private ViewTripAdapter _adapter;
+		private ViewPinAdapter _adapter;
 		private TextView _title;
 		private Button _return;
 		private Button _directions;
@@ -44,7 +44,7 @@ namespace DayTomato.Droid
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_trip_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewTripAdapter(_trip.Pins, Activity);
+			_adapter = new ViewPinAdapter(_trip.Pins, Activity);
 			_recyclerView.SetAdapter(_adapter);
 
 			this.Dialog.SetCancelable(true);

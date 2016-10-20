@@ -24,7 +24,7 @@ namespace DayTomato.Droid.Fragments
 
 		private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
-		private TripSuggestionAdapter _adapter;
+		private ViewTripAdapter _adapter;
 
 		public override void OnCreate(Bundle savedInstanceState)
 		{
@@ -56,7 +56,7 @@ namespace DayTomato.Droid.Fragments
 
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new TripSuggestionAdapter(_suggestions);
+			_adapter = new ViewTripAdapter(_suggestions, Activity);
 			_adapter.HandleClick += OnHandleClick;
 			_recyclerView.SetAdapter(_adapter);
 
