@@ -16,6 +16,8 @@ using DayTomato.Models;
 using Java.IO;
 using Android.Graphics;
 using Newtonsoft.Json.Linq;
+using Plugin.Geolocator.Abstractions;
+using Plugin.Media;
 
 namespace DayTomato.Droid
 {
@@ -26,8 +28,10 @@ namespace DayTomato.Droid
 
         private TabLayout _tabLayout;
 		private ViewPager _viewPager;
-		private static LatLng _currentLocation;
+		private LatLng _currentLocation;
 		private static Account _account;
+
+	    internal IGeolocator Locator { get; set; }
 
         public static DayTomatoClient dayTomatoClient;
 
@@ -44,7 +48,15 @@ namespace DayTomato.Droid
             dayTomatoClient = new DayTomatoClient(Intent.GetStringExtra("AuthIdToken"));
 
             // Get location
-            _currentLocation = await GetUserLocation();
+            Locator = CrossGeolocator.Current;
+            await Locator.StartListeningAsync(1, 0);
+            Locator.PositionChanged += (sender, args) =>
+            {
+                var pos = args.Position;
+                _currentLocation = new LatLng(pos.Latitude, pos.Longitude);
+            };
+            //_currentLocation = await GetUserLocation();
+            _currentLocation = new LatLng(0, 0);
 
 			// Get user account
 			_account = await GetUserAccount();
@@ -76,7 +88,7 @@ namespace DayTomato.Droid
 		    return _account;
 		}
 
-		public static async Task<LatLng> GetUserLocation()
+		public async Task<LatLng> GetUserLocation()
 		{
 			var locator = CrossGeolocator.Current;
 			locator.DesiredAccuracy = 50;
@@ -104,7 +116,7 @@ namespace DayTomato.Droid
 			return _account;
 		}
 
-		public static LatLng GetLocation()
+		public LatLng GetLocation()
 		{
 			return _currentLocation;
 		}
@@ -226,6 +238,10 @@ namespace DayTomato.Droid
 		public static Bitmap Bitmap { get; set; }
 	}
 }
+
+
+
+
 
 
 

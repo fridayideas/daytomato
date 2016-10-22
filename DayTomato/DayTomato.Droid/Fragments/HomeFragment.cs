@@ -94,7 +94,7 @@ namespace DayTomato.Droid.Fragments
 				Type = Feed.FEED_NOTIFICATION
 			});
 
-			var pins = await MainActivity.dayTomatoClient.GetHotPins();
+            var pins = await MainActivity.dayTomatoClient.GetHotPins();
 			foreach (var p in pins)
 			{
 				_feed.Add(new Feed
@@ -103,8 +103,8 @@ namespace DayTomato.Droid.Fragments
 					Type = Feed.FEED_PIN
 				});
 			}
-			_adapter.NotifyDataSetChanged();
-			pd.Hide();
+            _adapter.NotifyDataSetChanged();
+            pd.Hide();
 		}
     }
 }

@@ -13,6 +13,7 @@ using System;
 using Newtonsoft.Json;
 using Com.Google.Maps.Android.Clustering;
 using Android.Support.V7.App;
+using Plugin.Geolocator.Abstractions;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -36,22 +37,19 @@ namespace DayTomato.Droid.Fragments
 		private LatLng _selectLocation;
 		private LatLng _currentLocation;
 		private Dictionary<long, List<Pin>> _markerPins;
-		private Dictionary<long, Polygon> _markerPolygons;
+		private Dictionary<long, List<LatLng>> _markerPolygons;
 		private Dictionary<long, ClusterPin> _markers;
 		private ClusterManager _clusterManager;
-		private bool _lock;
-
-		private const double POLY_RADIUS = 0.0001;
+		private const double PolyRadius = 0.0001;
 
 		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
 
             var view = inflater.Inflate(Resource.Layout.map_fragment, container, false);
-			_lock = false;
 			_pins = new List<Pin>();
 			_markerPins = new Dictionary<long, List<Pin>>();
-			_markerPolygons = new Dictionary<long, Polygon>();
+			_markerPolygons = new Dictionary<long, List<LatLng>>();
 			_markers = new Dictionary<long, ClusterPin>();
 			_createPin = (FloatingActionButton)view.FindViewById(Resource.Id.map_create_pin_fab);
 			_selectLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_select_button);
@@ -65,7 +63,7 @@ namespace DayTomato.Droid.Fragments
         }
 
 		// Void here because we don't need to await the OnStart method
-		public override async void OnStart()
+		public override void OnStart()
 		{
 			base.OnStart();
 			// If map is not attached to this fragment, get it async
@@ -73,71 +71,62 @@ namespace DayTomato.Droid.Fragments
 			{
 				((SupportMapFragment)ChildFragmentManager.FindFragmentById(Resource.Id.map)).GetMapAsync(this);
 			}
-			if (!_lock)
-			{
-	            // Get pins
-	            // TODO can we do this progressively?
-				_pins = await MainActivity.dayTomatoClient.GetPins();
-
-				// Load pins onto map
-				UpdateMap();
-				_clusterManager.Cluster();
-			}
         }
 
-		// Can only be called if map is ready!
-		private void CreatePin(Pin pin)
-		{
-			if (_map != null)
-			{
-				// If a marker already exists within a certain diameter
-				// Then do not create a new marker, rather put it in dict
-				var stack = false; 
-				var markerId = 0L;
-				var coordinate = new LatLng(pin.Latitude, pin.Longitude);
+        // Can only be called if map is ready!
+        private void CreatePin(Pin pin)
+        {
+            // If a marker already exists within a certain diameter
+            // Then do not create a new marker, rather put it in dict
+            var stack = false;
+            var markerId = 0L;
+            var coordinate = new LatLng(pin.Latitude, pin.Longitude);
 
-				// Look at each polygon in all the polygons
-				foreach(var p in _markerPolygons)
-				{
-					// If the point is in the polygon, then we have to stack
-					if (PolyUtil.containsLocation(coordinate, new List<LatLng>(p.Value.Points), false))
-					{
-						stack = true;
-						markerId = p.Key;
-						break;
-					}
-			  	}
+            // Look at each polygon in all the polygons
+            foreach (var p in _markerPolygons)
+            {
+                // If the point is in the polygon, then we have to stack
+                if (PolyUtil.containsLocation(coordinate, new List<LatLng>(p.Value), false))
+                {
+                    stack = true;
+                    markerId = p.Key;
+                    break;
+                }
+            }
 
-				// If not stacking, create a new pin and new polygon
-				if (!stack)
-				{
-					var polyOpt = new PolygonOptions()
-					.Add(new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude - POLY_RADIUS),
-						 new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude + POLY_RADIUS),
-						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
-						 new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
-					.Visible(false);
-					var poly = _map.AddPolygon(polyOpt);
-					var m = new ClusterPin(pin.Latitude, pin.Longitude);
-					m.Title = pin.Name;
-					_clusterManager.AddItem(m);
-					//_clusterManager.Cluster();
+            // If not stacking, create a new pin and new polygon
+            if (!stack)
+            {
+                //var polyOpt = new PolygonOptions()
+                //.Add(new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude - POLY_RADIUS),
+                //     new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude + POLY_RADIUS),
+                //     new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
+                //     new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
+                //.Visible(false);
+                var points = new List<LatLng>()
+                {
+                    new LatLng(pin.Latitude - PolyRadius, pin.Longitude - PolyRadius),
+                    new LatLng(pin.Latitude - PolyRadius, pin.Longitude + PolyRadius),
+                    new LatLng(pin.Latitude + PolyRadius, pin.Longitude + PolyRadius),
+                    new LatLng(pin.Latitude + PolyRadius, pin.Longitude - PolyRadius)
+                };
+                var m = new ClusterPin(pin.Latitude, pin.Longitude) { Title = pin.Name };
+                _clusterManager.AddItem(m);
 
-					// Add new pin
-					_markers.Add(m.Id, m);
-					_markerPins.Add(m.Id, new List<Pin> { pin });
-					_markerPolygons[m.Id] = poly;
-				}
-				// Otherwise, just add a new pin at the same marker
-				else 
-				{
-					_markerPins[markerId].Add(pin);
-				}
-			}
-		}
+                // Add new pin
+                _markers.Add(m.Id, m);
+                _markerPins.Add(m.Id, new List<Pin> { pin });
+                _markerPolygons[m.Id] = points;
+            }
+            // Otherwise, just add a new pin at the same marker
+            else
+            {
+                _markerPins[markerId].Add(pin);
+            }
+        }
 
-		// Almost like a callback, gets called when the map is loaded
-		public void OnMapReady(GoogleMap googleMap)
+        // Almost like a callback, gets called when the map is loaded
+        public void OnMapReady(GoogleMap googleMap)
 		{
 			// Initialize map
 			_map = googleMap;								// Get the instance of the map
@@ -154,28 +143,44 @@ namespace DayTomato.Droid.Fragments
 			_map.SetOnMarkerClickListener(_clusterManager);
 
 			// Wait for location, should be relatively quick, then move camera
-			while (_currentLocation == null)
-			{
-				_currentLocation = MainActivity.GetLocation();
-			}
-			var builder = CameraPosition.InvokeBuilder();
-			builder.Target(_currentLocation);
-			builder.Zoom(15);
-			var cameraPosition = builder.Build();
-			var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
-			_map.MoveCamera(cameraUpdate);
-		}
+		    ((MainActivity) Activity).Locator.PositionChanged += OnLocationChanged;
 
-		// Update pins on map when view changes
-		private void UpdateMap()
+            // Get pins
+            // TODO can we do this progressively?
+		    Task.Run(async () =>
+		    {
+                _pins = await MainActivity.dayTomatoClient.GetPins();
+
+                // Load pins onto map
+                Activity.RunOnUiThread(() =>
+                {
+                    UpdateMap();
+                    _clusterManager.Cluster();
+                });
+            });
+        }
+
+        private void OnLocationChanged(object sender, PositionEventArgs args)
+        {
+		    ((MainActivity) Activity).Locator.PositionChanged -= OnLocationChanged;
+
+            var pos = args.Position;
+            _currentLocation = new LatLng(pos.Latitude, pos.Longitude);
+            var builder = CameraPosition.InvokeBuilder();
+            builder.Target(_currentLocation);
+            builder.Zoom(15);
+            var cameraPosition = builder.Build();
+            var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+            _map.AnimateCamera(cameraUpdate);
+        }
+
+        // Update pins on map when view changes
+        private void UpdateMap()
 		{
 			// Load pins onto map
             // TODO culling by area/viewport
-			for (int i = 0; i < _pins.Count; ++i)
-			{
-				CreatePin(_pins[i]);
-			}
-		}
+            _pins.ForEach(CreatePin);
+        }
 
 		private void SetListeners()
 		{
@@ -216,8 +221,8 @@ namespace DayTomato.Droid.Fragments
 			// User can select the location after clicking and the create a pin dialog shows
 			_selectLocationButton.Click += (sender, e) => 
 			{
-				Location curr = new Location("Current");
-				Location sel = new Location("Selected");
+				var curr = new Location("Current");
+				var sel = new Location("Selected");
 				curr.Latitude = _currentLocation.Latitude;
 				curr.Longitude = _currentLocation.Longitude;
 				sel.Latitude = _selectLocation.Latitude;
@@ -241,9 +246,8 @@ namespace DayTomato.Droid.Fragments
 			}; 
 		}
 
-		async void CreatePinDialog()
+        private async void CreatePinDialog()
 		{
-			_lock = true;
 			var fm = FragmentManager;
 			var ft = fm.BeginTransaction();
 
@@ -287,7 +291,7 @@ namespace DayTomato.Droid.Fragments
 			createPinDialogFragment.Show(fm, "CreatePinDialog");
 		}
 
-		public async Task<string> ReverseGeocode(LatLng coordinates)
+        private async Task<string> ReverseGeocode(LatLng coordinates)
 		{
 			// Reverse geocode coordinates
 			var geo = new Geocoder(Context);
@@ -314,7 +318,6 @@ namespace DayTomato.Droid.Fragments
 
 		public bool OnClusterItemClick(Java.Lang.Object marker)
 		{
-			_lock = true;
 			// Get pins and sort them based on # of likes
 			var pins = _markerPins[((ClusterPin)marker).Id];
 			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
@@ -377,16 +380,16 @@ namespace DayTomato.Droid.Fragments
 			}
 			if (e.Update)
 			{
-				List<Pin> update = e.PinsToUpdate;
-				for (int i = 0; i < update.Count; i++)
+			    var update = e.PinsToUpdate;
+				foreach (var t in update)
 				{
-					// This really sucks, but I cannot figure out why its creating multiple of the same pins here
-					_markerPins[e.MarkerId].RemoveAll(p => p.Id.Equals(update[i].Id));
-					int r1 = _pins.FindIndex(p => p.Id.Equals(update[i].Id));
-					_pins.RemoveAt(r1);
-					_pins.Add(update[i]);
-					_markerPins[e.MarkerId].Add(update[i]);
-					await MainActivity.dayTomatoClient.UpdatePin(update[i]);
+                    // This really sucks, but I cannot figure out why its creating multiple of the same pins here
+                    _markerPins[e.MarkerId].RemoveAll(p => p.Id.Equals(t.Id));
+				    var r1 = _pins.FindIndex(p => p.Id.Equals(t.Id));
+				    _pins.RemoveAt(r1);
+				    _pins.Add(t);
+				    _markerPins[e.MarkerId].Add(t);
+				    await MainActivity.dayTomatoClient.UpdatePin(t);
 				}
 				_clusterManager.Cluster();
 			}
@@ -394,13 +397,11 @@ namespace DayTomato.Droid.Fragments
 			// Switch button states
 			_createPin.Visibility = ViewStates.Visible;
 			_createPin.Enabled = true;
-			_lock = false;
 		}
 
 		// Event listener, when the createpin dialog is closed, this will get called
-		public async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
+        private async void OnCreatePinDialogClosed(object sender, CreatePinDialogEventArgs e)
 		{
-			_lock = false;
 			var account = MainActivity.GetAccount();
 			var pin = new Pin
 			{
