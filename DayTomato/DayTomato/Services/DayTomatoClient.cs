@@ -221,7 +221,15 @@ namespace DayTomato.Services
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
-                var account = JsonConvert.DeserializeObject<Account>(content);
+                JObject accountParsed = JObject.Parse(content);
+                Account account = new Account
+                {
+                    Id = (string)accountParsed["_id"],
+                    Username = (string)accountParsed["auth0Id"],
+                    Seeds = (double)accountParsed["numSeeds"],
+                    Pins = (int)accountParsed["numPins"]
+                };
+
                 return account;
             }
 
