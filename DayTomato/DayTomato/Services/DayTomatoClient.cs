@@ -214,15 +214,14 @@ namespace DayTomato.Services
 		}
 
         // Get Accounts
-        public async Task<Account> GetAccount(string accountId)
+        public async Task<Account> GetAccount()
         {
-            Account account = new Account();
-            var uri = new Uri(BASE_URL + "/api/accounts/" + accountId);
+            var uri = new Uri(BASE_URL + "/api/accounts/currentuser");
             var response = await httpClient.GetAsync(uri);
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
-                account = JsonConvert.DeserializeObject<Account>(content);
+                var account = JsonConvert.DeserializeObject<Account>(content);
                 return account;
             }
 
