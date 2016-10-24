@@ -16,19 +16,20 @@ namespace DayTomato.Droid.Fragments
 {
 	class TripFragment : Fragment
 	{
-		private readonly static string TAG = "TRIP_FRAGMENT";
+		private const string TAG = "TRIP_FRAGMENT";
 
         // Button to create new trip
         private FloatingActionButton _createTripButton;
 
         private List<Trip> _suggestions;
 
-		private LatLng _currentLocation;
 		private TextView _userLocation;
 
 		private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
-		private TripSuggestionAdapter _adapter;
+		private ViewTripAdapter _adapter;
+
+	    private MainActivity _activity;
 
         private bool _lock;
 
@@ -46,6 +47,7 @@ namespace DayTomato.Droid.Fragments
 			_createTripButton = (FloatingActionButton)view.FindViewById(Resource.Id.trip_create_fab);
             _userLocation = (TextView)view.FindViewById(Resource.Id.trip_current_location);
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.trip_recycler_view);
+		    _activity = (MainActivity) Activity;
 
             InitInstances();
             SetListeners();
@@ -60,19 +62,19 @@ namespace DayTomato.Droid.Fragments
 
 		private async void InitInstances()
 		{
-			_suggestions = await MainActivity.dayTomatoClient.GetTrips();
+            _suggestions = await MainActivity.dayTomatoClient.GetTrips();
 
-			_layoutManager = new LinearLayoutManager(Context);
+            _layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new TripSuggestionAdapter(_suggestions);
+			_adapter = new ViewTripAdapter(_suggestions, Activity);
 			_adapter.HandleClick += OnHandleClick;
 			_recyclerView.SetAdapter(_adapter);
 
-			_currentLocation = await MainActivity.GetUserLocation();
+		    var currentLoc = await _activity.GetUserLocation();
 
 			// Reverse geocode coordinates
 			var geo = new Geocoder(Context);
-			var addresses = await geo.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 1);
+			var addresses = await geo.GetFromLocationAsync(currentLoc.Latitude, currentLoc.Longitude, 1);
 
 			string address = "Unknown Address";
 			if (addresses.Count > 0)
