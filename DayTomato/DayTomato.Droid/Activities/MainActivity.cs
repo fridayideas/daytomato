@@ -30,6 +30,7 @@ namespace DayTomato.Droid
 		private ViewPager _viewPager;
 		private LatLng _currentLocation;
 		private static Account _account;
+	    private string _idToken; //IdToken provided by auth0. It is used to authenticate the current user on the server.
 
 	    internal IGeolocator Locator { get; set; }
 
@@ -44,8 +45,11 @@ namespace DayTomato.Droid
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
             toolbar.SetTitle(Resource.String.application_name);
 
+            //Set ID token provided by LoginActivity
+            _idToken = Intent.GetStringExtra("AuthIdToken");
+
             // REST API Client
-            dayTomatoClient = new DayTomatoClient(Intent.GetStringExtra("AuthIdToken"));
+            dayTomatoClient = new DayTomatoClient(_idToken);
 
             // Get location
             Locator = CrossGeolocator.Current;
@@ -66,24 +70,13 @@ namespace DayTomato.Droid
             InitTabLayout();
         }
 
+        /// <summary>
+        /// Call GetAccount in core to obtain 
+        /// </summary>
+        /// <returns></returns>
 		public async Task<Account> GetUserAccount()
 		{
-            //TODO: Parse and/or filter Auth0User info in DayTomatoClient
-            //_account = await dayTomatoClient.GetAccount();
-		    _account = new Account
-		    {
-		        Id = "100",
-		        Pins = 0,
-		        Seeds = 0,
-		        Privilege = Account.SeedLevels.GOD,
-		        UserJson = Intent.GetStringExtra("AuthUserJSON"),
-		        AccessToken = Intent.GetStringExtra("AuthAccessToken"),
-		        IdToken = Intent.GetStringExtra("AuthIdToken"),
-		        RefreshToken = Intent.GetStringExtra("RefreshToken")
-		    };
-
-		    JObject jo = JObject.Parse(_account.UserJson);
-		    _account.Username = (string)jo["given_name"];
+            _account = await dayTomatoClient.GetAccount();
 
 		    return _account;
 		}
