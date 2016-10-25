@@ -211,9 +211,20 @@ namespace DayTomato.Services
 			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/comments/" + accountId);
 			var response = await httpClient.DeleteAsync(uri);
 			return response.IsSuccessStatusCode;
-		}
+        }
 
-        // Get Accounts
+        /// <summary>
+        /// Generates an Account object by calling a GET request to 
+        /// the server. The server uses the IdToken (included in the httpClient)
+        /// to return an account object of the form: 
+        /// * {
+        /// *   "_id": string "mongo ID";,
+        /// *   "auth0Id": string "auth0Id",
+        /// *   "seeds": double seeds,
+        /// *   "pins": int pins
+        /// * }
+        /// </summary>
+        /// <returns></returns>
         public async Task<Account> GetAccount()
         {
             var uri = new Uri(BASE_URL + "/api/accounts/currentuser");
@@ -225,7 +236,7 @@ namespace DayTomato.Services
                 Account account = new Account
                 {
                     Id = (string)accountParsed["_id"],
-                    Username = (string)accountParsed["auth0Id"],
+                    Username = (string)accountParsed["auth0Id"],//TODO: This is a temporary placeholder for username (should use a real username once /accounts/currentuser route is updated)
                     Seeds = (double)accountParsed["numSeeds"],
                     Pins = (int)accountParsed["numPins"]
                 };

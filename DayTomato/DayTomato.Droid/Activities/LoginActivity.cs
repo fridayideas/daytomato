@@ -17,6 +17,7 @@ namespace DayTomato.Droid.Activities
             base.OnCreate(savedInstanceState);
 
             //TODO: Check for internet connection, handle if not available
+
             //TODO: Auto sign-in without pressing "Sign in as..."
 
             var auth0 = new Auth0Client(
@@ -36,6 +37,8 @@ namespace DayTomato.Droid.Activities
 
             //Pass account info to MainActivity and start MainActivity
             var mainActivityIntent = new Intent(this, typeof(MainActivity));
+
+            //TODO: Remove some of the below if not needed in the future
             mainActivityIntent.PutExtra("AuthUserJSON", auth0User.Profile.ToString());
             mainActivityIntent.PutExtra("AuthAccessToken", auth0User.Auth0AccessToken);
             mainActivityIntent.PutExtra("AuthIdToken", auth0User.IdToken);
