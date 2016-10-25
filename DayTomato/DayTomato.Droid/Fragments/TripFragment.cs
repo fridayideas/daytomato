@@ -124,6 +124,7 @@ namespace DayTomato.Droid.Fragments
         {
             _createTripButton.Click += (sender, args) =>
             {
+                //CreateTripDialog();
             };
         }
 

@@ -143,8 +143,8 @@ namespace DayTomato.Droid
             //Tab title array
             var titles = CharSequence.ArrayFromStringArray(new[] {
                 "Home",
-                "Map",
-				"Trips"
+                "Search map",
+				"Plan a Trip"
             });
 
             _viewPager = FindViewById<ViewPager>(Resource.Id.main_viewpager);

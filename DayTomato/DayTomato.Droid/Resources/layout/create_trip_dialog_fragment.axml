@@ -18,13 +18,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_pin_dialog_title" />
         <TextView
-            android:text="To create a trip, enter in the information below"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_pin_dialog_description"
-            android:layout_marginTop="10dp" />
-        <TextView
             android:text="Name"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
@@ -34,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/create_trip_dialog_name"
-            android:hint="Name of the place"
+            android:hint="Name this trip"
             android:textColor="@color/black" />
         <TextView
             android:text="Type"
@@ -46,7 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/create_trip_dialog_type"
-            android:hint="Foodie? Relax? Sight-see?" />
+            android:hint="Foodie? Relaxing? Walkable?"
+            android:textColor="@color/black" />
         <TextView
             android:text="Description"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -69,6 +63,18 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_trip_dialog_cost"
             android:hint="How much did you spend?"
+            android:textColor="@color/black" />
+        <TextView
+            android:text="Activities"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_trip_dialog_search"
+            android:hint="Search for a pin to add to this trip"
             android:textColor="@color/black" />
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
