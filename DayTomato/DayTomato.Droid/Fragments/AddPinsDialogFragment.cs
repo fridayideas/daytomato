@@ -12,6 +12,7 @@ using Plugin.Media;
 using System.IO;
 using DayTomato.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DayTomato.Droid
@@ -40,23 +41,21 @@ namespace DayTomato.Droid
             _createTripButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_create_button);
             _cancelButton = (Button)view.FindViewById(Resource.Id.create_trip_dialog_cancel_button);
 
-            //Load all pins from the server
+            ArrayAdapter autoCompleteAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleDropDownItem1Line, new List<string>());
+
+            var autocompleteTextView = view.FindViewById<AutoCompleteTextView>(Resource.Id.add_pins_dialog_autocomplete);
+            // Minimum number of characters to begin autocompletet for
+            autocompleteTextView.Threshold = 1;
+            autocompleteTextView.Adapter = autoCompleteAdapter;
+
+            // Load all pins from the server
             Task.Run(async () =>
             {
                 _allPins = await MainActivity.dayTomatoClient.GetPins();
-
+                autoCompleteAdapter.AddAll(_allPins.Select(p => p.Name).ToList());
+                // Updates autocomplete data
+                autoCompleteAdapter.NotifyDataSetChanged();
             });
-
-            var autoCompleteOptions = new string[100];
-            for (int i = 0; i < 100; i++)
-            {
-                autoCompleteOptions[i] = _allPins[i].Name;
-            }
-            ArrayAdapter autoCompleteAdapter = new ArrayAdapter(this.Activity, Android.Resource.Layout.SimpleDropDownItem1Line
-                , autoCompleteOptions);
-
-            var autocompleteTextView = view.FindViewById<AutoCompleteTextView>(Resource.Id.add_pins_dialog_autocomplete);
-            autocompleteTextView.Adapter = autoCompleteAdapter;
 
             /*_pin.KeyPress += (object sender, View.KeyEventArgs e) => {
                 e.Handled = false;
