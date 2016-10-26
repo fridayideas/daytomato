@@ -31,6 +31,8 @@ namespace DayTomato.Droid.Fragments
 
 	    private MainActivity _activity;
 
+        private Trip trip = new Trip();
+
         private bool _lock;
 
         public override void OnCreate(Bundle savedInstanceState)
@@ -124,7 +126,7 @@ namespace DayTomato.Droid.Fragments
         {
             _createTripButton.Click += (sender, args) =>
             {
-                //CreateTripDialog();
+                CreateTripDialog();
             };
         }
 
@@ -163,15 +165,52 @@ namespace DayTomato.Droid.Fragments
         {
             _lock = false;
             var account = MainActivity.GetAccount();
-            var trip = new Trip
+
+            trip.Type = e.Type;
+            trip.Name = e.Name;
+            trip.Description = e.Description;
+            trip.Cost = e.Cost;
+            trip.LinkedAccount = account.Id;
+            trip.CreateDate = e.CreateDate;
+
+            AddPinsDialog();
+            //trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
+        }
+
+        private void AddPinsDialog()
+        {
+            _lock = true;
+            var fm = FragmentManager;
+            var ft = fm.BeginTransaction();
+
+            //Remove fragment else it will crash as it is already added to backstack
+            var prev = fm.FindFragmentByTag("AddPinsDialog");
+            if (prev != null)
             {
-                Type = e.Type,
-                Name = e.Name,
-                LinkedAccount = account.Id,
-                CreateDate = e.CreateDate
-            };
+                ft.Remove(prev);
+            }
+
+            ft.AddToBackStack(null);
+
+            // Switch button states
+            _createTripButton.Visibility = ViewStates.Visible;
+            _createTripButton.Enabled = true;
+            
+            var addPinsDialogFragment = AddPinsDialogFragment.NewInstance();
+            addPinsDialogFragment.AddPinsDialogClosed += OnAddPinsDialogClosed;
+
+            //Add fragment
+            addPinsDialogFragment.Show(fm, "AddPinsDialog");
+        }
+        public async void OnAddPinsDialogClosed(object sender, AddPinsDialogEventArgs e)
+        {
+            _lock = false;
+           
+            trip.Pins = e.Pins;
 
             //trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
+
+            trip = new Trip();
         }
     }
 }

@@ -72,7 +72,7 @@ namespace DayTomato.Models
 				pin.Latitude = (double)jo["coordinate"]["latitude"];       // Pin latitude
 				pin.Longitude = (double)jo["coordinate"]["longitude"];     // Pin longitude
 				pin.LinkedAccount = (string)jo["linkedAccount"];           // Pin linked account
-				pin.CreateDate = (DateTime)jo["createDate"];               // Pin create date
+				//pin.CreateDate = (DateTime)jo["createDate"];               // Pin create date
 				pin.ImageURL = (string)jo["image"];						   // Pin image url
 			}
 			catch (Exception ex)
@@ -84,7 +84,7 @@ namespace DayTomato.Models
              * Comments are in this format:
              * [{"linkedAccount":111,"text":"LOOOOL","createDate":"2016-09-30T02:44:20.637Z"}]
              */
-			try
+			/*try
 			{ 
 				pin.Comments = new List<Comment>();
 				JArray ja = (JArray)jo["comments"];
@@ -99,7 +99,7 @@ namespace DayTomato.Models
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex.Message);
-			}	
+			}*/	
 
 			return pin;
 		}

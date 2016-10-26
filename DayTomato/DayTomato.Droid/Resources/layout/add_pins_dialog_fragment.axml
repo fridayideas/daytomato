@@ -18,52 +18,17 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_pin_dialog_title" />
         <TextView
-            android:text="Name"
+            android:text="Activities in this trip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
-        <EditText
+            android:id="@+id/textView2" />
+        <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_name"
-            android:hint="Name this trip"
-            android:textColor="@color/black" />
-        <TextView
-            android:text="Type"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView1" />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_type"
-            android:hint="Foodie? Relaxing? Walkable?"
-            android:textColor="@color/black" />
-        <TextView
-            android:text="Description"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_text_description"
-            android:hint="Give a short description"
-            android:textColor="@color/black" />
-        <TextView
-            android:text="Cost"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:inputType="numberDecimal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_cost"
-            android:hint="How much did you spend?"
-            android:textColor="@color/black" />
+            android:id="@+id/add_pins_dialog_autocomplete"
+            android:textColor="@color/black"
+            android:hint="Type to find a pin to add to this trip" />
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -82,11 +47,11 @@
                 android:layout_margin="10dp"
                 android:layout_weight="0.5" />
             <Button
-                android:text="Next"
+                android:text="Create"
                 android:background="@color/colorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/create_trip_dialog_add_pins_button"
+                android:id="@+id/add_pins_dialog_create_button"
                 android:layout_margin="10dp"
                 android:layout_weight="0.5" />
         </LinearLayout>
