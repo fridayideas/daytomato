@@ -7,8 +7,6 @@ using System.Diagnostics;
 
 namespace DayTomato.Models
 {
-
-	[JsonConverter(typeof(PinConverter))]
 	public class Pin
 	{
 		public Pin() { }
@@ -28,120 +26,34 @@ namespace DayTomato.Models
 			CreateDate = date;
 		}
 
+		[JsonProperty("_id")]
 		public string Id { get; set; }
-
-		// Type of pin depends on the amount of seeds the user has
-		// 0-10 seeds normal user; 10-50 seeds, ...
+		[JsonProperty("type", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public int Type { get; set; }
+		[JsonProperty("name")]
 		public string Name { get; set; }
+		[JsonProperty("rating", DefaultValueHandling = DefaultValueHandling.Populate) ]
 		public float Rating { get; set; }
+		[JsonProperty("description")]
 		public string Description { get; set; }
+		[JsonProperty("likes", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public int Likes { get; set; }
+		[JsonProperty("latitude", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public double Latitude { get; set; }
+		[JsonProperty("longitude", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public double Longitude { get; set; }
+		[JsonProperty("linkedAccount")]
 		public string LinkedAccount { get; set; }
+		[JsonProperty("review")]
 		public string Review { get; set;}
+		[JsonProperty("cost", DefaultValueHandling = DefaultValueHandling.Populate)]
         public double Cost { get; set; }
+		[JsonProperty("comments", TypeNameHandling = TypeNameHandling.Auto)]
 		public List<Comment> Comments { get; set; }
+		[JsonProperty("createDate")]
 		public DateTime CreateDate { get; set; }
+		[JsonProperty("image")]
 		public string ImageURL { get; set; }
-
-	}
-
-	public class PinConverter : JsonConverter
-	{
-		public override bool CanConvert(Type objectType)
-		{
-			return (objectType == typeof(Pin));
-		}
-
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-		{
-			JObject jo = JObject.Load(reader);
-			Pin pin = new Pin();
-			try
-			{
-				pin.Id = (string)jo["_id"];                                // Id of pin
-				pin.Type = (int)jo["pinType"];                             // Type of pin
-				pin.Name = (string)jo["name"];                       	   // Name of pin
-				pin.Rating = (float)jo["rating"];                          // Rating of pin
-				pin.Description = (string)jo["description"];               // Description of pin
-				pin.Likes = (int)jo["likes"];                              // Pin likes
-				pin.Review = (string)jo["review"];						   // Pin review
-                pin.Cost = (double)jo["cost"];                             // Pin cost
-				pin.Latitude = (double)jo["coordinate"]["latitude"];       // Pin latitude
-				pin.Longitude = (double)jo["coordinate"]["longitude"];     // Pin longitude
-				pin.LinkedAccount = (string)jo["linkedAccount"];           // Pin linked account
-				pin.CreateDate = (DateTime)jo["createDate"];               // Pin create date
-				pin.ImageURL = (string)jo["image"];						   // Pin image url
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex.Message);
-			}
-
-			/* Comments
-             * Comments are in this format:
-             * [{"linkedAccount":111,"text":"LOOOOL","createDate":"2016-09-30T02:44:20.637Z"}]
-             */
-			try
-			{ 
-				pin.Comments = new List<Comment>();
-				JArray ja = (JArray)jo["comments"];
-				for (int i = 0; i < ja.Count; ++i)
-				{
-					string account = (string)ja[i]["linkedAccount"];
-					string text = (string)ja[i]["text"];
-					DateTime date = (DateTime)ja[i]["createDate"];
-					pin.Comments.Add(new Comment(account, text, date));
-				}
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex.Message);
-			}	
-
-			return pin;
-		}
-
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-		{
-			JObject jo = new JObject();
-
-			Pin pin = (Pin)value;
-			jo.Add("_id", pin.Id);
-			jo.Add("pinType", pin.Type);
-			jo.Add("name", pin.Name);
-			jo.Add("rating", pin.Rating);
-			jo.Add("description", pin.Description);
-			JObject coordinates = new JObject();
-			coordinates.Add("latitude", pin.Latitude);
-			coordinates.Add("longitude", pin.Longitude);
-			jo.Add("coordinate", coordinates);
-			jo.Add("linkedAccount", pin.LinkedAccount);
-			jo.Add("likes", pin.Likes);
-			jo.Add("review", pin.Review);
-            jo.Add("cost", pin.Cost);
-			jo.Add("image", pin.ImageURL);
-			jo.Add("createDate", pin.CreateDate);
-
-			JArray ja = new JArray();
-			if (pin.Comments != null)
-			{
-				for (int i = 0; i < pin.Comments.Count; ++i)
-				{
-					JObject jr = new JObject();
-					jr.Add("linkedAccount", pin.Comments[i].LinkedAccount);
-					jr.Add("text", pin.Comments[i].Text);
-					jr.Add("createDate", pin.Comments[i].CreateDate);
-					ja.Add(jr);
-				}
-			}
-
-			jo.Add("comments", ja);
-
-			jo.WriteTo(writer);
-		}
 	}
 
 	public class Comment

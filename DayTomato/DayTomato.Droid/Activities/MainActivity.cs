@@ -17,7 +17,6 @@ using Java.IO;
 using Android.Graphics;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator.Abstractions;
-using Plugin.Media;
 
 namespace DayTomato.Droid
 {
