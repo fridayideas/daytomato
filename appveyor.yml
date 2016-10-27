@@ -22,3 +22,22 @@ build:
   publish_nuget_symbols: true
   include_nuget_references: true
   verbosity: minimal
+ 
+branches:
+  # whitelist
+  only:
+    - master
+
+deploy:
+  release: daytomato$(appveyor_build_version)
+  description: 'Release description'
+  provider: GitHub
+  auth_token:
+    secure: ffe579b1fddd34d3bf8afd5c7dd9252f6672abb3 # your encrypted token from GitHub
+  artifact: '*.nupkg'            # upload all NuGet packages to release assets
+  draft: false
+  prerelease: false
+  force_update: true
+  on:
+    branch: master                 # release from master branch only
+  

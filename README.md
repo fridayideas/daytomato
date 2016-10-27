@@ -9,6 +9,7 @@ When you open the application and sign in, you are taken to the home page. Here 
 
 On the Map tab, you can see all the pins that users have placed. Tap any to view them, give it a like or dislike, create your trip directly from the Map tab, or create your own pin!
 
+
 ---
 
 ### Our Team
