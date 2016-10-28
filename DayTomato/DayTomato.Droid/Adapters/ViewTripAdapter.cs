@@ -64,7 +64,7 @@ namespace DayTomato.Droid
 			vh.Account.Text = _suggestions[position].LinkedAccount;
 			vh.Likes.Text = _suggestions[position].Likes.ToString();
 			vh.Description.Text = _suggestions[position].Description;
-			vh.Cost.Text = _suggestions[position].Cost.ToString();
+			//vh.Cost.Text = _suggestions[position].Cost.ToString();
 			vh.Rating.Text = _suggestions[position].Rating.ToString();
 
 			// Initializing listview

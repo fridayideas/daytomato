@@ -15,6 +15,7 @@ using Android.Util;
 using DayTomato.Models;
 using Java.IO;
 using Android.Graphics;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator.Abstractions;
 
@@ -76,6 +77,10 @@ namespace DayTomato.Droid
 		public async Task<Account> GetUserAccount()
 		{
             _account = await dayTomatoClient.GetAccount();
+            
+            //Set name in Home tab to first name
+		    string googleAccInfo = Intent.GetStringExtra("AuthUserJSON");
+		    _account.Username = (string)JObject.Parse(googleAccInfo)["given_name"];
 
 		    return _account;
 		}
@@ -135,8 +140,8 @@ namespace DayTomato.Droid
             //Tab title array
             var titles = CharSequence.ArrayFromStringArray(new[] {
                 "Home",
-                "Map",
-				"Trips"
+                "Search map",
+				"Plan a Trip"
             });
 
             _viewPager = FindViewById<ViewPager>(Resource.Id.main_viewpager);
@@ -145,7 +150,6 @@ namespace DayTomato.Droid
 			_viewPager.AddOnPageChangeListener(this);
             // Give the TabLayout the ViewPager 
             _tabLayout.SetupWithViewPager(_viewPager);
-			//_tabLayout.SetOnTabSelectedListener(this);
             SetIcons();
         }
 

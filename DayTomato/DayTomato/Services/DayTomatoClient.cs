@@ -86,6 +86,21 @@ namespace DayTomato.Services
 			return null;
 		}
 
+        public async Task<string> CreateTrip(CreateTrip trip)
+        {
+            var uri = new Uri(BASE_URL + "/api/trips");
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var content = new StringContent(JsonConvert.SerializeObject(trip), Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(uri, content);
+            if (response.IsSuccessStatusCode)
+            {
+                var res = new JObject();
+                res = JObject.Parse(await response.Content.ReadAsStringAsync());
+                return (string)res["_id"];
+            }
+            return "";
+        }
+
         // Get Pins
         public async Task<List<Pin>> GetPins()
         {

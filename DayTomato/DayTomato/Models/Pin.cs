@@ -54,10 +54,10 @@ namespace DayTomato.Models
 		public DateTime CreateDate { get; set; }
 		[JsonProperty("image")]
 		public string ImageURL { get; set; }
-		[JsonProperty("likedBy", DefaultValueHandling = DefaultValueHandling.Populate)]
-		public List<string> LikedBy { get; set; }
-		[JsonProperty("dislikedBy", DefaultValueHandling = DefaultValueHandling.Populate)]
-		public List<string> DislikedBy { get; set; }
+		[JsonProperty("likedBy")]
+		public List<string> LikedBy { get; set; } = new List<string>();
+		[JsonProperty("dislikedBy")]
+		public List<string> DislikedBy { get; set; } = new List<string>();
 	}
 
 	public class Comment

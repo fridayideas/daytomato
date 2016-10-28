@@ -2357,55 +2357,58 @@ namespace DayTomato.Droid
 			public const int down_arrow_unfilled = 2130837636;
 			
 			// aapt resource value: 0x7f020085
-			public const int ic_add_location_white_18dp = 2130837637;
+			public const int ic_add_circle_white_24px = 2130837637;
 			
 			// aapt resource value: 0x7f020086
-			public const int ic_directions_black_48px = 2130837638;
+			public const int ic_add_location_white_18dp = 2130837638;
 			
 			// aapt resource value: 0x7f020087
-			public const int ic_directions_walk_white_24px = 2130837639;
+			public const int ic_directions_black_48px = 2130837639;
 			
 			// aapt resource value: 0x7f020088
-			public const int ic_home_white_24dp = 2130837640;
+			public const int ic_directions_walk_white_24px = 2130837640;
 			
 			// aapt resource value: 0x7f020089
-			public const int ic_insert_photo_black_48dp = 2130837641;
+			public const int ic_home_white_24dp = 2130837641;
 			
 			// aapt resource value: 0x7f02008a
-			public const int ic_person_black_24dp = 2130837642;
+			public const int ic_insert_photo_black_48dp = 2130837642;
 			
 			// aapt resource value: 0x7f02008b
-			public const int ic_place_black_24dp = 2130837643;
+			public const int ic_person_black_24dp = 2130837643;
 			
 			// aapt resource value: 0x7f02008c
-			public const int ic_place_white_24dp = 2130837644;
+			public const int ic_place_black_24dp = 2130837644;
 			
 			// aapt resource value: 0x7f02008d
-			public const int icon = 2130837645;
+			public const int ic_place_white_24dp = 2130837645;
 			
 			// aapt resource value: 0x7f02008e
-			public const int navigation_empty_icon = 2130837646;
-			
-			// aapt resource value: 0x7f020095
-			public const int notification_template_icon_bg = 2130837653;
+			public const int icon = 2130837646;
 			
 			// aapt resource value: 0x7f02008f
-			public const int playstore_icon = 2130837647;
+			public const int navigation_empty_icon = 2130837647;
+			
+			// aapt resource value: 0x7f020096
+			public const int notification_template_icon_bg = 2130837654;
 			
 			// aapt resource value: 0x7f020090
-			public const int select_location_pin = 2130837648;
+			public const int playstore_icon = 2130837648;
 			
 			// aapt resource value: 0x7f020091
-			public const int splash_screen = 2130837649;
+			public const int select_location_pin = 2130837649;
 			
 			// aapt resource value: 0x7f020092
-			public const int three_dots = 2130837650;
+			public const int splash_screen = 2130837650;
 			
 			// aapt resource value: 0x7f020093
-			public const int up_arrow_filled = 2130837651;
+			public const int three_dots = 2130837651;
 			
 			// aapt resource value: 0x7f020094
-			public const int up_arrow_unfilled = 2130837652;
+			public const int up_arrow_filled = 2130837652;
+			
+			// aapt resource value: 0x7f020095
+			public const int up_arrow_unfilled = 2130837653;
 			
 			static Drawable()
 			{
@@ -2420,8 +2423,8 @@ namespace DayTomato.Droid
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f0b00ab
-			public const int action0 = 2131427499;
+			// aapt resource value: 0x7f0b00b8
+			public const int action0 = 2131427512;
 			
 			// aapt resource value: 0x7f0b0069
 			public const int action_bar = 2131427433;
@@ -2447,8 +2450,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b006a
 			public const int action_context_bar = 2131427434;
 			
-			// aapt resource value: 0x7f0b00af
-			public const int action_divider = 2131427503;
+			// aapt resource value: 0x7f0b00bc
+			public const int action_divider = 2131427516;
 			
 			// aapt resource value: 0x7f0b0003
 			public const int action_menu_divider = 2131427331;
@@ -2470,6 +2473,21 @@ namespace DayTomato.Droid
 			
 			// aapt resource value: 0x7f0b003f
 			public const int add = 2131427391;
+			
+			// aapt resource value: 0x7f0b007b
+			public const int add_pins_dialog_add_button = 2131427451;
+			
+			// aapt resource value: 0x7f0b007a
+			public const int add_pins_dialog_autocomplete = 2131427450;
+			
+			// aapt resource value: 0x7f0b007d
+			public const int add_pins_dialog_cancel_button = 2131427453;
+			
+			// aapt resource value: 0x7f0b007e
+			public const int add_pins_dialog_create_button = 2131427454;
+			
+			// aapt resource value: 0x7f0b007c
+			public const int add_pins_dialog_listpins = 2131427452;
 			
 			// aapt resource value: 0x7f0b0017
 			public const int adjust_height = 2131427351;
@@ -2498,8 +2516,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0052
 			public const int buttonPanel = 2131427410;
 			
-			// aapt resource value: 0x7f0b00ac
-			public const int cancel_action = 2131427500;
+			// aapt resource value: 0x7f0b00b9
+			public const int cancel_action = 2131427513;
 			
 			// aapt resource value: 0x7f0b001f
 			public const int center = 2131427359;
@@ -2513,8 +2531,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0060
 			public const int checkbox = 2131427424;
 			
-			// aapt resource value: 0x7f0b00b2
-			public const int chronometer = 2131427506;
+			// aapt resource value: 0x7f0b00bf
+			public const int chronometer = 2131427519;
 			
 			// aapt resource value: 0x7f0b002a
 			public const int clip_horizontal = 2131427370;
@@ -2525,44 +2543,62 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0044
 			public const int collapseActionView = 2131427396;
 			
-			// aapt resource value: 0x7f0b0079
-			public const int comment_text = 2131427449;
+			// aapt resource value: 0x7f0b0080
+			public const int comment_text = 2131427456;
 			
 			// aapt resource value: 0x7f0b0058
 			public const int contentPanel = 2131427416;
 			
-			// aapt resource value: 0x7f0b0083
-			public const int create_pin_dialog_cancel_button = 2131427459;
+			// aapt resource value: 0x7f0b0089
+			public const int create_pin_dialog_cancel_button = 2131427465;
+			
+			// aapt resource value: 0x7f0b0087
+			public const int create_pin_dialog_cost = 2131427463;
+			
+			// aapt resource value: 0x7f0b008a
+			public const int create_pin_dialog_create_button = 2131427466;
 			
 			// aapt resource value: 0x7f0b0081
-			public const int create_pin_dialog_cost = 2131427457;
-			
-			// aapt resource value: 0x7f0b0084
-			public const int create_pin_dialog_create_button = 2131427460;
-			
-			// aapt resource value: 0x7f0b007b
-			public const int create_pin_dialog_description = 2131427451;
-			
-			// aapt resource value: 0x7f0b007c
-			public const int create_pin_dialog_image = 2131427452;
-			
-			// aapt resource value: 0x7f0b007d
-			public const int create_pin_dialog_location = 2131427453;
-			
-			// aapt resource value: 0x7f0b007e
-			public const int create_pin_dialog_name = 2131427454;
-			
-			// aapt resource value: 0x7f0b0080
-			public const int create_pin_dialog_rating = 2131427456;
+			public const int create_pin_dialog_description = 2131427457;
 			
 			// aapt resource value: 0x7f0b0082
-			public const int create_pin_dialog_review = 2131427458;
+			public const int create_pin_dialog_image = 2131427458;
 			
-			// aapt resource value: 0x7f0b007f
-			public const int create_pin_dialog_text_description = 2131427455;
+			// aapt resource value: 0x7f0b0083
+			public const int create_pin_dialog_location = 2131427459;
 			
-			// aapt resource value: 0x7f0b007a
-			public const int create_pin_dialog_title = 2131427450;
+			// aapt resource value: 0x7f0b0084
+			public const int create_pin_dialog_name = 2131427460;
+			
+			// aapt resource value: 0x7f0b0086
+			public const int create_pin_dialog_rating = 2131427462;
+			
+			// aapt resource value: 0x7f0b0088
+			public const int create_pin_dialog_review = 2131427464;
+			
+			// aapt resource value: 0x7f0b0085
+			public const int create_pin_dialog_text_description = 2131427461;
+			
+			// aapt resource value: 0x7f0b0078
+			public const int create_pin_dialog_title = 2131427448;
+			
+			// aapt resource value: 0x7f0b0091
+			public const int create_trip_dialog_add_pins_button = 2131427473;
+			
+			// aapt resource value: 0x7f0b0090
+			public const int create_trip_dialog_cancel_button = 2131427472;
+			
+			// aapt resource value: 0x7f0b008f
+			public const int create_trip_dialog_cost = 2131427471;
+			
+			// aapt resource value: 0x7f0b008b
+			public const int create_trip_dialog_name = 2131427467;
+			
+			// aapt resource value: 0x7f0b008e
+			public const int create_trip_dialog_text_description = 2131427470;
+			
+			// aapt resource value: 0x7f0b008d
+			public const int create_trip_dialog_type = 2131427469;
 			
 			// aapt resource value: 0x7f0b005e
 			public const int custom = 2131427422;
@@ -2579,20 +2615,20 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b004e
 			public const int default_activity_button = 2131427406;
 			
-			// aapt resource value: 0x7f0b0086
-			public const int design_bottom_sheet = 2131427462;
+			// aapt resource value: 0x7f0b0093
+			public const int design_bottom_sheet = 2131427475;
 			
-			// aapt resource value: 0x7f0b008d
-			public const int design_menu_item_action_area = 2131427469;
+			// aapt resource value: 0x7f0b009a
+			public const int design_menu_item_action_area = 2131427482;
 			
-			// aapt resource value: 0x7f0b008c
-			public const int design_menu_item_action_area_stub = 2131427468;
+			// aapt resource value: 0x7f0b0099
+			public const int design_menu_item_action_area_stub = 2131427481;
 			
-			// aapt resource value: 0x7f0b008b
-			public const int design_menu_item_text = 2131427467;
+			// aapt resource value: 0x7f0b0098
+			public const int design_menu_item_text = 2131427480;
 			
-			// aapt resource value: 0x7f0b008a
-			public const int design_navigation_view = 2131427466;
+			// aapt resource value: 0x7f0b0097
+			public const int design_navigation_view = 2131427479;
 			
 			// aapt resource value: 0x7f0b0039
 			public const int disableHome = 2131427385;
@@ -2603,8 +2639,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0022
 			public const int end = 2131427362;
 			
-			// aapt resource value: 0x7f0b00b6
-			public const int end_padder = 2131427510;
+			// aapt resource value: 0x7f0b00c3
+			public const int end_padder = 2131427523;
 			
 			// aapt resource value: 0x7f0b0019
 			public const int enterAlways = 2131427353;
@@ -2639,56 +2675,56 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b003a
 			public const int homeAsUp = 2131427386;
 			
-			// aapt resource value: 0x7f0b008f
-			public const int home_feed_notification = 2131427471;
-			
-			// aapt resource value: 0x7f0b0094
-			public const int home_feed_pin_cost = 2131427476;
-			
-			// aapt resource value: 0x7f0b0091
-			public const int home_feed_pin_directions = 2131427473;
-			
-			// aapt resource value: 0x7f0b0092
-			public const int home_feed_pin_image = 2131427474;
-			
-			// aapt resource value: 0x7f0b0093
-			public const int home_feed_pin_likes = 2131427475;
-			
-			// aapt resource value: 0x7f0b0090
-			public const int home_feed_pin_name = 2131427472;
-			
-			// aapt resource value: 0x7f0b0095
-			public const int home_feed_pin_review = 2131427477;
-			
-			// aapt resource value: 0x7f0b009b
-			public const int home_pin_count = 2131427483;
-			
-			// aapt resource value: 0x7f0b009a
-			public const int home_pin_layout = 2131427482;
-			
 			// aapt resource value: 0x7f0b009c
-			public const int home_pins_text = 2131427484;
+			public const int home_feed_notification = 2131427484;
 			
-			// aapt resource value: 0x7f0b0097
-			public const int home_profile_layout = 2131427479;
-			
-			// aapt resource value: 0x7f0b0098
-			public const int home_profile_picture = 2131427480;
-			
-			// aapt resource value: 0x7f0b00a0
-			public const int home_recycler_view = 2131427488;
+			// aapt resource value: 0x7f0b00a1
+			public const int home_feed_pin_cost = 2131427489;
 			
 			// aapt resource value: 0x7f0b009e
-			public const int home_seed_count = 2131427486;
-			
-			// aapt resource value: 0x7f0b009d
-			public const int home_seeds_layout = 2131427485;
+			public const int home_feed_pin_directions = 2131427486;
 			
 			// aapt resource value: 0x7f0b009f
-			public const int home_seeds_text = 2131427487;
+			public const int home_feed_pin_image = 2131427487;
 			
-			// aapt resource value: 0x7f0b0099
-			public const int home_user_name = 2131427481;
+			// aapt resource value: 0x7f0b00a0
+			public const int home_feed_pin_likes = 2131427488;
+			
+			// aapt resource value: 0x7f0b009d
+			public const int home_feed_pin_name = 2131427485;
+			
+			// aapt resource value: 0x7f0b00a2
+			public const int home_feed_pin_review = 2131427490;
+			
+			// aapt resource value: 0x7f0b00a8
+			public const int home_pin_count = 2131427496;
+			
+			// aapt resource value: 0x7f0b00a7
+			public const int home_pin_layout = 2131427495;
+			
+			// aapt resource value: 0x7f0b00a9
+			public const int home_pins_text = 2131427497;
+			
+			// aapt resource value: 0x7f0b00a4
+			public const int home_profile_layout = 2131427492;
+			
+			// aapt resource value: 0x7f0b00a5
+			public const int home_profile_picture = 2131427493;
+			
+			// aapt resource value: 0x7f0b00ad
+			public const int home_recycler_view = 2131427501;
+			
+			// aapt resource value: 0x7f0b00ab
+			public const int home_seed_count = 2131427499;
+			
+			// aapt resource value: 0x7f0b00aa
+			public const int home_seeds_layout = 2131427498;
+			
+			// aapt resource value: 0x7f0b00ac
+			public const int home_seeds_text = 2131427500;
+			
+			// aapt resource value: 0x7f0b00a6
+			public const int home_user_name = 2131427494;
 			
 			// aapt resource value: 0x7f0b000c
 			public const int hybrid = 2131427340;
@@ -2705,14 +2741,14 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b004d
 			public const int image = 2131427405;
 			
-			// aapt resource value: 0x7f0b00b5
-			public const int info = 2131427509;
+			// aapt resource value: 0x7f0b00c2
+			public const int info = 2131427522;
 			
 			// aapt resource value: 0x7f0b000a
 			public const int item_touch_helper_previous_elevation = 2131427338;
 			
-			// aapt resource value: 0x7f0b00a2
-			public const int layout_main = 2131427490;
+			// aapt resource value: 0x7f0b00af
+			public const int layout_main = 2131427503;
 			
 			// aapt resource value: 0x7f0b0024
 			public const int left = 2131427364;
@@ -2720,26 +2756,26 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0016
 			public const int light = 2131427350;
 			
-			// aapt resource value: 0x7f0b00b0
-			public const int line1 = 2131427504;
+			// aapt resource value: 0x7f0b00bd
+			public const int line1 = 2131427517;
 			
-			// aapt resource value: 0x7f0b00b4
-			public const int line3 = 2131427508;
+			// aapt resource value: 0x7f0b00c1
+			public const int line3 = 2131427521;
 			
-			// aapt resource value: 0x7f0b00e2
-			public const int linearLayout1 = 2131427554;
+			// aapt resource value: 0x7f0b00d5
+			public const int linearLayout1 = 2131427541;
 			
-			// aapt resource value: 0x7f0b00cc
-			public const int linearLayout10 = 2131427532;
+			// aapt resource value: 0x7f0b00d9
+			public const int linearLayout10 = 2131427545;
 			
-			// aapt resource value: 0x7f0b00e0
-			public const int linearLayout2 = 2131427552;
+			// aapt resource value: 0x7f0b00ed
+			public const int linearLayout2 = 2131427565;
 			
-			// aapt resource value: 0x7f0b00ce
-			public const int linearLayout6 = 2131427534;
+			// aapt resource value: 0x7f0b00db
+			public const int linearLayout6 = 2131427547;
 			
-			// aapt resource value: 0x7f0b00da
-			public const int linearLayout8 = 2131427546;
+			// aapt resource value: 0x7f0b00e7
+			public const int linearLayout8 = 2131427559;
 			
 			// aapt resource value: 0x7f0b0037
 			public const int listMode = 2131427383;
@@ -2747,35 +2783,35 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b004f
 			public const int list_item = 2131427407;
 			
-			// aapt resource value: 0x7f0b00a3
-			public const int main_sliding_tabs = 2131427491;
+			// aapt resource value: 0x7f0b00b0
+			public const int main_sliding_tabs = 2131427504;
 			
-			// aapt resource value: 0x7f0b0078
-			public const int main_toolbar = 2131427448;
+			// aapt resource value: 0x7f0b007f
+			public const int main_toolbar = 2131427455;
 			
-			// aapt resource value: 0x7f0b00a4
-			public const int main_viewpager = 2131427492;
+			// aapt resource value: 0x7f0b00b1
+			public const int main_viewpager = 2131427505;
 			
-			// aapt resource value: 0x7f0b00a5
-			public const int map = 2131427493;
+			// aapt resource value: 0x7f0b00b2
+			public const int map = 2131427506;
 			
-			// aapt resource value: 0x7f0b00a9
-			public const int map_create_pin_cancel_selection = 2131427497;
+			// aapt resource value: 0x7f0b00b6
+			public const int map_create_pin_cancel_selection = 2131427510;
 			
-			// aapt resource value: 0x7f0b00a6
-			public const int map_create_pin_fab = 2131427494;
+			// aapt resource value: 0x7f0b00b3
+			public const int map_create_pin_fab = 2131427507;
 			
-			// aapt resource value: 0x7f0b00aa
-			public const int map_create_pin_select_button = 2131427498;
+			// aapt resource value: 0x7f0b00b7
+			public const int map_create_pin_select_button = 2131427511;
 			
-			// aapt resource value: 0x7f0b00a7
-			public const int map_create_pin_select_location_pin = 2131427495;
+			// aapt resource value: 0x7f0b00b4
+			public const int map_create_pin_select_location_pin = 2131427508;
 			
-			// aapt resource value: 0x7f0b00a8
-			public const int map_fragment_estimate_address = 2131427496;
+			// aapt resource value: 0x7f0b00b5
+			public const int map_fragment_estimate_address = 2131427509;
 			
-			// aapt resource value: 0x7f0b00ae
-			public const int media_actions = 2131427502;
+			// aapt resource value: 0x7f0b00bb
+			public const int media_actions = 2131427515;
 			
 			// aapt resource value: 0x7f0b0042
 			public const int middle = 2131427394;
@@ -2786,8 +2822,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0032
 			public const int multiply = 2131427378;
 			
-			// aapt resource value: 0x7f0b0089
-			public const int navigation_header_container = 2131427465;
+			// aapt resource value: 0x7f0b0096
+			public const int navigation_header_container = 2131427478;
 			
 			// aapt resource value: 0x7f0b0046
 			public const int never = 2131427398;
@@ -2807,56 +2843,56 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0029
 			public const int pin = 2131427369;
 			
-			// aapt resource value: 0x7f0b00c2
-			public const int pin_view_holder_account = 2131427522;
+			// aapt resource value: 0x7f0b00cf
+			public const int pin_view_holder_account = 2131427535;
 			
-			// aapt resource value: 0x7f0b00c3
-			public const int pin_view_holder_add_comment = 2131427523;
+			// aapt resource value: 0x7f0b00d0
+			public const int pin_view_holder_add_comment = 2131427536;
 			
-			// aapt resource value: 0x7f0b00c5
-			public const int pin_view_holder_add_comment_button = 2131427525;
+			// aapt resource value: 0x7f0b00d2
+			public const int pin_view_holder_add_comment_button = 2131427538;
+			
+			// aapt resource value: 0x7f0b00d1
+			public const int pin_view_holder_comment_edit_text = 2131427537;
+			
+			// aapt resource value: 0x7f0b00d3
+			public const int pin_view_holder_comment_list = 2131427539;
+			
+			// aapt resource value: 0x7f0b00cc
+			public const int pin_view_holder_cost = 2131427532;
+			
+			// aapt resource value: 0x7f0b00cd
+			public const int pin_view_holder_description = 2131427533;
+			
+			// aapt resource value: 0x7f0b00c9
+			public const int pin_view_holder_down_button = 2131427529;
+			
+			// aapt resource value: 0x7f0b00c8
+			public const int pin_view_holder_likes = 2131427528;
+			
+			// aapt resource value: 0x7f0b00ca
+			public const int pin_view_holder_pin_image = 2131427530;
 			
 			// aapt resource value: 0x7f0b00c4
-			public const int pin_view_holder_comment_edit_text = 2131427524;
+			public const int pin_view_holder_pin_name = 2131427524;
 			
-			// aapt resource value: 0x7f0b00c6
-			public const int pin_view_holder_comment_list = 2131427526;
+			// aapt resource value: 0x7f0b00cb
+			public const int pin_view_holder_rating = 2131427531;
 			
-			// aapt resource value: 0x7f0b00bf
-			public const int pin_view_holder_cost = 2131427519;
+			// aapt resource value: 0x7f0b00ce
+			public const int pin_view_holder_review = 2131427534;
 			
-			// aapt resource value: 0x7f0b00c0
-			public const int pin_view_holder_description = 2131427520;
-			
-			// aapt resource value: 0x7f0b00bc
-			public const int pin_view_holder_down_button = 2131427516;
-			
-			// aapt resource value: 0x7f0b00bb
-			public const int pin_view_holder_likes = 2131427515;
-			
-			// aapt resource value: 0x7f0b00bd
-			public const int pin_view_holder_pin_image = 2131427517;
-			
-			// aapt resource value: 0x7f0b00b7
-			public const int pin_view_holder_pin_name = 2131427511;
-			
-			// aapt resource value: 0x7f0b00be
-			public const int pin_view_holder_rating = 2131427518;
-			
-			// aapt resource value: 0x7f0b00c1
-			public const int pin_view_holder_review = 2131427521;
+			// aapt resource value: 0x7f0b00d4
+			public const int pin_view_holder_show_comments = 2131427540;
 			
 			// aapt resource value: 0x7f0b00c7
-			public const int pin_view_holder_show_comments = 2131427527;
+			public const int pin_view_holder_up_button = 2131427527;
 			
-			// aapt resource value: 0x7f0b00ba
-			public const int pin_view_holder_up_button = 2131427514;
+			// aapt resource value: 0x7f0b00c6
+			public const int pin_view_holder_view_menu = 2131427526;
 			
-			// aapt resource value: 0x7f0b00b9
-			public const int pin_view_holder_view_menu = 2131427513;
-			
-			// aapt resource value: 0x7f0b0096
-			public const int profile_row = 2131427478;
+			// aapt resource value: 0x7f0b00a3
+			public const int profile_row = 2131427491;
 			
 			// aapt resource value: 0x7f0b0006
 			public const int progress_circular = 2131427334;
@@ -2867,8 +2903,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0062
 			public const int radio = 2131427426;
 			
-			// aapt resource value: 0x7f0b00b8
-			public const int relativeLayout1 = 2131427512;
+			// aapt resource value: 0x7f0b00c5
+			public const int relativeLayout1 = 2131427525;
 			
 			// aapt resource value: 0x7f0b0025
 			public const int right = 2131427365;
@@ -2939,11 +2975,11 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b003d
 			public const int showTitle = 2131427389;
 			
-			// aapt resource value: 0x7f0b0088
-			public const int snackbar_action = 2131427464;
+			// aapt resource value: 0x7f0b0095
+			public const int snackbar_action = 2131427477;
 			
-			// aapt resource value: 0x7f0b0087
-			public const int snackbar_text = 2131427463;
+			// aapt resource value: 0x7f0b0094
+			public const int snackbar_text = 2131427476;
 			
 			// aapt resource value: 0x7f0b001d
 			public const int snap = 2131427357;
@@ -2969,8 +3005,8 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0026
 			public const int start = 2131427366;
 			
-			// aapt resource value: 0x7f0b00ad
-			public const int status_bar_latest_event_content = 2131427501;
+			// aapt resource value: 0x7f0b00ba
+			public const int status_bar_latest_event_content = 2131427514;
 			
 			// aapt resource value: 0x7f0b0063
 			public const int submenuarrow = 2131427427;
@@ -2987,23 +3023,23 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b000b
 			public const int text = 2131427339;
 			
-			// aapt resource value: 0x7f0b00b3
-			public const int text2 = 2131427507;
+			// aapt resource value: 0x7f0b00c0
+			public const int text2 = 2131427520;
 			
 			// aapt resource value: 0x7f0b005b
 			public const int textSpacerNoButtons = 2131427419;
 			
-			// aapt resource value: 0x7f0b00c8
-			public const int textView1 = 2131427528;
+			// aapt resource value: 0x7f0b008c
+			public const int textView1 = 2131427468;
 			
-			// aapt resource value: 0x7f0b00c9
-			public const int textView2 = 2131427529;
+			// aapt resource value: 0x7f0b0079
+			public const int textView2 = 2131427449;
 			
-			// aapt resource value: 0x7f0b008e
-			public const int text_input_password_toggle = 2131427470;
+			// aapt resource value: 0x7f0b009b
+			public const int text_input_password_toggle = 2131427483;
 			
-			// aapt resource value: 0x7f0b00b1
-			public const int time = 2131427505;
+			// aapt resource value: 0x7f0b00be
+			public const int time = 2131427518;
 			
 			// aapt resource value: 0x7f0b0051
 			public const int title = 2131427409;
@@ -3017,62 +3053,65 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0055
 			public const int topPanel = 2131427413;
 			
-			// aapt resource value: 0x7f0b0085
-			public const int touch_outside = 2131427461;
-			
-			// aapt resource value: 0x7f0b00ca
-			public const int trip_current_location = 2131427530;
-			
-			// aapt resource value: 0x7f0b00cb
-			public const int trip_recycler_view = 2131427531;
-			
-			// aapt resource value: 0x7f0b00d7
-			public const int trip_suggestion_account = 2131427543;
-			
-			// aapt resource value: 0x7f0b00d9
-			public const int trip_suggestion_add_comment = 2131427545;
-			
-			// aapt resource value: 0x7f0b00dc
-			public const int trip_suggestion_add_comment_button = 2131427548;
-			
-			// aapt resource value: 0x7f0b00db
-			public const int trip_suggestion_comment_edit_text = 2131427547;
-			
-			// aapt resource value: 0x7f0b00dd
-			public const int trip_suggestion_comment_list = 2131427549;
-			
-			// aapt resource value: 0x7f0b00d4
-			public const int trip_suggestion_cost = 2131427540;
+			// aapt resource value: 0x7f0b0092
+			public const int touch_outside = 2131427474;
 			
 			// aapt resource value: 0x7f0b00d8
-			public const int trip_suggestion_create_date = 2131427544;
-			
-			// aapt resource value: 0x7f0b00d5
-			public const int trip_suggestion_description = 2131427541;
-			
-			// aapt resource value: 0x7f0b00d1
-			public const int trip_suggestion_down_button = 2131427537;
-			
-			// aapt resource value: 0x7f0b00d0
-			public const int trip_suggestion_likes = 2131427536;
-			
-			// aapt resource value: 0x7f0b00cd
-			public const int trip_suggestion_name = 2131427533;
+			public const int trip_create_fab = 2131427544;
 			
 			// aapt resource value: 0x7f0b00d6
-			public const int trip_suggestion_pins = 2131427542;
+			public const int trip_current_location = 2131427542;
 			
-			// aapt resource value: 0x7f0b00d3
-			public const int trip_suggestion_rating = 2131427539;
+			// aapt resource value: 0x7f0b00d7
+			public const int trip_recycler_view = 2131427543;
+			
+			// aapt resource value: 0x7f0b00e4
+			public const int trip_suggestion_account = 2131427556;
+			
+			// aapt resource value: 0x7f0b00e6
+			public const int trip_suggestion_add_comment = 2131427558;
+			
+			// aapt resource value: 0x7f0b00e9
+			public const int trip_suggestion_add_comment_button = 2131427561;
+			
+			// aapt resource value: 0x7f0b00e8
+			public const int trip_suggestion_comment_edit_text = 2131427560;
+			
+			// aapt resource value: 0x7f0b00ea
+			public const int trip_suggestion_comment_list = 2131427562;
+			
+			// aapt resource value: 0x7f0b00e1
+			public const int trip_suggestion_cost = 2131427553;
+			
+			// aapt resource value: 0x7f0b00e5
+			public const int trip_suggestion_create_date = 2131427557;
+			
+			// aapt resource value: 0x7f0b00e2
+			public const int trip_suggestion_description = 2131427554;
 			
 			// aapt resource value: 0x7f0b00de
-			public const int trip_suggestion_show_comments = 2131427550;
+			public const int trip_suggestion_down_button = 2131427550;
 			
-			// aapt resource value: 0x7f0b00d2
-			public const int trip_suggestion_type = 2131427538;
+			// aapt resource value: 0x7f0b00dd
+			public const int trip_suggestion_likes = 2131427549;
 			
-			// aapt resource value: 0x7f0b00cf
-			public const int trip_suggestion_up_button = 2131427535;
+			// aapt resource value: 0x7f0b00da
+			public const int trip_suggestion_name = 2131427546;
+			
+			// aapt resource value: 0x7f0b00e3
+			public const int trip_suggestion_pins = 2131427555;
+			
+			// aapt resource value: 0x7f0b00e0
+			public const int trip_suggestion_rating = 2131427552;
+			
+			// aapt resource value: 0x7f0b00eb
+			public const int trip_suggestion_show_comments = 2131427563;
+			
+			// aapt resource value: 0x7f0b00df
+			public const int trip_suggestion_type = 2131427551;
+			
+			// aapt resource value: 0x7f0b00dc
+			public const int trip_suggestion_up_button = 2131427548;
 			
 			// aapt resource value: 0x7f0b0009
 			public const int up = 2131427337;
@@ -3083,41 +3122,41 @@ namespace DayTomato.Droid
 			// aapt resource value: 0x7f0b0000
 			public const int view_offset_helper = 2131427328;
 			
-			// aapt resource value: 0x7f0b00e4
-			public const int view_pin_dialog_add_button = 2131427556;
+			// aapt resource value: 0x7f0b00f0
+			public const int view_pin_dialog_add_button = 2131427568;
 			
-			// aapt resource value: 0x7f0b00e3
-			public const int view_pin_dialog_return_button = 2131427555;
+			// aapt resource value: 0x7f0b00ef
+			public const int view_pin_dialog_return_button = 2131427567;
 			
-			// aapt resource value: 0x7f0b00df
-			public const int view_pin_dialog_title = 2131427551;
+			// aapt resource value: 0x7f0b00ec
+			public const int view_pin_dialog_title = 2131427564;
 			
-			// aapt resource value: 0x7f0b00ea
-			public const int view_pin_popup_menu_delete = 2131427562;
+			// aapt resource value: 0x7f0b00f6
+			public const int view_pin_popup_menu_delete = 2131427574;
 			
-			// aapt resource value: 0x7f0b00e1
-			public const int view_pin_recycler_view = 2131427553;
+			// aapt resource value: 0x7f0b00ee
+			public const int view_pin_recycler_view = 2131427566;
 			
-			// aapt resource value: 0x7f0b00e8
-			public const int view_trip_dialog_map_button = 2131427560;
+			// aapt resource value: 0x7f0b00f4
+			public const int view_trip_dialog_map_button = 2131427572;
 			
-			// aapt resource value: 0x7f0b00e7
-			public const int view_trip_dialog_return_button = 2131427559;
+			// aapt resource value: 0x7f0b00f3
+			public const int view_trip_dialog_return_button = 2131427571;
 			
-			// aapt resource value: 0x7f0b00e5
-			public const int view_trip_dialog_title = 2131427557;
+			// aapt resource value: 0x7f0b00f1
+			public const int view_trip_dialog_title = 2131427569;
 			
-			// aapt resource value: 0x7f0b00e6
-			public const int view_trip_recycler_view = 2131427558;
+			// aapt resource value: 0x7f0b00f2
+			public const int view_trip_recycler_view = 2131427570;
 			
-			// aapt resource value: 0x7f0b00e9
-			public const int webview = 2131427561;
+			// aapt resource value: 0x7f0b00f5
+			public const int webview = 2131427573;
 			
 			// aapt resource value: 0x7f0b0013
 			public const int wide = 2131427347;
 			
-			// aapt resource value: 0x7f0b00a1
-			public const int window = 2131427489;
+			// aapt resource value: 0x7f0b00ae
+			public const int window = 2131427502;
 			
 			// aapt resource value: 0x7f0b0047
 			public const int withText = 2131427399;
@@ -3254,127 +3293,133 @@ namespace DayTomato.Droid
 			public const int abc_select_dialog_material = 2130903065;
 			
 			// aapt resource value: 0x7f03001a
-			public const int app_bar = 2130903066;
+			public const int add_pins_dialog_fragment = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int comment_view_holder = 2130903067;
+			public const int app_bar = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int create_pin_dialog_fragment = 2130903068;
+			public const int comment_view_holder = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int design_bottom_sheet_dialog = 2130903069;
+			public const int create_pin_dialog_fragment = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
-			public const int design_layout_snackbar = 2130903070;
+			public const int create_trip_dialog_fragment = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int design_layout_snackbar_include = 2130903071;
+			public const int design_bottom_sheet_dialog = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int design_layout_tab_icon = 2130903072;
+			public const int design_layout_snackbar = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int design_layout_tab_text = 2130903073;
+			public const int design_layout_snackbar_include = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int design_menu_item_action_area = 2130903074;
+			public const int design_layout_tab_icon = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int design_navigation_item = 2130903075;
+			public const int design_layout_tab_text = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int design_navigation_item_header = 2130903076;
+			public const int design_menu_item_action_area = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int design_navigation_item_separator = 2130903077;
+			public const int design_navigation_item = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int design_navigation_item_subheader = 2130903078;
+			public const int design_navigation_item_header = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int design_navigation_menu = 2130903079;
+			public const int design_navigation_item_separator = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int design_navigation_menu_item = 2130903080;
+			public const int design_navigation_item_subheader = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int design_text_input_password_icon = 2130903081;
+			public const int design_navigation_menu = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int home_feed_notification_view_holder = 2130903082;
+			public const int design_navigation_menu_item = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int home_feed_pins_view_holder = 2130903083;
+			public const int design_text_input_password_icon = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int home_fragment = 2130903084;
+			public const int home_feed_notification_view_holder = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int info_window = 2130903085;
+			public const int home_feed_pins_view_holder = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int Main = 2130903086;
+			public const int home_fragment = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int map_fragment = 2130903087;
+			public const int info_window = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int notification_media_action = 2130903088;
+			public const int Main = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int notification_media_cancel_action = 2130903089;
+			public const int map_fragment = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int notification_template_big_media = 2130903090;
+			public const int notification_media_action = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int notification_template_big_media_narrow = 2130903091;
+			public const int notification_media_cancel_action = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int notification_template_lines = 2130903092;
+			public const int notification_template_big_media = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int notification_template_media = 2130903093;
+			public const int notification_template_big_media_narrow = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int notification_template_part_chronometer = 2130903094;
+			public const int notification_template_lines = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int notification_template_part_time = 2130903095;
+			public const int notification_template_media = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int pin_view_holder = 2130903096;
+			public const int notification_template_part_chronometer = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int select_dialog_item_material = 2130903097;
+			public const int notification_template_part_time = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int select_dialog_multichoice_material = 2130903098;
+			public const int pin_view_holder = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int select_dialog_singlechoice_material = 2130903099;
+			public const int select_dialog_item_material = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int support_simple_spinner_dropdown_item = 2130903100;
+			public const int select_dialog_multichoice_material = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int text_bubble = 2130903101;
+			public const int select_dialog_singlechoice_material = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
-			public const int trip_fragment = 2130903102;
+			public const int support_simple_spinner_dropdown_item = 2130903102;
 			
 			// aapt resource value: 0x7f03003f
-			public const int trip_suggestion_view_holder = 2130903103;
+			public const int text_bubble = 2130903103;
 			
 			// aapt resource value: 0x7f030040
-			public const int view_pin_dialog_fragment = 2130903104;
+			public const int trip_fragment = 2130903104;
 			
 			// aapt resource value: 0x7f030041
-			public const int view_trip_dialog_fragment = 2130903105;
+			public const int trip_suggestion_view_holder = 2130903105;
 			
 			// aapt resource value: 0x7f030042
-			public const int webview = 2130903106;
+			public const int view_pin_dialog_fragment = 2130903106;
+			
+			// aapt resource value: 0x7f030043
+			public const int view_trip_dialog_fragment = 2130903107;
+			
+			// aapt resource value: 0x7f030044
+			public const int webview = 2130903108;
 			
 			static Layout()
 			{
