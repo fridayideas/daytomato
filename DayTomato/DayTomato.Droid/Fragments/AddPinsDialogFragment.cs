@@ -59,6 +59,7 @@ namespace DayTomato.Droid
                         Toast.MakeText(this.Activity, "Added Pin", ToastLength.Short).Show();
                         _listPins.Text += autocompleteTextView.Text + "\n";
                         _pin = null;
+                        autocompleteTextView.Text = "";
                     }
                     else { Toast.MakeText(this.Activity, "Could not find pin", ToastLength.Short).Show(); }
                 }
