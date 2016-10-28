@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Android.App;
 using Android.Support.V7.Widget;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
@@ -13,10 +14,13 @@ namespace DayTomato.Droid
 		//Create an Event so that our our clients can act when a user clicks
 		//on each individual item.
 		public event EventHandler<int> HandleClick;
+
+		private readonly string TAG = "VIEW_TRIP_ADAPTER";
 		private List<Trip> _suggestions;
 		private List<bool> _tripLiked;
 		private List<bool> _tripDisliked;
 		private Activity _context;
+		private Account _account;
 
 		public ViewTripAdapter(List<Trip> suggestions, Activity context)
 		{
@@ -24,6 +28,7 @@ namespace DayTomato.Droid
 			_tripLiked = new List<bool>(new bool[_suggestions.Count]);
 			_tripDisliked = new List<bool>(new bool[_suggestions.Count]);
 			_context = context;
+			_account = MainActivity.GetAccount();
 		}
 
 		public override int ItemCount
@@ -68,6 +73,30 @@ namespace DayTomato.Droid
 			vh.Description.Text = _suggestions[position].Description;
 			//vh.Cost.Text = _suggestions[position].Cost.ToString();
 			vh.Rating.Text = _suggestions[position].Rating.ToString();
+
+			try
+			{
+				if (_suggestions[position].LikedBy.Contains(_account.Id))
+				{
+					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
+					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					_tripLiked[position] = true;
+					_tripDisliked[position] = false;
+
+				}
+				else if (_suggestions[position].DislikedBy.Contains(_account.Id))
+				{
+					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
+					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
+					_tripLiked[position] = false;
+					_tripDisliked[position] = true;
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Debug(TAG, ex.Message);
+			}
+
 
 			// Initializing listview
 			vh.CommentsAdapter = new CommentsAdapter(_context, _suggestions[position].Comments);
@@ -133,6 +162,10 @@ namespace DayTomato.Droid
 					vh.Likes.Text = _suggestions[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					if (!_suggestions[position].LikedBy.Contains(_account.Id) && !_suggestions[position].DislikedBy.Contains(_account.Id))
+					{
+						_suggestions[position].LikedBy.Add(_account.Id);
+					}
 				}
 				// Else we need to "reset" the likes
 				else if (_tripDisliked[position])
@@ -143,6 +176,10 @@ namespace DayTomato.Droid
 					vh.Likes.Text = _suggestions[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					if (!_suggestions[position].LikedBy.Contains(_account.Id))
+					{
+						_suggestions[position].LikedBy.Remove(_account.Id);
+					}
 				}
 			};
 			vh.DownButton.Click += (sender, e) =>
@@ -156,6 +193,10 @@ namespace DayTomato.Droid
 					vh.Likes.Text = _suggestions[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
+					if (!_suggestions[position].LikedBy.Contains(_account.Id) && !_suggestions[position].DislikedBy.Contains(_account.Id))
+					{
+						_suggestions[position].DislikedBy.Add(_account.Id);
+					}
 				}
 				// Else we need to "reset" the likes
 				else if (_tripLiked[position])
@@ -166,6 +207,10 @@ namespace DayTomato.Droid
 					vh.Likes.Text = _suggestions[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					if (!_suggestions[position].DislikedBy.Contains(_account.Id))
+					{
+						_suggestions[position].DislikedBy.Remove(_account.Id);
+					}
 				}
 			};
 		}

@@ -221,12 +221,6 @@ namespace DayTomato.Droid.Fragments
 			// User can select the location after clicking and the create a pin dialog shows
 			_selectLocationButton.Click += (sender, e) => 
 			{
-				var curr = new Location("Current");
-				var sel = new Location("Selected");
-				curr.Latitude = _currentLocation.Latitude;
-				curr.Longitude = _currentLocation.Longitude;
-				sel.Latitude = _selectLocation.Latitude;
-				sel.Longitude = _selectLocation.Longitude;
 				CreatePinDialog();
 			}; 
 		}
@@ -305,6 +299,25 @@ namespace DayTomato.Droid.Fragments
 		{
 			// Get pins and sort them based on # of likes
 			var pins = _markerPins[((ClusterPin)marker).Id];
+
+			// Give seeds to all users if they are near!
+			var curr = new Location("Current");
+			var sel = new Location("Selected");
+			curr.Latitude = _currentLocation.Latitude;
+			curr.Longitude = _currentLocation.Longitude;
+			sel.Latitude = _selectLocation.Latitude;
+			sel.Longitude = _selectLocation.Longitude;
+
+			// If they are within 300 meters
+			//if (curr.DistanceTo(sel) < 300)
+			//{
+			var parts = pins.Count;
+			foreach (var p in pins)
+			{
+				MainActivity.UpdateAccount(p.LinkedAccount, (1 / parts), 0);
+			}	
+			//}
+
 			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
 			var pinData = JsonConvert.SerializeObject(pins);
 

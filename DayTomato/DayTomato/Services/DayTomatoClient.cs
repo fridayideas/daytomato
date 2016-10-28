@@ -282,6 +282,15 @@ namespace DayTomato.Services
 			return response.IsSuccessStatusCode;
 		}
 
+		// Change pin amount of account
+		// Need to pass account ID and amount
+		public async Task<bool> UpdateAccountPins(string accountId, int amount)
+		{
+			var uri = new Uri(BASE_URL + "/api/accounts/pins/" + accountId + "/" + amount);
+			var response = await httpClient.PutAsync(uri, null);
+			return response.IsSuccessStatusCode;
+		}
+
 
 		// Getting an image from a url
 		public async Task<byte[]> GetImageBitmapFromUrlAsync(string url)

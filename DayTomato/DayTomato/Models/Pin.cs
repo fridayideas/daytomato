@@ -55,9 +55,9 @@ namespace DayTomato.Models
 		[JsonProperty("image")]
 		public string ImageURL { get; set; }
 		[JsonProperty("likedBy")]
-		public List<string> LikedBy { get; set; } = new List<string>();
+		public List<string> LikedBy { get; set; }
 		[JsonProperty("dislikedBy")]
-		public List<string> DislikedBy { get; set; } = new List<string>();
+		public List<string> DislikedBy { get; set; }
 	}
 
 	public class Comment

@@ -118,10 +118,12 @@ namespace DayTomato.Droid
 			return _currentLocation;
 		}
 
-		public static void UpdateAccount(string accountId, double seeds, int pins)
+		public static async void UpdateAccount(string accountId, double seeds, int pins)
 		{
 			_account.Pins += pins;
 			_account.Seeds += seeds;
+			await dayTomatoClient.UpdateAccountSeeds(accountId, seeds);
+			await dayTomatoClient.UpdateAccountPins(accountId, pins);
 		}
 
 		/*
