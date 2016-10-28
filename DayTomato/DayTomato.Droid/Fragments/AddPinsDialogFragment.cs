@@ -13,6 +13,8 @@ using System.IO;
 using DayTomato.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using Java.Lang;
 
 namespace DayTomato.Droid
 {
@@ -23,9 +25,11 @@ namespace DayTomato.Droid
         public event EventHandler<AddPinsDialogEventArgs> AddPinsDialogClosed;      // Event handler when user presses create
         private Button _createTripButton;                               // Create trip button
         private Button _cancelButton;                                   // Cancel create trip button
-        private EditText _pin;                                          // Search for a particular pin/activity
-        private List<Pin> _added_pins;                                      // Array of added pins
+        private Button _addPinButton;                                   // Add pin to trip button
+        private List<string> _addedPins = new List<string> ();                                  // Array of added pins
         private List<Pin> _allPins;                                     // All pins currently on server
+        private AutoCompleteTextView autocompleteTextView;              // Search for pins
+        private TextView _listPins;                                     // List of added pins
         private bool _createTrip;                                        // Check if they pressed create or not
 
         public static AddPinsDialogFragment NewInstance()
@@ -38,35 +42,44 @@ namespace DayTomato.Droid
         {
             View view = inflater.Inflate(Resource.Layout.add_pins_dialog_fragment, container, false);
             _createTripButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_create_button);
-            _cancelButton = (Button)view.FindViewById(Resource.Id.create_trip_dialog_cancel_button);
+            _cancelButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_cancel_button);
+            _addPinButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_add_button);
+            
+            _listPins = view.FindViewById<TextView>(Resource.Id.add_pins_dialog_listpins);
 
-            //Load all pins from the server
+            // Anytime the user clicks on the add button, add that pin to the trip and display the list of pins on the screen
+            _addPinButton.Click += (sender, e) =>
+            {
+                if (autocompleteTextView.Text != null)
+                {
+                    Pin _pin = _allPins.Find(p => p.Name == autocompleteTextView.Text);
+                    if (_pin != null)
+                    {
+                        _addedPins.Add(_pin.Id);
+                        Toast.MakeText(this.Activity, "Added Pin", ToastLength.Short).Show();
+                        _listPins.Text += autocompleteTextView.Text + "\n";
+                        _pin = null;
+                    }
+                    else { Toast.MakeText(this.Activity, "Could not find pin", ToastLength.Short).Show(); }
+                }
+                else { Toast.MakeText(this.Activity, "Type the name of a pin to add", ToastLength.Short).Show(); }
+            };
+
+            ArrayAdapter autoCompleteAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleDropDownItem1Line, new List<string>());
+
+            autocompleteTextView = view.FindViewById<AutoCompleteTextView>(Resource.Id.add_pins_dialog_autocomplete);
+            // Minimum number of characters to begin autocompletet for
+            autocompleteTextView.Threshold = 1;
+            autocompleteTextView.Adapter = autoCompleteAdapter;
+
+            // Load all pins from the server
             Task.Run(async () =>
             {
                 _allPins = await MainActivity.dayTomatoClient.GetPins();
-
+                autoCompleteAdapter.AddAll(_allPins.Select(p => p.Name).ToList());
+                // Updates autocomplete data
+                autoCompleteAdapter.NotifyDataSetChanged();
             });
-
-            var autoCompleteOptions = new string[100];
-            for (int i = 0; i < 100; i++)
-            {
-                autoCompleteOptions[i] = _allPins[i].Name;
-            }
-            ArrayAdapter autoCompleteAdapter = new ArrayAdapter(this.Activity, Android.Resource.Layout.SimpleDropDownItem1Line
-                , autoCompleteOptions);
-
-            var autocompleteTextView = view.FindViewById<AutoCompleteTextView>(Resource.Id.add_pins_dialog_autocomplete);
-            autocompleteTextView.Adapter = autoCompleteAdapter;
-
-            /*_pin.KeyPress += (object sender, View.KeyEventArgs e) => {
-                e.Handled = false;
-                if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Space)
-               {
-                    Toast.MakeText(this.Activity, _pin.Text, ToastLength.Short).Show();
-                    e.Handled = true;
-                }
-            };*/
-
 
             this.Dialog.SetCancelable(true);
             this.Dialog.SetCanceledOnTouchOutside(true);
@@ -90,7 +103,7 @@ namespace DayTomato.Droid
             { 
                 AddPinsDialogClosed(this, new AddPinsDialogEventArgs
                 {
-                    Pins = _added_pins
+                    Pins = _addedPins
                 });
 
                 MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
@@ -115,6 +128,6 @@ namespace DayTomato.Droid
         }
     public class AddPinsDialogEventArgs
     {
-        public List<Pin> Pins { get; set; }
+        public List<string> Pins { get; set; }
     }
 }

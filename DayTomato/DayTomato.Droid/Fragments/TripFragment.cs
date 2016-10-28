@@ -31,7 +31,7 @@ namespace DayTomato.Droid.Fragments
 
 	    private MainActivity _activity;
 
-        private Trip trip = new Trip();
+        private CreateTrip trip = new CreateTrip();
 
         private bool _lock;
 
@@ -169,7 +169,7 @@ namespace DayTomato.Droid.Fragments
             trip.Type = e.Type;
             trip.Name = e.Name;
             trip.Description = e.Description;
-            trip.Cost = e.Cost;
+            //trip.Cost = e.Cost;
             trip.LinkedAccount = account.Id;
             trip.CreateDate = e.CreateDate;
 
@@ -208,9 +208,9 @@ namespace DayTomato.Droid.Fragments
            
             trip.Pins = e.Pins;
 
-            //trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
+            trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
 
-            trip = new Trip();
+            trip = new CreateTrip();
         }
     }
 }

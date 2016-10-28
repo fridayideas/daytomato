@@ -8,12 +8,12 @@ using Newtonsoft.Json.Linq;
 
 namespace DayTomato.Models
 {
-    public class Trip
+    public class CreateTrip
     {
         [JsonProperty("_id")]
 		public string Id { get; set; }
         [JsonProperty("pins")]
-        public List<Pin> Pins { get; set; }
+        public List<string> Pins { get; set; }
         [JsonProperty("name")]
 		public string Name { get; set; }
         [JsonProperty("type")]

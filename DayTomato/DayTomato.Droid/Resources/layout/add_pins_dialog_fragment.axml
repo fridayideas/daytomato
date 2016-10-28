@@ -29,6 +29,18 @@
             android:id="@+id/add_pins_dialog_autocomplete"
             android:textColor="@color/black"
             android:hint="Type to find a pin to add to this trip" />
+        <Button
+            android:text="ADD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_pins_dialog_add_button"
+            android:background="@color/colorPrimary"
+            android:layout_gravity="right" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_pins_dialog_listpins"
+            android:textColor="@color/black" />
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -43,7 +55,7 @@
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/create_trip_dialog_cancel_button"
+                android:id="@+id/add_pins_dialog_cancel_button"
                 android:layout_margin="10dp"
                 android:layout_weight="0.5" />
             <Button
