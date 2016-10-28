@@ -227,6 +227,7 @@ namespace DayTomato.Droid
 					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
 					{
 						_pins[position].LikedBy.Add(_account.Id);
+						MainActivity.UpdateAccount(_pins[position].LinkedAccount, 1, 0);
 					}
 				}
 				// Else we need to "reset" the likes
@@ -241,6 +242,7 @@ namespace DayTomato.Droid
 					if (!_pins[position].LikedBy.Contains(_account.Id))
 					{
 						_pins[position].LikedBy.Remove(_account.Id);
+						MainActivity.UpdateAccount(_pins[position].LinkedAccount, -1, 0);
 					}
 				}
 			};
@@ -258,6 +260,7 @@ namespace DayTomato.Droid
 					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
 					{
 						_pins[position].DislikedBy.Add(_account.Id);
+						MainActivity.UpdateAccount(_pins[position].LinkedAccount, -1, 0);
 					}
 
 				}
@@ -273,6 +276,7 @@ namespace DayTomato.Droid
 					if (!_pins[position].DislikedBy.Contains(_account.Id))
 					{
 						_pins[position].DislikedBy.Remove(_account.Id);
+						MainActivity.UpdateAccount(_pins[position].LinkedAccount, 1, 0);
 					}
 				}
 			};

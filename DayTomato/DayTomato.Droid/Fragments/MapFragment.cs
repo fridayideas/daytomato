@@ -305,18 +305,18 @@ namespace DayTomato.Droid.Fragments
 			var sel = new Location("Selected");
 			curr.Latitude = _currentLocation.Latitude;
 			curr.Longitude = _currentLocation.Longitude;
-			sel.Latitude = _selectLocation.Latitude;
-			sel.Longitude = _selectLocation.Longitude;
+			sel.Latitude = ((ClusterPin)marker).Position.Latitude;
+			sel.Longitude =((ClusterPin)marker).Position.Longitude;
 
 			// If they are within 300 meters
-			//if (curr.DistanceTo(sel) < 300)
-			//{
-			var parts = pins.Count;
-			foreach (var p in pins)
+			if (curr.DistanceTo(sel) < 300)
 			{
-				MainActivity.UpdateAccount(p.LinkedAccount, (1 / parts), 0);
-			}	
-			//}
+				var parts = pins.Count;
+				foreach (var p in pins)
+				{
+					MainActivity.UpdateAccount(p.LinkedAccount, (double)(1 / parts), 0);
+				}	
+			}
 
 			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
 			var pinData = JsonConvert.SerializeObject(pins);

@@ -15,13 +15,12 @@ using Android.Util;
 using DayTomato.Models;
 using Java.IO;
 using Android.Graphics;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator.Abstractions;
 
 namespace DayTomato.Droid
 {
-    [Activity(Icon = "@drawable/icon")]
+    [Activity(Icon = "@drawable/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : FragmentActivity, ViewPager.IOnPageChangeListener
 	{
 		private static readonly string TAG = "MAIN_ACTIVITY";
@@ -122,8 +121,14 @@ namespace DayTomato.Droid
 		{
 			_account.Pins += pins;
 			_account.Seeds += seeds;
-			await dayTomatoClient.UpdateAccountSeeds(accountId, seeds);
-			await dayTomatoClient.UpdateAccountPins(accountId, pins);
+			if (seeds > 0)
+			{
+				await dayTomatoClient.UpdateAccountSeeds(accountId, seeds);
+			}
+			if (pins > 0)
+			{
+				await dayTomatoClient.UpdateAccountPins(accountId, pins);
+			}
 		}
 
 		/*
