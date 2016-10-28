@@ -19,10 +19,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
+using Android.Content.PM;
 
 namespace DayTomato.Droid
 {
-    [Activity(Icon = "@drawable/icon")]
+    [Activity(Icon = "@drawable/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : FragmentActivity, ViewPager.IOnPageChangeListener
 	{
 		private static readonly string TAG = "MAIN_ACTIVITY";
