@@ -102,8 +102,8 @@ namespace DayTomato.Droid
 			// Open google maps for directions to the hot place
 			view.Directions.Click += (sender, e) => 
 			{
-				string lat = Convert.ToString(_feed[position].Pin.Latitude);
-				string lng = Convert.ToString(_feed[position].Pin.Longitude);
+				string lat = Convert.ToString(_feed[position].Pin.Coordinate.latitude);
+				string lng = Convert.ToString(_feed[position].Pin.Coordinate.longitude);
 				var geoUri = Android.Net.Uri.Parse("geo:0,0?q=" + lat + "," +lng + "(" + _feed[position].Pin.Name + ")");
 				var mapIntent = new Intent(Intent.ActionView, geoUri);
 				_context.StartActivity(mapIntent);

@@ -90,7 +90,7 @@ namespace DayTomato.Droid
 				string coords = "";
 				foreach (var p in _trip.Pins)
 				{
-					coords += "/" + p.Latitude + "," + p.Longitude;
+					coords += "/" + p.Coordinate.latitude + "," + p.Coordinate.longitude;
 				}
 				var geoUri = Android.Net.Uri.Parse("https://www.google.com/maps/dir/" + coords);
 				var mapIntent = new Intent(Intent.ActionView, geoUri);

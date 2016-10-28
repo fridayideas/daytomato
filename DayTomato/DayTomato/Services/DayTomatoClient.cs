@@ -171,18 +171,22 @@ namespace DayTomato.Services
 		}
 
 		// Like Pin
-		public async Task<bool> LikePin(Pin pin)
+		public async Task<bool> LikePin(Pin pin, Account account)
 		{
 			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/likes");
-			var response = await httpClient.PutAsync(uri, null);
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			var content = new StringContent(JsonConvert.SerializeObject(account), Encoding.UTF8, "application/json");
+			var response = await httpClient.PostAsync(uri, null);
 			return response.IsSuccessStatusCode;
 		}
 
 		// Dislike Pin
-		public async Task<bool> DislikePin(Pin pin)
+		public async Task<bool> DislikePin(Pin pin, Account account)
 		{
 			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/dislikes");
-			var response = await httpClient.PutAsync(uri, null);
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			var content = new StringContent(JsonConvert.SerializeObject(account), Encoding.UTF8, "application/json");
+			var response = await httpClient.PostAsync(uri, null);
 			return response.IsSuccessStatusCode;
 		}
 

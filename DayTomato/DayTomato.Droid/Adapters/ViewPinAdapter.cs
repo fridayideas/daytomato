@@ -20,13 +20,15 @@ namespace DayTomato.Droid
 		private List<bool> _pinDisliked;
 		private Activity _context;
 		private ViewPinDialogFragment _parent;
+		private Account _account;
 
 		public ViewPinAdapter(List<Pin> pins, Activity context)
 		{
 			_pins = pins;
-			_pinLiked = new List<bool>(new bool[pins.Count]);
-			_pinDisliked = new List<bool>(new bool[pins.Count]);
+			_pinLiked = new List<bool>(new bool[_pins.Count]);
+			_pinDisliked = new List<bool>(new bool[_pins.Count]);
 			_context = context;
+			_account = MainActivity.GetAccount();
 		}
 
 		public List<Pin> GetItems()
@@ -128,10 +130,33 @@ namespace DayTomato.Droid
 
 			vh.PinName.Text = _pins[position].Name;
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
+			try
+			{
+				if (_pins[position].LikedBy.Contains(_account.Id))
+				{
+					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
+					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					_pinLiked[position] = true;
+					_pinDisliked[position] = false;
+
+				}
+				else if (_pins[position].DislikedBy.Contains(_account.Id))
+				{
+					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
+					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
+					_pinLiked[position] = false;
+					_pinDisliked[position] = true;
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Debug(TAG, ex.Message);
+			}
+
 			vh.PinDescription.Text = _pins[position].Description;
 			vh.PinReview.Text = _pins[position].Review;
 			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
-            vh.PinRating.Text = "Rating: " + _pins[position].Rating.ToString();
+            vh.PinRating.Text = "Rating: " + _pins[position].Rating;
 
 			double cost = _pins[position].Cost;
 			vh.PinCost.Text = "Cost: $" + cost;
@@ -157,13 +182,12 @@ namespace DayTomato.Droid
 				vh.AddCommentInput.Visibility = ViewStates.Gone;
 				vh.AddCommentButton.Visibility = ViewStates.Gone;
 
-				Account account = MainActivity.GetAccount();
 				if (_pins[position].Comments.Count > 0 && _pins[position].Comments[_pins[position].Comments.Count - 1].Text == vh.AddCommentInput.Text)
 					return; 
-				_pins[position].Comments.Add(new Comment(account.Id, vh.AddCommentInput.Text, DateTime.Today));
+				_pins[position].Comments.Add(new Comment(_account.Id, vh.AddCommentInput.Text, DateTime.Today));
 				await MainActivity.dayTomatoClient.AddCommentToPin(_pins[position],
 																   vh.AddCommentInput.Text,
-																   account.Id);
+																   _account.Id);
 				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 				vh.HideComments = !vh.HideComments;
 				vh.CommentsListView.Visibility = ViewStates.Visible;
@@ -200,6 +224,7 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					_pins[position].LikedBy.Add(_account.Id);
 				}
 				// Else we need to "reset" the likes
 				else if (_pinDisliked[position])
@@ -210,6 +235,7 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					_pins[position].LikedBy.Remove(_account.Id);
 				}
 			};
 			vh.DownButton.Click += (sender, e) =>
@@ -223,6 +249,7 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
+					_pins[position].DislikedBy.Add(_account.Id);
 				}
 				// Else we need to "reset" the likes
 				else if (_pinLiked[position])
@@ -233,6 +260,7 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
+					_pins[position].DislikedBy.Remove(_account.Id);
 				}
 			};
 			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)

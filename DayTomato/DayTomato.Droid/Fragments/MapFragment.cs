@@ -80,7 +80,7 @@ namespace DayTomato.Droid.Fragments
             // Then do not create a new marker, rather put it in dict
             var stack = false;
             var markerId = 0L;
-            var coordinate = new LatLng(pin.Latitude, pin.Longitude);
+            var coordinate = new LatLng(pin.Coordinate.latitude, pin.Coordinate.longitude);
 
             // Look at each polygon in all the polygons
             foreach (var p in _markerPolygons)
@@ -105,12 +105,12 @@ namespace DayTomato.Droid.Fragments
                 //.Visible(false);
                 var points = new List<LatLng>()
                 {
-                    new LatLng(pin.Latitude - PolyRadius, pin.Longitude - PolyRadius),
-                    new LatLng(pin.Latitude - PolyRadius, pin.Longitude + PolyRadius),
-                    new LatLng(pin.Latitude + PolyRadius, pin.Longitude + PolyRadius),
-                    new LatLng(pin.Latitude + PolyRadius, pin.Longitude - PolyRadius)
+                    new LatLng(pin.Coordinate.latitude - PolyRadius, pin.Coordinate.longitude - PolyRadius),
+                    new LatLng(pin.Coordinate.latitude - PolyRadius, pin.Coordinate.longitude + PolyRadius),
+                    new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude + PolyRadius),
+                    new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude - PolyRadius)
                 };
-                var m = new ClusterPin(pin.Latitude, pin.Longitude) { Title = pin.Name };
+                var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude) { Title = pin.Name };
                 _clusterManager.AddItem(m);
 
                 // Add new pin
@@ -227,22 +227,7 @@ namespace DayTomato.Droid.Fragments
 				curr.Longitude = _currentLocation.Longitude;
 				sel.Latitude = _selectLocation.Latitude;
 				sel.Longitude = _selectLocation.Longitude;
-
-				if (curr.DistanceTo(sel) > 100 && (MainActivity.GetAccount().Privilege <= Account.SeedLevels.TRUSTED))
-				{
-					AlertDialog.Builder alert = new AlertDialog.Builder(Context);
-					alert.SetTitle("You're too far away!");
-					alert.SetMessage("You need to be within 100m of placing a new pin. " +
-					                 "Collect more seeds to remove this restriction! ");
-					alert.SetPositiveButton("OK", (senderAlert, args) => {});
-
-					Android.App.Dialog dialog = alert.Create();
-					dialog.Show();
-				}
-				else
-				{
-					CreatePinDialog();
-				}
+				CreatePinDialog();
 			}; 
 		}
 
@@ -410,8 +395,7 @@ namespace DayTomato.Droid.Fragments
 				Rating = e.Rating,
 				Description = e.Description,
 				Likes = 0,
-				Latitude = _selectLocation.Latitude,
-				Longitude = _selectLocation.Longitude,
+				Coordinate = new Coordinate(_selectLocation.Latitude, _selectLocation.Longitude),
 				LinkedAccount = account.Id,
 				Review = e.Review,
 				Cost = e.Cost,

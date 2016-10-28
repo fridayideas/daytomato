@@ -14,9 +14,13 @@ namespace DayTomato.Models
 		public enum SeedLevels { NOOB, EXPERIENCED, PRO, ESTABLISHED, TRUSTED, GOD };
 
 		// Images are not stored in server, rather, they will be saved locally on the phone
+		[JsonProperty("_id")]
 		public string Id { get; set; }
+		[JsonProperty("username")]
 		public string Username { get; set; }
+		[JsonProperty("seeds", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public double Seeds { get; set; }
+		[JsonProperty("pins", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public int Pins { get; set; }
 		public Byte[] ProfilePicture { get; set; }
 		public SeedLevels Privilege { get; set; }
@@ -40,32 +44,5 @@ namespace DayTomato.Models
 			else
 				return SeedLevels.GOD;
 		}
-
-        public class AccountConverter : JsonConverter
-        {
-            public override bool CanConvert(Type objectType)
-            {
-                return (objectType == typeof(Pin));
-            }
-
-            //Read REST API Json
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                JObject jo = JObject.Load(reader);
-                Account account = new Account();
-
-                account.Id = (string)jo["_id"];                      // Id of account
-                account.Username = (string)jo["username"];           // Name of user
-                account.Seeds = (double)jo["seeds"];                 // Number of seeds user owns
-                account.Pins = (int)jo["pins"];                      // Number of pins user owns
-
-                return account;
-            }
-
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                throw new NotImplementedException();
-            }
-        }
     }
 }
