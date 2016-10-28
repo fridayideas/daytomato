@@ -224,7 +224,10 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					_pins[position].LikedBy.Add(_account.Id);
+					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
+					{
+						_pins[position].LikedBy.Add(_account.Id);
+					}
 				}
 				// Else we need to "reset" the likes
 				else if (_pinDisliked[position])
@@ -235,7 +238,10 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					_pins[position].LikedBy.Remove(_account.Id);
+					if (!_pins[position].LikedBy.Contains(_account.Id))
+					{
+						_pins[position].LikedBy.Remove(_account.Id);
+					}
 				}
 			};
 			vh.DownButton.Click += (sender, e) =>
@@ -249,7 +255,11 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
-					_pins[position].DislikedBy.Add(_account.Id);
+					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
+					{
+						_pins[position].DislikedBy.Add(_account.Id);
+					}
+
 				}
 				// Else we need to "reset" the likes
 				else if (_pinLiked[position])
@@ -260,7 +270,10 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					_pins[position].DislikedBy.Remove(_account.Id);
+					if (!_pins[position].DislikedBy.Contains(_account.Id))
+					{
+						_pins[position].DislikedBy.Remove(_account.Id);
+					}
 				}
 			};
 			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)

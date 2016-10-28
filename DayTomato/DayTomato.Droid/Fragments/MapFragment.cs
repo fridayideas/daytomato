@@ -363,10 +363,9 @@ namespace DayTomato.Droid.Fragments
 				_markers.Remove(e.MarkerId);
 				_clusterManager.Cluster();
 			}
-			if (e.Update)
+			if (e.Update.Count > 0)
 			{
-			    var update = e.PinsToUpdate;
-				foreach (var t in update)
+				foreach (var t in e.Update)
 				{
                     // This really sucks, but I cannot figure out why its creating multiple of the same pins here
                     _markerPins[e.MarkerId].RemoveAll(p => p.Id.Equals(t.Id));
