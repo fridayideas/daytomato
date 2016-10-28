@@ -15,6 +15,7 @@ using Android.Util;
 using DayTomato.Models;
 using Java.IO;
 using Android.Graphics;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
@@ -77,6 +78,10 @@ namespace DayTomato.Droid
 		public async Task<Account> GetUserAccount()
 		{
             _account = await dayTomatoClient.GetAccount();
+            
+            //Set name in Home tab to first name
+		    string googleAccInfo = Intent.GetStringExtra("AuthUserJSON");
+		    _account.Username = (string)JObject.Parse(googleAccInfo)["given_name"];
 
 		    return _account;
 		}
