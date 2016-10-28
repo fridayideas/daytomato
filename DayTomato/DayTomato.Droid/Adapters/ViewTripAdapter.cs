@@ -21,6 +21,8 @@ namespace DayTomato.Droid
 		public ViewTripAdapter(List<Trip> suggestions, Activity context)
 		{
 			_suggestions = suggestions;
+			_tripLiked = new List<bool>(new bool[_suggestions.Count]);
+			_tripDisliked = new List<bool>(new bool[_suggestions.Count]);
 			_context = context;
 		}
 
