@@ -18,8 +18,6 @@ namespace DayTomato.Droid.Activities
 
             //TODO: Check for internet connection, handle if not available
 
-            //TODO: Auto sign-in without pressing "Sign in as..."
-
             var auth0 = new Auth0Client(
                 _domain,
                 _clientId);
@@ -28,7 +26,8 @@ namespace DayTomato.Droid.Activities
 
             try
             {
-                auth0User = await Login(auth0);
+                //auth0User = await Login(auth0);
+                auth0User = await auth0.LoginAsync(this, "google-oauth2", withRefreshToken: true);
             }
             catch (TaskCanceledException)
             {
