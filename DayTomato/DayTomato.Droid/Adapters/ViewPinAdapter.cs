@@ -253,7 +253,12 @@ namespace DayTomato.Droid
 						   	NotifyItemRemoved(position);
 						   	NotifyDataSetChanged();
 						}
-					};
+                        if (command.Equals("Edit"))
+                        {
+                            
+                            NotifyDataSetChanged();
+                        }
+                       };
 					menu.Show();
 				};
 			}
