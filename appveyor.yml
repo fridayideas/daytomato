@@ -29,7 +29,7 @@ branches:
     - master
 
 artifacts:
-- path: bin/Debug/*.apk
+- path: bin\Debug\*.apk
   name: project
 
 deploy:
