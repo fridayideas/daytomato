@@ -156,6 +156,7 @@
   <ItemGroup>
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Fragments\AddPinsDialogFragment.cs" />
+    <Compile Include="Fragments\EditPinDialogFragment.cs" />
     <Compile Include="Fragments\CreateTripDialogFragment.cs" />
     <Compile Include="Fragments\MapFragment.cs" />
     <Compile Include="Fragments\HomeFragment.cs" />
@@ -229,6 +230,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon.png" />
     <AndroidResource Include="Resources\layout\create_trip_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\add_pins_dialog_fragment.axml" />
+    <AndroidResource Include="Resources\layout\edit_pin_dialog_fragment.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
