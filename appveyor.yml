@@ -12,7 +12,13 @@ xamarin:
     secure: 8G7oASWzzzsic0ngACjkHmj9FCR1cpQ+ahZVHH00npg=
   android: true
   ios: true
-
+  
+install:
+ - ps: |
+ $zipPath = "$($env:APPVEYOR_BUILD_FOLDER)\xpkg.zip"
+ (New-Object Net.WebClient).DownloadFile('https://components.xamarin.com/submit/xpkg', $zipPath)
+ 7z x $zipPath | Out-Null
+ 
 before_build:
  - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-23,android-19
