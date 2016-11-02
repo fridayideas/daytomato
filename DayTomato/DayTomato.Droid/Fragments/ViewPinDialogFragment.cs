@@ -121,7 +121,7 @@ namespace DayTomato.Droid
 			return _update;
 		}
 
-        public async void EditPinDialog(string _pinId, int position)
+        public void EditPinDialog(string _pinId, int position)
         {
             _pinPosition = position;
 
@@ -155,14 +155,13 @@ namespace DayTomato.Droid
                 Rating = e.Rating,
                 Description = e.Description,
                 Likes = e.Likes,
-                Latitude = e.Latitude,
-                Longitude = e.Longitude,
+				Coordinate = new Coordinate(e.Latitude, e.Longitude),
                 LinkedAccount = account.Id,
                 Review = e.Review,
                 Cost = e.Cost,
                 CreateDate = e.CreateDate,
                 ImageURL = e.ImageUrl,
-                Comments = new List<Comment>()
+                Comments = e.Comments
             };
             
             await MainActivity.dayTomatoClient.UpdatePin(pin);

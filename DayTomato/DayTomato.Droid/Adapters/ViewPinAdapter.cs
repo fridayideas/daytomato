@@ -37,6 +37,7 @@ namespace DayTomato.Droid
             _pinLiked = new List<bool>(new bool[pins.Count]);
             _pinDisliked = new List<bool>(new bool[pins.Count]);
             _context = context;
+			_account = MainActivity.GetAccount();
             _parent = parent;
         }
 
