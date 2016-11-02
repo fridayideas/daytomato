@@ -211,6 +211,8 @@ namespace DayTomato.Droid.Fragments
             trip.Id = await MainActivity.dayTomatoClient.CreateTrip(trip);
 
             trip = new CreateTrip();
+
+            this.InitInstances();
         }
     }
 }
