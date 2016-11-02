@@ -121,8 +121,24 @@ namespace DayTomato.Services
             return null;
         }
 
-		// Get Pins In Area
-		public async Task<List<Pin>> GetPins(double latTopLeft, double lngTopLeft, double latBotRight, double lngBotRight)
+        // Get a Pin
+        public async Task<Pin> GetPin(string Id)
+        {
+            Pin pin = new Pin();
+            var uri = new Uri(BASE_URL + "/api/pins/" + Id);
+            var response = await httpClient.GetAsync(uri);
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                pin = JsonConvert.DeserializeObject<Pin>(content);
+                return pin;
+            }
+
+            return null;
+        }
+
+        // Get Pins In Area
+        public async Task<List<Pin>> GetPins(double latTopLeft, double lngTopLeft, double latBotRight, double lngBotRight)
 		{
 			List<Pin> pins = new List<Pin>();
 			var uri = new Uri(BASE_URL + "/api/pins?searcharea=" + Convert.ToString(latTopLeft) + "," 

@@ -228,21 +228,8 @@ namespace DayTomato.Droid.Fragments
 				sel.Latitude = _selectLocation.Latitude;
 				sel.Longitude = _selectLocation.Longitude;
 
-				if (curr.DistanceTo(sel) > 100 && (MainActivity.GetAccount().Privilege <= Account.SeedLevels.TRUSTED))
-				{
-					AlertDialog.Builder alert = new AlertDialog.Builder(Context);
-					alert.SetTitle("You're too far away!");
-					alert.SetMessage("You need to be within 100m of placing a new pin. " +
-					                 "Collect more seeds to remove this restriction! ");
-					alert.SetPositiveButton("OK", (senderAlert, args) => {});
-
-					Android.App.Dialog dialog = alert.Create();
-					dialog.Show();
-				}
-				else
-				{
-					CreatePinDialog();
-				}
+				CreatePinDialog();
+				
 			}; 
 		}
 

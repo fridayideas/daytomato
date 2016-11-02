@@ -29,7 +29,16 @@ namespace DayTomato.Droid
 			_context = context;
 		}
 
-		public List<Pin> GetItems()
+        public ViewPinAdapter(List<Pin> pins, Activity context, ViewPinDialogFragment parent)
+        {
+            _pins = pins;
+            _pinLiked = new List<bool>(new bool[pins.Count]);
+            _pinDisliked = new List<bool>(new bool[pins.Count]);
+            _context = context;
+            _parent = parent;
+        }
+
+        public List<Pin> GetItems()
 		{
 			return _pins;
 		}
@@ -255,15 +264,17 @@ namespace DayTomato.Droid
 						}
                         if (command.Equals("Edit"))
                         {
-                            
-                            NotifyDataSetChanged();
+                            string pinId = _pins[position].Id;
+                            _parent.EditPinDialog(pinId, position);
                         }
-                       };
+                    };
 					menu.Show();
 				};
 			}
+            
 		}
-	}
+       
+    }
 
 	public class ViewPinViewHolder : RecyclerView.ViewHolder
 	{
