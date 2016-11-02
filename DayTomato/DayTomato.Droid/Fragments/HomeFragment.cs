@@ -86,7 +86,14 @@ namespace DayTomato.Droid.Fragments
 		    if (_account.ProfilePicture != null)
 		    {
                 var imageBitmap = BitmapFactory.DecodeByteArray(_account.ProfilePicture, 0, _account.ProfilePicture.Length);
-                _profilePicture.SetImageBitmap(imageBitmap);
+                var bitmapScaled = Bitmap.CreateScaledBitmap(imageBitmap, 250, 250, true);
+
+                //TODO: Crop the image to be circular
+
+                imageBitmap.Recycle();
+                _profilePicture.SetMaxHeight(10);
+                _profilePicture.SetImageBitmap(bitmapScaled);
+                
             }
 
             // Get feed from server
