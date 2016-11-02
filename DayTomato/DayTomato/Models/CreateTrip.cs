@@ -32,5 +32,9 @@ namespace DayTomato.Models
 		public float Rating { get; set; }
         [JsonProperty("comments", TypeNameHandling = TypeNameHandling.Auto)]
 		public List<Comment> Comments { get; set; }
+		[JsonProperty("likedBy")]
+		public List<string> LikedBy { get; set; }
+		[JsonProperty("dislikedBy")]
+		public List<string> DislikedBy { get; set; }
     }
 }

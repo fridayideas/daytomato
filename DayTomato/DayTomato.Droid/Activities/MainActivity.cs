@@ -15,11 +15,8 @@ using Android.Util;
 using DayTomato.Models;
 using Java.IO;
 using Android.Graphics;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator.Abstractions;
-using Plugin.Media;
-using Android.Content.PM;
 
 namespace DayTomato.Droid
 {
@@ -124,10 +121,18 @@ namespace DayTomato.Droid
 			return _currentLocation;
 		}
 
-		public static void UpdateAccount(string accountId, double seeds, int pins)
+		public static async void UpdateAccount(string accountId, double seeds, int pins)
 		{
 			_account.Pins += pins;
 			_account.Seeds += seeds;
+			if (seeds > 0)
+			{
+				await dayTomatoClient.UpdateAccountSeeds(accountId, seeds);
+			}
+			if (pins > 0)
+			{
+				await dayTomatoClient.UpdateAccountPins(accountId, pins);
+			}
 		}
 
 		/*

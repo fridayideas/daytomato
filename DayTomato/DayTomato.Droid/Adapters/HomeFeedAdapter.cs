@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Support.V7.Widget;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 
@@ -11,6 +12,7 @@ namespace DayTomato.Droid
 {
 	public class HomeFeedAdapter : RecyclerView.Adapter
 	{
+		private static readonly string TAG = "HOME_FEED_ADAPTER";
 		private List<Feed> _feed;
 		private const int FEED_NOTIFICATION = 0;
 		private const int FEED_PIN = 1;
@@ -72,21 +74,27 @@ namespace DayTomato.Droid
 		public void ConfigureNotification(HomeFeedNotificationViewHolder view, int position)
 		{
 			view.Notification.Text = _feed[position].Notification;
-		}
+		} 
 
 		public async void ConfigurePin(HomeFeedPinViewHolder view, int position)
 		{
 			view.Name.Text = _feed[position].Pin.Name;
 
 			// Pin imageURL 
-			var imageUrl = _feed[position].Pin.ImageURL;
-			if (!imageUrl.Equals("none") && !imageUrl.Equals(""))
+			try
 			{
-				var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
-				var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-				view.Image.SetImageBitmap(imageBitmap);
+				var imageUrl = _feed[position].Pin.ImageURL;
+				if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
+				{
+					var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
+					var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+					view.Image.SetImageBitmap(imageBitmap);
+				}
 			}
-
+			catch (Exception ex)
+			{
+				Log.Debug(TAG, ex.Message);
+			}
 			view.Likes.Text = _feed[position].Pin.Likes + " likes";
 			view.Cost.Text = "$" + _feed[position].Pin.Cost;
 			view.Review.Text = _feed[position].Pin.Review;
@@ -94,8 +102,8 @@ namespace DayTomato.Droid
 			// Open google maps for directions to the hot place
 			view.Directions.Click += (sender, e) => 
 			{
-				string lat = Convert.ToString(_feed[position].Pin.Latitude);
-				string lng = Convert.ToString(_feed[position].Pin.Longitude);
+				string lat = Convert.ToString(_feed[position].Pin.Coordinate.latitude);
+				string lng = Convert.ToString(_feed[position].Pin.Coordinate.longitude);
 				var geoUri = Android.Net.Uri.Parse("geo:0,0?q=" + lat + "," +lng + "(" + _feed[position].Pin.Name + ")");
 				var mapIntent = new Intent(Intent.ActionView, geoUri);
 				_context.StartActivity(mapIntent);

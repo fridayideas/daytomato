@@ -13,6 +13,7 @@ using Plugin.Media;
 using System.IO;
 using DayTomato.Models;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DayTomato.Droid
 {
@@ -81,15 +82,16 @@ namespace DayTomato.Droid
                     Id = pin.Id,
                     Name = _name.Text,
                     Description = _description.Text,
-                    Latitude = pin.Latitude,
-                    Longitude = pin.Longitude,
+                    Latitude = pin.Coordinate.latitude,
+                    Longitude = pin.Coordinate.longitude,
 					Rating = _rating.Rating,
 					Review = _review.Text,
                     Type = pin.Type,
                     Likes = pin.Likes,
 					Cost = Convert.ToDouble(_cost.Text),
                     CreateDate = pin.CreateDate,
-                    ImageUrl = _imageUrl
+                    ImageUrl = _imageUrl,
+					Comments = pin.Comments
 				});
 
 				MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
@@ -179,5 +181,6 @@ namespace DayTomato.Droid
         public double Cost { get; set; }
         public DateTime CreateDate { get; set; }
         public string ImageUrl { get; set; }
+		public List<Comment> Comments { get; set; }
 	}
 }

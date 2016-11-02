@@ -80,7 +80,7 @@ namespace DayTomato.Droid.Fragments
             // Then do not create a new marker, rather put it in dict
             var stack = false;
             var markerId = 0L;
-            var coordinate = new LatLng(pin.Latitude, pin.Longitude);
+            var coordinate = new LatLng(pin.Coordinate.latitude, pin.Coordinate.longitude);
 
             // Look at each polygon in all the polygons
             foreach (var p in _markerPolygons)
@@ -105,12 +105,12 @@ namespace DayTomato.Droid.Fragments
                 //.Visible(false);
                 var points = new List<LatLng>()
                 {
-                    new LatLng(pin.Latitude - PolyRadius, pin.Longitude - PolyRadius),
-                    new LatLng(pin.Latitude - PolyRadius, pin.Longitude + PolyRadius),
-                    new LatLng(pin.Latitude + PolyRadius, pin.Longitude + PolyRadius),
-                    new LatLng(pin.Latitude + PolyRadius, pin.Longitude - PolyRadius)
+                    new LatLng(pin.Coordinate.latitude - PolyRadius, pin.Coordinate.longitude - PolyRadius),
+                    new LatLng(pin.Coordinate.latitude - PolyRadius, pin.Coordinate.longitude + PolyRadius),
+                    new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude + PolyRadius),
+                    new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude - PolyRadius)
                 };
-                var m = new ClusterPin(pin.Latitude, pin.Longitude) { Title = pin.Name };
+                var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude) { Title = pin.Name };
                 _clusterManager.AddItem(m);
 
                 // Add new pin
@@ -221,15 +221,7 @@ namespace DayTomato.Droid.Fragments
 			// User can select the location after clicking and the create a pin dialog shows
 			_selectLocationButton.Click += (sender, e) => 
 			{
-				var curr = new Location("Current");
-				var sel = new Location("Selected");
-				curr.Latitude = _currentLocation.Latitude;
-				curr.Longitude = _currentLocation.Longitude;
-				sel.Latitude = _selectLocation.Latitude;
-				sel.Longitude = _selectLocation.Longitude;
-
 				CreatePinDialog();
-				
 			}; 
 		}
 
@@ -307,6 +299,25 @@ namespace DayTomato.Droid.Fragments
 		{
 			// Get pins and sort them based on # of likes
 			var pins = _markerPins[((ClusterPin)marker).Id];
+
+			// Give seeds to all users if they are near!
+			var curr = new Location("Current");
+			var sel = new Location("Selected");
+			curr.Latitude = _currentLocation.Latitude;
+			curr.Longitude = _currentLocation.Longitude;
+			sel.Latitude = ((ClusterPin)marker).Position.Latitude;
+			sel.Longitude =((ClusterPin)marker).Position.Longitude;
+
+			// If they are within 300 meters
+			if (curr.DistanceTo(sel) < 300)
+			{
+				var parts = pins.Count;
+				foreach (var p in pins)
+				{
+					MainActivity.UpdateAccount(p.LinkedAccount, (double)(1 / parts), 0);
+				}	
+			}
+
 			pins.Sort(delegate (Pin p1, Pin p2) { return p2.Likes.CompareTo(p1.Likes); });
 			var pinData = JsonConvert.SerializeObject(pins);
 
@@ -365,10 +376,9 @@ namespace DayTomato.Droid.Fragments
 				_markers.Remove(e.MarkerId);
 				_clusterManager.Cluster();
 			}
-			if (e.Update)
+			if (e.Update.Count > 0)
 			{
-			    var update = e.PinsToUpdate;
-				foreach (var t in update)
+				foreach (var t in e.Update)
 				{
                     // This really sucks, but I cannot figure out why its creating multiple of the same pins here
                     _markerPins[e.MarkerId].RemoveAll(p => p.Id.Equals(t.Id));
@@ -397,8 +407,7 @@ namespace DayTomato.Droid.Fragments
 				Rating = e.Rating,
 				Description = e.Description,
 				Likes = 0,
-				Latitude = _selectLocation.Latitude,
-				Longitude = _selectLocation.Longitude,
+				Coordinate = new Coordinate(_selectLocation.Latitude, _selectLocation.Longitude),
 				LinkedAccount = account.Id,
 				Review = e.Review,
 				Cost = e.Cost,

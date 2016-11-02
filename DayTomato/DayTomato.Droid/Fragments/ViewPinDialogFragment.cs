@@ -25,8 +25,7 @@ namespace DayTomato.Droid
 		private Button _add;
 		private bool _create;
 		private bool _delete;
-		private bool _update;
-		private List<Pin> _pinsToUpdate;
+		private List<Pin> _update;
 
 		public static ViewPinDialogFragment NewInstance(Bundle bundle)
 		{
@@ -75,8 +74,7 @@ namespace DayTomato.Droid
 				{
 					Create = _create,
 					Delete = _delete,
-					Update = _update,
-					PinsToUpdate = PinsToUpdate(),
+					Update = PinsToUpdate(),
 					MarkerId = Arguments.GetLong("VIEW_PIN_MARKER")
 				});
 			}
@@ -87,8 +85,7 @@ namespace DayTomato.Droid
 			_title.Text = Arguments.GetString("VIEW_PIN_TITLE");
 			_create = false;
 			_delete = false;
-			_update = false;
-			_pinsToUpdate = new List<Pin>();
+			_update = new List<Pin>();
 		}
 
 		private void SetListeners()
@@ -119,15 +116,12 @@ namespace DayTomato.Droid
 		{
 			foreach (var p in _adapter.GetItems())
 			{
-				if (!_pins.Contains(p))
-				{
-					_pinsToUpdate.Add(p);
-				}
+				_update.Add(p);
 			}
-			return _pinsToUpdate;
+			return _update;
 		}
 
-        public async void EditPinDialog(string _pinId, int position)
+        public void EditPinDialog(string _pinId, int position)
         {
             _pinPosition = position;
 
@@ -161,14 +155,13 @@ namespace DayTomato.Droid
                 Rating = e.Rating,
                 Description = e.Description,
                 Likes = e.Likes,
-                Latitude = e.Latitude,
-                Longitude = e.Longitude,
+				Coordinate = new Coordinate(e.Latitude, e.Longitude),
                 LinkedAccount = account.Id,
                 Review = e.Review,
                 Cost = e.Cost,
                 CreateDate = e.CreateDate,
                 ImageURL = e.ImageUrl,
-                Comments = new List<Comment>()
+                Comments = e.Comments
             };
             
             await MainActivity.dayTomatoClient.UpdatePin(pin);
@@ -182,8 +175,7 @@ namespace DayTomato.Droid
 	{
 		public bool Create { get; set; }
 		public bool Delete { get; set; }
-		public bool Update { get; set; }
-		public List<Pin> PinsToUpdate { get; set; }
+		public List<Pin> Update { get; set; }
 		public long MarkerId { get; set; }
 	}
 }
