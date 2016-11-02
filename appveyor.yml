@@ -8,6 +8,8 @@ environment:
   xamarin_email: fridayideasgroup@gmail.com
   xamarin_password:
     secure: 8G7oASWzzzsic0ngACjkHmj9FCR1cpQ+ahZVHH00npg=
+  XAMARIN_COOKIE:
+    secure: FDgZacwt2M4kC8rPrXdz9gCY/a+9+p+KchRoiX8I3td/lorsbcQTVuFU8sTjVAM3
 
 xamarin:
   email: fridayideasgroup@gmail.com
@@ -20,12 +22,12 @@ install:
  - ps: $zipPath = "$($env:APPVEYOR_BUILD_FOLDER)\xpkg.zip"
  - ps: (New-Object Net.WebClient).DownloadFile('https://components.xamarin.com/submit/xpkg', $zipPath)
  - ps: 7z x $zipPath | Out-Null
+ - ps: Set-Content -path "$env:USERPROFILE\.xamarin-credentials" -value "xamarin.com,$env:XAMARIN_COOKIE"
  
 before_build:
  - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-23,android-19
  - nuget restore
- - xamarin-component login fridayideasgroup@gmail.com
  - xamarin-component restore DayTomato.sln
 
 build:
