@@ -81,10 +81,14 @@ namespace DayTomato.Droid
             _account = await dayTomatoClient.GetAccount();
             
             //Set name in Home tab to first name
-		    string googleAccInfo = Intent.GetStringExtra("AuthUserJSON");
-		    _account.Username = (string)JObject.Parse(googleAccInfo)["given_name"];
+		    string googleAccInfoJSON = Intent.GetStringExtra("AuthUserJSON");
+            JToken googleAccInfoObj = JObject.Parse(googleAccInfoJSON);
 
-		    return _account;
+            _account.Username = (string)googleAccInfoObj["given_name"];
+		    string imageurl = (string)googleAccInfoObj["picture"];
+            _account.ProfilePicture = await dayTomatoClient.GetImageBitmapFromUrlAsync(imageurl);
+
+            return _account;
 		}
 
 		public async Task<LatLng> GetUserLocation()
