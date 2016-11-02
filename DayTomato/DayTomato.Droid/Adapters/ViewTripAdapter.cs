@@ -151,7 +151,7 @@ namespace DayTomato.Droid
 				}
 			};
 
-			vh.UpButton.Click += (sender, e) =>
+			vh.UpButton.Click += async (sender, e) =>
 			{
 				// If the like and dislike button was not pressed, then its fresh
 				if (!_tripLiked[position] && !_tripDisliked[position])
@@ -165,6 +165,7 @@ namespace DayTomato.Droid
 					if (!_suggestions[position].LikedBy.Contains(_account.Id) && !_suggestions[position].DislikedBy.Contains(_account.Id))
 					{
 						_suggestions[position].LikedBy.Add(_account.Id);
+						await MainActivity.dayTomatoClient.LikeTrip(_suggestions[position].Id, _account);
 					}
 				}
 				// Else we need to "reset" the likes
@@ -176,13 +177,14 @@ namespace DayTomato.Droid
 					vh.Likes.Text = _suggestions[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (!_suggestions[position].LikedBy.Contains(_account.Id))
+					if (_suggestions[position].DislikedBy.Contains(_account.Id))
 					{
-						_suggestions[position].LikedBy.Remove(_account.Id);
+						_suggestions[position].DislikedBy.Remove(_account.Id);
+						await MainActivity.dayTomatoClient.RemoveVoteTrip(_suggestions[position].Id, _account);
 					}
 				}
 			};
-			vh.DownButton.Click += (sender, e) =>
+			vh.DownButton.Click += async (sender, e) =>
 			{
 				// If the like and dislike button was not pressed, then its fresh
 				if (!_tripLiked[position] && !_tripDisliked[position])
@@ -196,6 +198,7 @@ namespace DayTomato.Droid
 					if (!_suggestions[position].LikedBy.Contains(_account.Id) && !_suggestions[position].DislikedBy.Contains(_account.Id))
 					{
 						_suggestions[position].DislikedBy.Add(_account.Id);
+						await MainActivity.dayTomatoClient.DislikeTrip(_suggestions[position].Id, _account);
 					}
 				}
 				// Else we need to "reset" the likes
@@ -207,9 +210,10 @@ namespace DayTomato.Droid
 					vh.Likes.Text = _suggestions[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (!_suggestions[position].DislikedBy.Contains(_account.Id))
+					if (_suggestions[position].LikedBy.Contains(_account.Id))
 					{
-						_suggestions[position].DislikedBy.Remove(_account.Id);
+						_suggestions[position].LikedBy.Remove(_account.Id);
+						await MainActivity.dayTomatoClient.RemoveVoteTrip(_suggestions[position].Id, _account);
 					}
 				}
 			};

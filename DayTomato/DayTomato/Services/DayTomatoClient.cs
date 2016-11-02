@@ -101,6 +101,39 @@ namespace DayTomato.Services
             return "";
         }
 
+		// Like Trip
+		public async Task<bool> LikeTrip(string tripId, Account account)
+		{
+			var uri = new Uri(BASE_URL + "/api/trips/" + tripId + "/votes/" + account.Id);
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			string dir = "{\"dir\": 1}";
+			var content = new StringContent(dir, Encoding.UTF8, "application/json");
+			var response = await httpClient.PutAsync(uri, content);
+			return response.IsSuccessStatusCode;
+		}
+
+		// Dislike Trip
+		public async Task<bool> DislikeTrip(string tripId, Account account)
+		{
+			var uri = new Uri(BASE_URL + "/api/trips/" + tripId + "/votes/" + account.Id);
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			string dir = "{\"dir\": -1}";
+			var content = new StringContent(dir, Encoding.UTF8, "application/json");
+			var response = await httpClient.PutAsync(uri, content);
+			return response.IsSuccessStatusCode;
+		}
+
+		// Remove Votes Trip
+		public async Task<bool> RemoveVoteTrip(string tripId, Account account)
+		{
+			var uri = new Uri(BASE_URL + "/api/trips/" + tripId + "/votes/" + account.Id);
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			string dir = "{\"dir\": 0}";
+			var content = new StringContent(dir, Encoding.UTF8, "application/json");
+			var response = await httpClient.PutAsync(uri, content);
+			return response.IsSuccessStatusCode;
+		}
+
         // Get Pins
         public async Task<List<Pin>> GetPins()
         {
@@ -186,22 +219,35 @@ namespace DayTomato.Services
 		}
 
 		// Like Pin
-		public async Task<bool> LikePin(Pin pin, Account account)
+		public async Task<bool> LikePin(string pinId, Account account)
 		{
-			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/likes");
+			var uri = new Uri(BASE_URL + "/api/pins/" + pinId + "/votes/" + account.Id);
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var content = new StringContent(JsonConvert.SerializeObject(account), Encoding.UTF8, "application/json");
-			var response = await httpClient.PostAsync(uri, null);
+			string dir = "{\"dir\": 1}";
+			var content = new StringContent(dir, Encoding.UTF8, "application/json");
+			var response = await httpClient.PutAsync(uri, content);
 			return response.IsSuccessStatusCode;
 		}
 
 		// Dislike Pin
-		public async Task<bool> DislikePin(Pin pin, Account account)
+		public async Task<bool> DislikePin(string pinId, Account account)
 		{
-			var uri = new Uri(BASE_URL + "/api/pins/" + pin.Id + "/dislikes");
+			var uri = new Uri(BASE_URL + "/api/pins/" + pinId + "/votes/" + account.Id);
 			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var content = new StringContent(JsonConvert.SerializeObject(account), Encoding.UTF8, "application/json");
-			var response = await httpClient.PostAsync(uri, null);
+			string dir = "{\"dir\": -1}";
+			var content = new StringContent(dir, Encoding.UTF8, "application/json");
+			var response = await httpClient.PutAsync(uri, content);
+			return response.IsSuccessStatusCode;
+		}
+
+		// Remove Votes Pin
+		public async Task<bool> RemoveVotePin(string pinId, Account account)
+		{
+			var uri = new Uri(BASE_URL + "/api/pins/" + pinId + "/votes/" + account.Id);
+			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			string dir = "{\"dir\": 0}";
+			var content = new StringContent(dir, Encoding.UTF8, "application/json");
+			var response = await httpClient.PutAsync(uri, content);
 			return response.IsSuccessStatusCode;
 		}
 

@@ -213,7 +213,7 @@ namespace DayTomato.Droid
 				}
 			};
 
-			vh.UpButton.Click += (sender, e) =>
+			vh.UpButton.Click += async (sender, e) =>
 			{
 				// If the like and dislike button was not pressed, then its fresh
 				if (!_pinLiked[position] && !_pinDisliked[position])
@@ -227,7 +227,7 @@ namespace DayTomato.Droid
 					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
 					{
 						_pins[position].LikedBy.Add(_account.Id);
-						MainActivity.UpdateAccount(_pins[position].LinkedAccount, 1, 0);
+						await MainActivity.dayTomatoClient.LikePin(_pins[position].Id, _account);
 					}
 				}
 				// Else we need to "reset" the likes
@@ -239,14 +239,14 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (!_pins[position].LikedBy.Contains(_account.Id))
+					if (_pins[position].DislikedBy.Contains(_account.Id))
 					{
-						_pins[position].LikedBy.Remove(_account.Id);
-						MainActivity.UpdateAccount(_pins[position].LinkedAccount, -1, 0);
+						_pins[position].DislikedBy.Remove(_account.Id);
+						await MainActivity.dayTomatoClient.RemoveVotePin(_pins[position].Id, _account);
 					}
 				}
 			};
-			vh.DownButton.Click += (sender, e) =>
+			vh.DownButton.Click += async (sender, e) =>
 			{
 				// If the like and dislike button was not pressed, then its fresh
 				if (!_pinLiked[position] && !_pinDisliked[position])
@@ -260,7 +260,7 @@ namespace DayTomato.Droid
 					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
 					{
 						_pins[position].DislikedBy.Add(_account.Id);
-						MainActivity.UpdateAccount(_pins[position].LinkedAccount, -1, 0);
+						await MainActivity.dayTomatoClient.DislikePin(_pins[position].Id, _account);
 					}
 
 				}
@@ -273,10 +273,10 @@ namespace DayTomato.Droid
 					vh.PinLikes.Text = _pins[position].Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (!_pins[position].DislikedBy.Contains(_account.Id))
+					if (_pins[position].LikedBy.Contains(_account.Id))
 					{
-						_pins[position].DislikedBy.Remove(_account.Id);
-						MainActivity.UpdateAccount(_pins[position].LinkedAccount, 1, 0);
+						_pins[position].LikedBy.Remove(_account.Id);
+						await MainActivity.dayTomatoClient.RemoveVotePin(_pins[position].Id, _account);
 					}
 				}
 			};
