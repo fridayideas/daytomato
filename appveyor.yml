@@ -29,7 +29,7 @@ branches:
     - master
 
 artifacts:
-- path: DayTomato.Droid\bin\Release\com.fridayideas.daytomato.apk
+- path: DayTomato\DayTomato.Droid\bin\Release\com.fridayideas.daytomato.apk
   name: project
 
 after_build:
