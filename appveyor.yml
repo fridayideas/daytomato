@@ -32,6 +32,9 @@ artifacts:
 - path: DayTomato.Droid\bin\Release\com.fridayideas.daytomato.apk
   name: project
 
+after_build:
+- dir DayTomato.Droid
+
 deploy:
   release: daytomato$(appveyor_build_version)
   description: 'Release description'
