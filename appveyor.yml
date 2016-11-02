@@ -19,6 +19,7 @@ install:
  - ps: 7z x $zipPath | Out-Null
  - ps: Set-Content -path "$env:USERPROFILE\.xamarin-credentials" -value "xamarin.com,$env:XAMARIN_COOKIE"
  
+# you think this is funny, appveyor?
 before_build:
  - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-23,android-19
