@@ -77,3 +77,4 @@ Resource.designer.cs
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 
+/DayTomato/DayTomato.Droid/Resources/Resource.designer.cs

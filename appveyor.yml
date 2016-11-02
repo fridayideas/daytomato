@@ -13,9 +13,10 @@ xamarin:
   android: true
   ios: true
 
-build_script:
+before_build:
  - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-23,android-19
+ - nuget restore
 
 build:
   publish_nuget: true
@@ -28,16 +29,23 @@ branches:
   only:
     - master
 
+artifacts:
+- path: DayTomato\DayTomato.Droid\bin\Release\com.fridayideas.daytomato.apk
+  name: project
+
+after_build:
+- dir DayTomato\DayTomato.Droid
+
 deploy:
   release: daytomato$(appveyor_build_version)
   description: 'Release description'
   provider: GitHub
-  auth_token:
-    secure: $env:GITHUB_TOKEN    # your encrypted token from GitHub
-  artifact: '*.nupkg'            # upload all NuGet packages to release assets
+  auth_token: $env:GITHUB_TOKEN    # your encrypted token from GitHub
+  artifact: project           # upload all NuGet packages to release assets
   draft: false
   prerelease: false
   force_update: true
   on:
     appveyor_repo_tag: true
+    branch: master 
   

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Android.Gms.Maps.Model;
+using Android.Graphics;
 using Android.Locations;
 using Android.OS;
 using Android.Support.V4.App;
@@ -81,8 +82,22 @@ namespace DayTomato.Droid.Fragments
 			_pinCount.Text = _account.Pins.ToString();
 			_seedCount.Text = _account.Seeds.ToString();
 
-			// Get feed from server
-			_feed = new List<Feed>();
+            //Set profile picture
+		    if (_account.ProfilePicture != null)
+		    {
+                var imageBitmap = BitmapFactory.DecodeByteArray(_account.ProfilePicture, 0, _account.ProfilePicture.Length);
+                var bitmapScaled = Bitmap.CreateScaledBitmap(imageBitmap, 250, 250, true);
+
+                //TODO: Crop the image to be circular
+
+                imageBitmap.Recycle();
+                _profilePicture.SetMaxHeight(10);
+                _profilePicture.SetImageBitmap(bitmapScaled);
+                
+            }
+
+            // Get feed from server
+            _feed = new List<Feed>();
 			_feed.Add(new Feed
 			{
 				Notification = "User 1 liked your pin",

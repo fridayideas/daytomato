@@ -16,6 +16,7 @@ namespace DayTomato.Droid
 	{
 		public event EventHandler<ViewPinDialogEventArgs> ViewPinDialogClosed;
 		private List<Pin> _pins;
+        private int _pinPosition;
 		private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
 		private ViewPinAdapter _adapter;
@@ -45,9 +46,9 @@ namespace DayTomato.Droid
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_pin_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins, Activity);
+			_adapter = new ViewPinAdapter(_pins, Activity, this);
 			_recyclerView.SetAdapter(_adapter);
-
+       
 			this.Dialog.SetCancelable(true);
 			this.Dialog.SetCanceledOnTouchOutside(true);
 
@@ -119,7 +120,57 @@ namespace DayTomato.Droid
 			}
 			return _update;
 		}
-	}
+
+        public async void EditPinDialog(string _pinId, int position)
+        {
+            _pinPosition = position;
+
+            var fm = FragmentManager;
+            var ft = fm.BeginTransaction();
+
+            //Remove fragment else it will crash as it is already added to backstack
+            var prev = fm.FindFragmentByTag("EditPinDialog");
+            if (prev != null)
+            {
+                ft.Remove(prev);
+            }
+
+            ft.AddToBackStack(null);
+
+            var editPinDialogFragment = EditPinDialogFragment.NewInstance(_pinId);
+            editPinDialogFragment.EditPinDialogClosed += OnEditPinDialogClosed;
+
+            //Add fragment
+            editPinDialogFragment.Show(fm, "EditPinDialog");
+        }
+
+        private async void OnEditPinDialogClosed(object sender, EditPinDialogEventArgs e)
+        {
+            var account = MainActivity.GetAccount();
+            var pin = new Pin
+            {
+                Id = e.Id,
+                Type = e.Type,
+                Name = e.Name,
+                Rating = e.Rating,
+                Description = e.Description,
+                Likes = e.Likes,
+                Latitude = e.Latitude,
+                Longitude = e.Longitude,
+                LinkedAccount = account.Id,
+                Review = e.Review,
+                Cost = e.Cost,
+                CreateDate = e.CreateDate,
+                ImageURL = e.ImageUrl,
+                Comments = new List<Comment>()
+            };
+            
+            await MainActivity.dayTomatoClient.UpdatePin(pin);
+            
+            _pins[_pinPosition] = pin;
+            _adapter.NotifyDataSetChanged();
+        }
+    }
 
 	public class ViewPinDialogEventArgs
 	{
