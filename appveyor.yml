@@ -5,12 +5,7 @@ platform: Any CPU
 environment:
   ANDROID_HOME: C:\android-sdk
   AndroidSdkDirectory: C:\android-sdk
-  xamarin_email: fridayideasgroup@gmail.com
-  xamarin_password:
-    secure: 8G7oASWzzzsic0ngACjkHmj9FCR1cpQ+ahZVHH00npg=
-  XAMARIN_COOKIE:
-    secure: K3s5muKMRbPGA/6I39zZuhhI7atG9NVcacyLE1xQNsf7q84xNRx4BpL3MRZ+twDN
-
+  
 xamarin:
   email: fridayideasgroup@gmail.com
   password:
