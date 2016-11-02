@@ -25,7 +25,7 @@ before_build:
  - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-23,android-19
  - nuget restore
- - xamarin-component login $xamarin_email $xamarin_password
+ - xamarin-component login fridayideasgroup@gmail.com
  - xamarin-component restore DayTomato.sln
 
 build:
