@@ -33,7 +33,7 @@ artifacts:
   name: project
 
 after_build:
-- dir DayTomato.Droid
+- dir 
 
 deploy:
   release: daytomato$(appveyor_build_version)
