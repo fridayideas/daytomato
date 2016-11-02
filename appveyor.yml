@@ -9,7 +9,7 @@ environment:
   xamarin_password:
     secure: 8G7oASWzzzsic0ngACjkHmj9FCR1cpQ+ahZVHH00npg=
   XAMARIN_COOKIE:
-    secure: FDgZacwt2M4kC8rPrXdz9gCY/a+9+p+KchRoiX8I3td/lorsbcQTVuFU8sTjVAM3
+    secure: K3s5muKMRbPGA/6I39zZuhhI7atG9NVcacyLE1xQNsf7q84xNRx4BpL3MRZ+twDN
 
 xamarin:
   email: fridayideasgroup@gmail.com
