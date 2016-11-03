@@ -34,6 +34,8 @@ namespace DayTomato.Droid
 	    internal IGeolocator Locator { get; set; }
 
         public static DayTomatoClient dayTomatoClient;
+		public static ImgurClient imgurClient;
+		public static GoogleClient googleClient;
 
         protected override async void OnCreate(Bundle bundle)
         {
@@ -49,6 +51,8 @@ namespace DayTomato.Droid
 
             // REST API Client
             dayTomatoClient = new DayTomatoClient(_idToken);
+			imgurClient = new ImgurClient();
+			googleClient = new GoogleClient();
 
             // Get location
             Locator = CrossGeolocator.Current;
