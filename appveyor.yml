@@ -35,6 +35,9 @@ build:
   publish_nuget_symbols: true
   include_nuget_references: true
   verbosity: minimal
+  
+after_build:
+ - cmd: dir DayTomato\DayTomato.Droid\
  
 branches:
   # whitelist
