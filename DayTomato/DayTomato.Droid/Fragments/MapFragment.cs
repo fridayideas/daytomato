@@ -244,7 +244,7 @@ namespace DayTomato.Droid.Fragments
 			// Reverse geocode coordinates
 			var address = await ReverseGeocode(_selectLocation);
 
-			var place = await MainActivity.dayTomatoClient.GetPlace(_selectLocation.Latitude, _selectLocation.Longitude);
+			var place = await MainActivity.googleClient.GetPlace(_selectLocation.Latitude, _selectLocation.Longitude);
 
 			// Create and show the dialog.
 			var bundle = new Bundle();

@@ -12,18 +12,33 @@ namespace DayTomato.Models
 	{
 		public Pin() { }
 
-		public Pin(int type, string name, float rating, double cost, string description, int likes, double lat, double lng, string account, DateTime date)
+		public Pin(string id,
+				   int type, 
+		           string name, 
+		           float rating, 
+		           string description, 
+		           int likes, 
+		           double lat, 
+		           double lng, 
+		           string account,
+		           string review,
+		           double cost,
+		           DateTime date,
+		           string imageURL)
 		{
+			Id = id;
 			Type = type;
 			Name = name;
 			Rating = rating;
-			Cost = cost;
 			Description = description;
 			Likes = likes;
 			Coordinate = new Coordinate(lat, lng);
 			LinkedAccount = account;
+			Review = review;
+			Cost = cost;
 			Comments = new List<Comment>();
 			CreateDate = date;
+			ImageURL = imageURL;
 			LikedBy = new List<string>();
 			DislikedBy = new List<string>();
 		}

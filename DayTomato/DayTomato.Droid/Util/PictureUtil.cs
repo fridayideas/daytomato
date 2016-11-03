@@ -34,12 +34,6 @@ namespace DayTomato.Droid
 					break;
 				case "1": // landscape
 					break;
-				default:
-					mtx.PreRotate(90);
-					resizedBitmap = Bitmap.CreateBitmap(resizedBitmap, 0, 0, resizedBitmap.Width, resizedBitmap.Height, mtx, false);
-					mtx.Dispose();
-					mtx = null;
-					break;
 			}
 
 			return resizedBitmap;

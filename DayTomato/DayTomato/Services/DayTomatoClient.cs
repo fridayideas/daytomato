@@ -18,56 +18,17 @@ namespace DayTomato.Services
 
         private readonly string BASE_URL = "http://fridayideas.herokuapp.com";
 
-        private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
-		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-		private readonly string GOOGLE_PLACES_PHOTO_BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?";
-		private readonly string GOOGLE_RANK_BY = "distance";
-		private readonly string GOOGLE_PHOTO_MAX_WIDTH = "256";
-
-		private readonly string IMGUR_BASE_URL = "https://api.imgur.com/3";
-		private readonly string IMGUR_CLIENT_ID = "1f30123ee30a53b";
-		private readonly string IMGUR_CLIENT_SECRET = "979732009beba54d18e67f6dc9f8c3fa79082d16";
-
         public DayTomatoClient()
         {
             httpClient = new HttpClient();
             httpClient.MaxResponseContentBufferSize = 256000;
         }
 
-        public DayTomatoClient(string idToken)
-        {
-            httpClient = new HttpClient();
-            httpClient.MaxResponseContentBufferSize = 256000;
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", idToken);
-        }
-
-        // Get Place
-        public async Task<Place> GetPlace(double lat, double lng)
+		public DayTomatoClient(string idToken)
 		{
-			Place place = new Place();
-			string result = "";
-			var uri = new Uri(GOOGLE_PLACES_BASE_URL 
-			                  + "location=" + lat + "," + lng 
-			                  + "&rankby=" + GOOGLE_RANK_BY
-			                  + "&key=" + GOOGLE_API_KEY);
-			var response = await httpClient.GetAsync(uri);
-			if (response.IsSuccessStatusCode)
-			{
-				result = await response.Content.ReadAsStringAsync();
-				place = JsonConvert.DeserializeObject<Place>(result);
-			}
-
-			uri = new Uri(GOOGLE_PLACES_PHOTO_BASE_URL 
-			              + "maxwidth=" + GOOGLE_PHOTO_MAX_WIDTH 
-			              + "&photoreference=" + place.PhotoReference 
-			              + "&key=" + GOOGLE_API_KEY);
-			response = await httpClient.GetAsync(uri);
-			if (response.IsSuccessStatusCode)
-			{
-				place.Image = await response.Content.ReadAsByteArrayAsync();
-			}
-
-			return place;
+			httpClient = new HttpClient();
+			httpClient.MaxResponseContentBufferSize = 256000;
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", idToken);
 		}
 
 		// Get All Trips
@@ -151,10 +112,10 @@ namespace DayTomato.Services
         }
 
         // Get a Pin
-        public async Task<Pin> GetPin(string Id)
+        public async Task<Pin> GetPin(string id)
         {
             Pin pin = new Pin();
-            var uri = new Uri(BASE_URL + "/api/pins/" + Id);
+            var uri = new Uri(BASE_URL + "/api/pins/" + id);
             var response = await httpClient.GetAsync(uri);
             if (response.IsSuccessStatusCode)
             {
@@ -381,25 +342,5 @@ namespace DayTomato.Services
 			}
 
 		}
-
-		// Imgur post image
-		public async Task<string> UploadImage(byte[] img)
-		{
-			var parms = new JObject();
-			parms.Add("image", img);
-			var uri = new Uri(IMGUR_BASE_URL + "/image");
-			httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", IMGUR_CLIENT_ID);
-			var content = new StringContent(parms.ToString(), Encoding.UTF8, "application/json");
-			var response = await httpClient.PostAsync(uri, content);
-			if (response.IsSuccessStatusCode)
-			{
-				var res = new JObject();
-				res = JObject.Parse(await response.Content.ReadAsStringAsync());
-				return (string)res["data"]["link"];
-			}
-			return "";
-		}
-
     }
 }

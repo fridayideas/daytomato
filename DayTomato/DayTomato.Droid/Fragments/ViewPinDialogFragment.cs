@@ -16,7 +16,6 @@ namespace DayTomato.Droid
 	{
 		public event EventHandler<ViewPinDialogEventArgs> ViewPinDialogClosed;
 		private List<Pin> _pins;
-        private int _pinPosition;
 		private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
 		private ViewPinAdapter _adapter;
@@ -121,10 +120,8 @@ namespace DayTomato.Droid
 			return _update;
 		}
 
-        public void EditPinDialog(string _pinId, int position)
+        public void EditPinDialog(string pinId, int position)
         {
-            _pinPosition = position;
-
             var fm = FragmentManager;
             var ft = fm.BeginTransaction();
 
@@ -137,7 +134,10 @@ namespace DayTomato.Droid
 
             ft.AddToBackStack(null);
 
-            var editPinDialogFragment = EditPinDialogFragment.NewInstance(_pinId);
+			var bundle = new Bundle();
+			bundle.PutString("EDIT_PIN_ID", pinId);
+			bundle.PutInt("EDIT_PIN_POSITION", position);
+            var editPinDialogFragment = EditPinDialogFragment.NewInstance(bundle);
             editPinDialogFragment.EditPinDialogClosed += OnEditPinDialogClosed;
 
             //Add fragment
@@ -161,12 +161,14 @@ namespace DayTomato.Droid
                 Cost = e.Cost,
                 CreateDate = e.CreateDate,
                 ImageURL = e.ImageUrl,
-                Comments = e.Comments
+                Comments = e.Comments,
+				LikedBy = e.LikedBy,
+				DislikedBy = e.DislikedBy
             };
             
             await MainActivity.dayTomatoClient.UpdatePin(pin);
             
-            _pins[_pinPosition] = pin;
+            _pins[e.PinPosition] = pin;
             _adapter.NotifyDataSetChanged();
         }
     }

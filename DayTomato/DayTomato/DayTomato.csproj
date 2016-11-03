@@ -41,6 +41,8 @@
     <Compile Include="Services\DayTomatoClient.cs" />
     <Compile Include="Models\Place.cs" />
     <Compile Include="Models\Feed.cs" />
+    <Compile Include="Services\ImgurClient.cs" />
+    <Compile Include="Services\GoogleClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

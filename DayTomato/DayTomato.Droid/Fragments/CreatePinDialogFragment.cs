@@ -123,46 +123,103 @@ namespace DayTomato.Droid
 				_createPin = false;
 				Dialog.Dismiss();
 			};
-			_image.Click += async (sender, e) => 
+
+			_image.Click += (sender, e) =>
 			{
-				await CrossMedia.Current.Initialize();
-				if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+				PopupWindow menu = new PopupWindow(Activity);
+				var adapter = new ArrayAdapter<string>(Activity,
+													   Android.Resource.Layout.SimpleListItem1,
+													   new string[] { "Choose Photo", "Take Photo" });
+				ListView list = new ListView(Activity) { Adapter = adapter };
+				list.ItemClick += (s, args) =>
 				{
-					Toast.MakeText(this.Activity, "No Camera available", ToastLength.Short);
-					return;
-				}
+					switch (args.Position)
+					{
+						case 0:
+							ChoosePhoto();
+							break;
+						case 1:
+							TakePhoto();
+							break;
+					}
+					menu.Dismiss();
+				};
+				menu.Width = ViewGroup.LayoutParams.WrapContent;
+				menu.Height = ViewGroup.LayoutParams.WrapContent;
+				menu.ContentView = list;
+				menu.ShowAtLocation(View, GravityFlags.Center, 0, 0);
+			};
+		}
 
-				Android.App.ProgressDialog pd = new Android.App.ProgressDialog(this.Activity);
-				pd.Show();
-				pd.SetMessage("Loading...");
+		private async void ChoosePhoto()
+		{
+			await CrossMedia.Current.Initialize();
+			if (!CrossMedia.Current.IsPickPhotoSupported)
+			{
+				Toast.MakeText(this.Activity, "Cannot choose photos", ToastLength.Short);
+				return;
+			}
 
-				var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-				{
-					Directory = "DayTomato",
-					Name = string.Format("{0}.jpg", Guid.NewGuid()),
-					SaveToAlbum = true,
-					PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
-					CompressionQuality = 92
-				});
+			Android.App.ProgressDialog pd = new Android.App.ProgressDialog(this.Activity);
+			pd.Show();
+			pd.SetMessage("Loading...");
 
-				if (file == null)
-				{
-					return;
-				}
+			var file = await CrossMedia.Current.PickPhotoAsync();
 
-				Toast.MakeText(this.Activity, "Photo saved: " + file.Path, ToastLength.Short);
+			if (file == null)
+			{
+				return;
+			}
 
-				var resizedBitmap = await PictureUtil.DecodeByteArrayAsync(file.AlbumPath, 200, 200);
+			var resizedBitmap = await PictureUtil.DecodeByteArrayAsync(file.Path, 200, 200);
 
-				var stream = new MemoryStream();
-				resizedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
-				var resizedImg = stream.ToArray();
+			var stream = new MemoryStream();
+			resizedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+			var resizedImg = stream.ToArray();
 
-				var imgurl = await MainActivity.dayTomatoClient.UploadImage(resizedImg);
-				_imageUrl = imgurl;
-				_image.SetImageBitmap(resizedBitmap);
-				pd.Hide();
-			};	
+			var imgurl = await MainActivity.imgurClient.UploadImage(resizedImg);
+			_imageUrl = imgurl;
+			_image.SetImageBitmap(resizedBitmap);
+			pd.Hide();
+		}
+
+		private async void TakePhoto()
+		{
+			await CrossMedia.Current.Initialize();
+			if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+			{
+				Toast.MakeText(this.Activity, "No Camera available", ToastLength.Short);
+				return;
+			}
+
+			Android.App.ProgressDialog pd = new Android.App.ProgressDialog(this.Activity);
+			pd.Show();
+			pd.SetMessage("Loading...");
+
+			var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+			{
+				Directory = "DayTomato",
+				Name = string.Format("{0}.jpg", Guid.NewGuid()),
+				SaveToAlbum = true,
+				PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
+				CompressionQuality = 92
+			});
+
+			if (file == null)
+			{
+				return;
+			}
+
+			var resizedBitmap = await PictureUtil.DecodeByteArrayAsync(file.AlbumPath, 200, 200);
+
+			var stream = new MemoryStream();
+			resizedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
+			var resizedImg = stream.ToArray();
+
+			var imgurl = await MainActivity.imgurClient.UploadImage(resizedImg);
+			_imageUrl = imgurl;
+			_image.SetImageBitmap(resizedBitmap);
+			pd.Hide();
 		}
 	}
 

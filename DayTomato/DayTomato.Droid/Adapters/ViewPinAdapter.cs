@@ -92,51 +92,6 @@ namespace DayTomato.Droid
 					Log.Error(TAG, ex.Message);
 				}
 			}
-			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
-			{
-				vh.PinImage.Click += async (sender, e) =>
-			   	{
-				   	await CrossMedia.Current.Initialize();
-				   	if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-				   	{
-					   	Toast.MakeText(_context, "No Camera available", ToastLength.Short);
-					   	return;
-				   	}
-
-					ProgressDialog pd = new ProgressDialog(_context);
-				    pd.Show();
-					pd.SetMessage("Loading...");
-
-				   	var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-				   	{
-					  	Directory = "DayTomato",
-					   	Name = string.Format("{0}.jpg", Guid.NewGuid()),
-					   	SaveToAlbum = true,
-					   	PhotoSize = Plugin.Media.Abstractions.PhotoSize.Small,
-					   	CompressionQuality = 92
-				   	});
-
-				   	if (file == null)
-				   	{
-					   	return;
-				   	}
-
-				   	Toast.MakeText(_context, "Photo saved: " + file.Path, ToastLength.Short);
-
-				   	var resizedBitmap = await PictureUtil.DecodeByteArrayAsync(file.AlbumPath, 200, 200);
-
-				   	var stream = new MemoryStream();
-				   	resizedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
-				   	var resizedImg = stream.ToArray();
-
-				   	var imgurl = await MainActivity.dayTomatoClient.UploadImage(resizedImg);
-				   	_pins[position].ImageURL = imgurl;
-				   	vh.PinImage.SetImageBitmap(resizedBitmap);
-				    pd.Hide();
-					stream.Dispose();
-					GC.Collect();
-				};
-			}
 
 			vh.PinName.Text = _pins[position].Name;
 			vh.PinLikes.Text = _pins[position].Likes.ToString();
