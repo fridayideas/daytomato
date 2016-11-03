@@ -221,11 +221,11 @@ namespace DayTomato.Droid.Fragments
 			// User can select the location after clicking and the create a pin dialog shows
 			_selectLocationButton.Click += (sender, e) => 
 			{
-				CreatePinDialog();
+				CreateNewPinDialog();
 			}; 
 		}
 
-        private async void CreatePinDialog()
+        private async void CreateNewPinDialog()
 		{
 			var fm = FragmentManager;
 			var ft = fm.BeginTransaction();
@@ -239,20 +239,12 @@ namespace DayTomato.Droid.Fragments
 
 			ft.AddToBackStack(null);
 
-			// Switch button states
-			_selectLocationButton.Visibility = ViewStates.Invisible;
-			_selectLocationButton.Enabled = false;
-			_cancelLocationButton.Visibility = ViewStates.Invisible;
-			_cancelLocationButton.Enabled = false;
-			_createPin.Visibility = ViewStates.Visible;
-			_createPin.Enabled = true;
-			_selectLocationPin.Visibility = ViewStates.Invisible;
-			_estimateAddress.Visibility = ViewStates.Invisible;
-
-			var place = await MainActivity.dayTomatoClient.GetPlace(_selectLocation.Latitude, _selectLocation.Longitude);
+			SwitchLocationButtonState(true);
 
 			// Reverse geocode coordinates
 			var address = await ReverseGeocode(_selectLocation);
+
+			var place = await MainActivity.dayTomatoClient.GetPlace(_selectLocation.Latitude, _selectLocation.Longitude);
 
 			// Create and show the dialog.
 			var bundle = new Bundle();
@@ -262,6 +254,42 @@ namespace DayTomato.Droid.Fragments
 			bundle.PutByteArray("SELECTED_LOCATION_IMAGE", place.Image);
 			bundle.PutString("SELECTED_LOCATION_NAME", place.Name);
 			bundle.PutString("SELECTED_LOCATION_DESCRIPTION", place.Description);
+
+			var createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
+			createPinDialogFragment.CreatePinDialogClosed += OnCreatePinDialogClosed;
+
+			//Add fragment
+			createPinDialogFragment.Show(fm, "CreatePinDialog");
+		}
+
+		private async void CreatePinDialog(Pin p)
+		{
+			var fm = FragmentManager;
+			var ft = fm.BeginTransaction();
+
+			//Remove fragment else it will crash as it is already added to backstack
+			var prev = fm.FindFragmentByTag("CreatePinDialog");
+			if (prev != null)
+			{
+				ft.Remove(prev);
+			}
+
+			ft.AddToBackStack(null);
+
+			SwitchLocationButtonState(true);
+
+			// Reverse geocode coordinates
+			var address = await ReverseGeocode(new LatLng(p.Coordinate.latitude, p.Coordinate.longitude));
+
+			// Create and show the dialog.
+			var bundle = new Bundle();
+			bundle.PutString("SELECTED_LOCATION", address);
+			bundle.PutDouble("SELECTED_LOCATION_LATITUDE", p.Coordinate.latitude);
+			bundle.PutDouble("SELECTED_LOCATION_LONGITUDE", p.Coordinate.longitude);
+			bundle.PutByteArray("SELECTED_LOCATION_IMAGE", 
+			                    await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(p.ImageURL));
+			bundle.PutString("SELECTED_LOCATION_NAME", p.Name);
+			bundle.PutString("SELECTED_LOCATION_DESCRIPTION", p.Description);
 
 			var createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
 			createPinDialogFragment.CreatePinDialogClosed += OnCreatePinDialogClosed;
@@ -333,15 +361,7 @@ namespace DayTomato.Droid.Fragments
 
 			ft.AddToBackStack(null);
 
-			// Switch button states
-			_selectLocationButton.Visibility = ViewStates.Invisible;
-			_selectLocationButton.Enabled = false;
-			_cancelLocationButton.Visibility = ViewStates.Invisible;
-			_cancelLocationButton.Enabled = false;
-			_createPin.Visibility = ViewStates.Invisible;
-			_createPin.Enabled = false;
-			_selectLocationPin.Visibility = ViewStates.Invisible;
-			_estimateAddress.Visibility = ViewStates.Invisible;
+			SwitchLocationButtonState(false);
 
 			// Create and show the dialog.
 			var bundle = new Bundle();
@@ -365,7 +385,7 @@ namespace DayTomato.Droid.Fragments
 
 			if (e.Create)
 			{
-				CreatePinDialog();
+				CreatePinDialog(_markerPins[e.MarkerId][0]);
 			}
 			if (e.Delete)
 			{
@@ -413,7 +433,9 @@ namespace DayTomato.Droid.Fragments
 				Cost = e.Cost,
 				CreateDate = e.CreateDate,
 				ImageURL = e.ImageUrl,
-				Comments = new List<Comment>()
+				Comments = new List<Comment>(),
+				LikedBy = new List<string>(),
+				DislikedBy = new List<string>()
 			};
 
 			pin.Id = await MainActivity.dayTomatoClient.CreatePin(pin);
@@ -422,6 +444,19 @@ namespace DayTomato.Droid.Fragments
 			CreatePin(pin);
 
 			_clusterManager.Cluster();
+		}
+
+		private void SwitchLocationButtonState(bool createPin)
+		{
+			// Switch button states
+			_selectLocationButton.Visibility = ViewStates.Invisible;
+			_selectLocationButton.Enabled = false;
+			_cancelLocationButton.Visibility = ViewStates.Invisible;
+			_cancelLocationButton.Enabled = false;
+			_createPin.Visibility = createPin ? ViewStates.Visible : ViewStates.Invisible;
+			_createPin.Enabled = createPin;
+			_selectLocationPin.Visibility = ViewStates.Invisible;
+			_estimateAddress.Visibility = ViewStates.Invisible;
 		}
 	}
 }
