@@ -20,6 +20,8 @@ install:
  - ps: 7z x $zipPath | Out-Null
  - ps: Set-Content -path "$env:USERPROFILE\.xamarin-credentials" -value "xamarin.com,$env:XAMARIN_COOKIE"
  - cmd: SET PATH=%JAVA_HOME%\bin;%PATH%
+ - cmd: echo %path%
+ - java -version
  
 before_build:
  - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
