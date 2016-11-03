@@ -5,20 +5,28 @@ platform: Any CPU
 environment:
   ANDROID_HOME: C:\android-sdk
   AndroidSdkDirectory: C:\android-sdk
-
+  
 xamarin:
   email: fridayideasgroup@gmail.com
   password:
     secure: 8G7oASWzzzsic0ngACjkHmj9FCR1cpQ+ahZVHH00npg=
   android: true
   ios: true
-
+  
+install:
+ - ps: $zipPath = "$($env:APPVEYOR_BUILD_FOLDER)\xpkg.zip"
+ - ps: (New-Object Net.WebClient).DownloadFile('https://components.xamarin.com/submit/xpkg', $zipPath)
+ - ps: 7z x $zipPath | Out-Null
+ - ps: Set-Content -path "$env:USERPROFILE\.xamarin-credentials" -value "xamarin.com,$env:XAMARIN_COOKIE"
+ 
 before_build:
  - cmd: mklink /j %ANDROID_HOME% "C:\Program Files (x86)\Android\android-sdk"
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-23,android-19
  - nuget restore
+ - xamarin-component restore DayTomato.sln
 
 build:
+  project: DayTomato.sln
   publish_nuget: true
   publish_nuget_symbols: true
   include_nuget_references: true
@@ -32,10 +40,7 @@ branches:
 artifacts:
 - path: DayTomato\DayTomato.Droid\bin\Release\com.fridayideas.daytomato.apk
   name: project
-
-after_build:
-- dir DayTomato\DayTomato.Droid
-
+  
 deploy:
   release: daytomato$(appveyor_build_version)
   description: 'Release description'
