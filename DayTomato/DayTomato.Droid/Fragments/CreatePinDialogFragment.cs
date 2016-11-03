@@ -11,7 +11,8 @@ using Android.Graphics;
 using Android.Util;
 using Plugin.Media;
 using System.IO;
-
+using System.Text.RegularExpressions;
+using Android.Support.Design.Widget;
 namespace DayTomato.Droid
 {
 	public class CreatePinDialogFragment : DialogFragment
@@ -83,6 +84,7 @@ namespace DayTomato.Droid
 										  Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")),
 					CreateDate = DateTime.Today,
 					ImageUrl = _imageUrl
+							
 				});
 
 				MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
@@ -108,14 +110,46 @@ namespace DayTomato.Droid
 			_imageUrl = "";
 			_cost.Text = "0";
 		}
+		public Boolean isValidCost(String Cost)
+		{
+			//String Cost_Test = ("^[0-9]+$");
+			Regex regex = new Regex(@"^\d$");
+			if (regex.IsMatch(Cost))
+			{
+				Console.WriteLine(" work");
+				return true;
 
+			}
+			else {
+				return false;
+			}	/*
+			if (System.Text.RegularExpressions.Regex.IsMatch(Cost, Cost_Test))
+			{
+				return true;
+			}
+			else {
+				return false;
+			}
+*/
+		}
 		private void SetListeners()
 		{
 			_createPinButton.Click += (sender, e) =>
 			{
-				Toast.MakeText(this.Activity, "Created Pin", ToastLength.Short).Show();
-				_createPin = true;
-				Dialog.Dismiss();
+				if (!isValidCost(_cost.Text))
+				{
+
+					Console.WriteLine("asda");
+					_cost.Error = "Cannot Be Empty";
+					_createPin = false;
+
+				}
+					else {
+
+					Toast.MakeText(this.Activity, "Created Pin", ToastLength.Short).Show();
+					_createPin = true;
+					Dialog.Dismiss();
+				}
 			};
 
 			_cancelButton.Click += (sender, e) =>
@@ -234,4 +268,5 @@ namespace DayTomato.Droid
 		public DateTime CreateDate { get; set; }
 		public string ImageUrl { get; set; }
 	}
+
 }
