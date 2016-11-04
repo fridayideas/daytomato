@@ -73,10 +73,14 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp" />
     <AutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:theme="@style/AutoCompleteTextViewStyle"
         android:id="@+id/map_fragment_search"
         android:hint="Search DayTomato"
-        android:layout_margin="16dp"
-        android:inputType="textCapWords" />
+        android:inputType="textCapWords"
+        android:textColor="@color/black"
+        android:textColorHint="#ff898989"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded"
+        android:layout_margin="12dp" />
 </FrameLayout>

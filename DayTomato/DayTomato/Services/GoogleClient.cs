@@ -11,7 +11,7 @@ namespace DayTomato
 		HttpClient httpClient;
 		private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
 		private readonly string GOOGLE_PLACES_AUTO_COMPLETE_BASE_URL = "https://maps.googleapis.com/maps/api/place/autocomplete/json?";
-		private readonly string GOOGLE_GEOCODING_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
+		private readonly string GOOGLE_GEOCODING_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
 		private readonly string GOOGLE_PLACES_PHOTO_BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?";
 		private readonly string GOOGLE_RANK_BY = "distance";
@@ -62,6 +62,7 @@ namespace DayTomato
 			var uri = new Uri(GOOGLE_PLACES_AUTO_COMPLETE_BASE_URL
 							  + "input=" + input
 							  + "&location=" + lat + "," + lng
+			                  + "&radius=20000"
 							  + "&key=" + GOOGLE_API_KEY);
 
 			var result = "";
@@ -83,6 +84,30 @@ namespace DayTomato
 			}
 
 			return new string[] { };
+		}
+
+		public async Task<Models.Coordinate> Geocode(string address)
+		{
+			Models.Coordinate coords = new Models.Coordinate(0,0);
+			// Example:
+			// https://maps.googleapis.com/maps/api/geocode/json?
+			// address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
+
+			var uri = new Uri(GOOGLE_GEOCODING_BASE_URL
+							  + "address=" + address
+							  + "&key=" + GOOGLE_API_KEY);
+
+			var response = await httpClient.GetAsync(uri);
+			if (response.IsSuccessStatusCode)
+			{
+				var result = await response.Content.ReadAsStringAsync();
+				var geocode = JsonConvert.DeserializeObject<Geocode.RootObject>(result);
+
+				coords.latitude = geocode.results[0].geometry.location.lat;
+				coords.longitude = geocode.results[0].geometry.location.lng;
+			}
+
+			return coords;
 		}
 	}
 }

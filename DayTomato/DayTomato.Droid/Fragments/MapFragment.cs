@@ -70,10 +70,7 @@ namespace DayTomato.Droid.Fragments
 			_estimateAddress = (TextView)view.FindViewById(Resource.Id.map_fragment_estimate_address);
 			_filterButton = (Button)view.FindViewById(Resource.Id.map_fragment_filter_button);
 			_mapSearch = (AutoCompleteTextView)view.FindViewById(Resource.Id.map_fragment_search);
-			_mapSearchAdapter = new ArrayAdapter<string>(Activity, 
-			                                             Android.Resource.Layout.SimpleDropDownItem1Line, 
-			                                             _mapSearchPredictions);
-			_mapSearch.Adapter = _mapSearchAdapter;
+			_mapSearch.Threshold = 1;
 
 			SetFilterOptions();
 			SetListeners();
@@ -275,16 +272,25 @@ namespace DayTomato.Droid.Fragments
 				_mapSearchPredictions = await MainActivity.googleClient.PredictPlaces(e.Text.ToString(),
 																					 _currentLocation.Latitude,
 																					 _currentLocation.Longitude);
+				_mapSearchAdapter = new ArrayAdapter(Activity, 
+				                                     Android.Resource.Layout.SimpleDropDownItem1Line, 
+				                                     _mapSearchPredictions);
+				_mapSearch.Adapter = _mapSearchAdapter;
 			};
 
 			_mapSearch.ItemClick += async (Sender, e) =>
 			{
-				//to soft keyboard hide
-				InputMethodManager inputManager = (InputMethodManager)Context.GetSystemService(Context.GetSystemService.inputManager);
-				inputManager.HideSoftInputFromWindow(_mapSearch.WindowToken, HideSoftInputFlags.NotAlways);
+				var imm = (InputMethodManager)Context.GetSystemService(Android.Content.Context.InputMethodService);
+				imm.HideSoftInputFromWindow(_mapSearch.WindowToken, 0);
 
-				//await MainActivity.googleClient.Geocode();
-			}
+				if (_mapSearch.Text != string.Empty)
+				{
+					Coordinate coords = await MainActivity.googleClient.Geocode(_mapSearch.Text);
+					UpdateCameraPosition(new LatLng(coords.latitude, coords.longitude));
+					_mapSearch.Text = "";
+					_mapSearch.ClearFocus();
+				}
+			};
 		}
 
 		private void FilterDialog()
@@ -583,6 +589,16 @@ namespace DayTomato.Droid.Fragments
 				_clusterManager.Cluster();
 				RefreshMap();
 			}
+		}
+
+		private void UpdateCameraPosition(LatLng position)
+		{
+			CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+			builder.Target(position);
+			builder.Zoom(16);
+			CameraPosition cameraPosition = builder.Build();
+			CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+			_map.AnimateCamera(cameraUpdate);
 		}
 
 		private void RefreshMap()
