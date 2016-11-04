@@ -517,7 +517,7 @@ namespace DayTomato.Droid.Fragments
 				Description = e.Description,
 				Likes = 0,
 				Coordinate = new Coordinate(_selectLocation.Latitude, _selectLocation.Longitude),
-				LinkedAccount = account.Id,
+				LinkedAccount = account.Username,
 				Review = e.Review,
 				Cost = e.Cost,
 				CreateDate = e.CreateDate,

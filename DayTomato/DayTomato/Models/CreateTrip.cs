@@ -26,8 +26,8 @@ namespace DayTomato.Models
 		public int Likes { get; set; }
         [JsonProperty("description")]
 		public string Description { get; set; }
-        //[JsonProperty("cost", DefaultValueHandling = DefaultValueHandling.Populate)]
-		//public double Cost { get; set; }
+        [JsonProperty("cost", DefaultValueHandling = DefaultValueHandling.Populate)]
+		public double Cost { get; set; }
         [JsonProperty("rating", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public float Rating { get; set; }
         [JsonProperty("comments", TypeNameHandling = TypeNameHandling.Auto)]

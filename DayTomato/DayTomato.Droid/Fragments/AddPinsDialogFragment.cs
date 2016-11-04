@@ -5,32 +5,26 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using Android.Gms.Maps.Model;
-using Android.Graphics;
-using Android.Util;
-using Plugin.Media;
-using System.IO;
 using DayTomato.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using Java.Lang;
 
 namespace DayTomato.Droid
 {
     public class AddPinsDialogFragment : DialogFragment
     {
-        private readonly static string TAG = "ADD_PINS_DIALOG_FRAGMENT";
 
         public event EventHandler<AddPinsDialogEventArgs> AddPinsDialogClosed;      // Event handler when user presses create
         private Button _createTripButton;                               // Create trip button
         private Button _cancelButton;                                   // Cancel create trip button
         private Button _addPinButton;                                   // Add pin to trip button
-        private List<string> _addedPins = new List<string> ();                                  // Array of added pins
+		private List<Pin> _addedPins;                                   // Array of added pins
+		private List<String> _addedPinsIds;
         private List<Pin> _allPins;                                     // All pins currently on server
-        private AutoCompleteTextView autocompleteTextView;              // Search for pins
+		private AutoCompleteTextView _autocompleteTextView;             // Search for pins
         private TextView _listPins;                                     // List of added pins
-        private bool _createTrip;                                        // Check if they pressed create or not
+        private bool _createTrip;                                       // Check if they pressed create or not
 
         public static AddPinsDialogFragment NewInstance()
         {
@@ -43,35 +37,16 @@ namespace DayTomato.Droid
             View view = inflater.Inflate(Resource.Layout.add_pins_dialog_fragment, container, false);
             _createTripButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_create_button);
             _cancelButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_cancel_button);
-            _addPinButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_add_button);
-            
+			_addPinButton = (Button)view.FindViewById(Resource.Id.add_pins_dialog_add_button);
             _listPins = view.FindViewById<TextView>(Resource.Id.add_pins_dialog_listpins);
+			_addedPins = new List<Pin>();
+			_addedPinsIds = new List<string>();
 
-            // Anytime the user clicks on the add button, add that pin to the trip and display the list of pins on the screen
-            _addPinButton.Click += (sender, e) =>
-            {
-                if (autocompleteTextView.Text != null)
-                {
-                    Pin _pin = _allPins.Find(p => p.Name == autocompleteTextView.Text);
-                    if (_pin != null)
-                    {
-                        _addedPins.Add(_pin.Id);
-                        Toast.MakeText(this.Activity, "Added Pin", ToastLength.Short).Show();
-                        _listPins.Text += autocompleteTextView.Text + "\n";
-                        _pin = null;
-                        autocompleteTextView.Text = "";
-                    }
-                    else { Toast.MakeText(this.Activity, "Could not find pin", ToastLength.Short).Show(); }
-                }
-                else { Toast.MakeText(this.Activity, "Type the name of a pin to add", ToastLength.Short).Show(); }
-            };
-
-            ArrayAdapter autoCompleteAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleDropDownItem1Line, new List<string>());
-
-            autocompleteTextView = view.FindViewById<AutoCompleteTextView>(Resource.Id.add_pins_dialog_autocomplete);
+			ArrayAdapter autoCompleteAdapter = new ArrayAdapter(Activity, Android.Resource.Layout.SimpleDropDownItem1Line, new List<string>());
+            _autocompleteTextView = view.FindViewById<AutoCompleteTextView>(Resource.Id.add_pins_dialog_autocomplete);
             // Minimum number of characters to begin autocompletet for
-            autocompleteTextView.Threshold = 1;
-            autocompleteTextView.Adapter = autoCompleteAdapter;
+            _autocompleteTextView.Threshold = 1;
+            _autocompleteTextView.Adapter = autoCompleteAdapter;
 
             // Load all pins from the server
             Task.Run(async () =>
@@ -82,8 +57,8 @@ namespace DayTomato.Droid
                 autoCompleteAdapter.NotifyDataSetChanged();
             });
 
-            this.Dialog.SetCancelable(true);
-            this.Dialog.SetCanceledOnTouchOutside(true);
+            Dialog.SetCancelable(true);
+            Dialog.SetCanceledOnTouchOutside(true);
             
             SetListeners();
             return view;
@@ -104,18 +79,37 @@ namespace DayTomato.Droid
             { 
                 AddPinsDialogClosed(this, new AddPinsDialogEventArgs
                 {
-                    Pins = _addedPins
+                    PinsIds = _addedPinsIds,
+					Pins = _addedPins
                 });
-
-                MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
             }
         }
 
         private void SetListeners()
         {
+			// Anytime the user clicks on the add button, add that pin to the trip and display the list of pins on the screen
+			_addPinButton.Click += (sender, e) =>
+			{
+				if (_autocompleteTextView.Text != null)
+				{
+					Pin _pin = _allPins.Find(p => p.Name == _autocompleteTextView.Text);
+					if (_pin != null)
+					{
+						_addedPins.Add(_pin);
+						_addedPinsIds.Add(_pin.Id);
+						Toast.MakeText(Activity, "Added Pin", ToastLength.Short).Show();
+						_listPins.Text += _autocompleteTextView.Text + "\n";
+						_pin = null;
+						_autocompleteTextView.Text = "";
+					}
+					else { Toast.MakeText(Activity, "Could not find pin", ToastLength.Short).Show(); }
+				}
+				else { Toast.MakeText(Activity, "Type the name of a pin to add", ToastLength.Short).Show(); }
+			};
+
             _createTripButton.Click += (sender, e) =>
             {
-                Toast.MakeText(this.Activity, "Created Trip", ToastLength.Short).Show();
+                Toast.MakeText(Activity, "Created Trip", ToastLength.Short).Show();
                 _createTrip = true;
                 Dialog.Dismiss();
             };
@@ -129,6 +123,7 @@ namespace DayTomato.Droid
         }
     public class AddPinsDialogEventArgs
     {
-        public List<string> Pins { get; set; }
+        public List<string> PinsIds { get; set; }
+		public List<Pin> Pins { get; set; }
     }
 }

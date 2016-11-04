@@ -15,6 +15,7 @@ using DayTomato.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Android.Graphics.Drawables;
+using System.Text.RegularExpressions;
 
 namespace DayTomato.Droid
 {
@@ -126,9 +127,17 @@ namespace DayTomato.Droid
 		{
 			_finishButton.Click += (sender, e) =>
 			{
-				Toast.MakeText(this.Activity, "Edited Pin", ToastLength.Short).Show();
-				_editPin = true;
-				Dialog.Dismiss();
+				if (!isValidCost(_cost.Text))
+				{
+					_cost.Error = "Cannot Be Empty";
+					_editPin = false;
+
+				}
+				else {
+					Toast.MakeText(this.Activity, "Created Pin", ToastLength.Short).Show();
+					_editPin = true;
+					Dialog.Dismiss();
+				}
 			};
 
 			_cancelButton.Click += (sender, e) =>
@@ -162,6 +171,12 @@ namespace DayTomato.Droid
 				menu.ContentView = list;
 				menu.ShowAtLocation(View, GravityFlags.Center, 0, 0);
 			};	
+		}
+
+		private bool isValidCost(string cost)
+		{
+			Regex regex = new Regex(@"[0-9]+");
+			return regex.IsMatch(cost);
 		}
 
 		private async void ChoosePhoto()

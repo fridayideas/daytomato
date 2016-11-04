@@ -63,6 +63,7 @@ namespace DayTomato.Droid
 			TripSuggestionViewHolder vh = holder as TripSuggestionViewHolder;
 			vh.Name.Text = _suggestions[position].Name;
 			vh.Type.Text = _suggestions[position].Type;
+			vh.Pins.Text = "";
 			foreach (var p in _suggestions[position].Pins)
 			{
 				vh.Pins.Text += p.Name + "\n";
@@ -71,8 +72,8 @@ namespace DayTomato.Droid
 			vh.Account.Text = _suggestions[position].LinkedAccount;
 			vh.Likes.Text = _suggestions[position].Likes.ToString();
 			vh.Description.Text = _suggestions[position].Description;
-			//vh.Cost.Text = _suggestions[position].Cost.ToString();
-			vh.Rating.Text = _suggestions[position].Rating.ToString();
+			vh.Cost.Text = "$" + _suggestions[position].Cost;
+			vh.Rating.Text = "Rating " + _suggestions[position].Rating;
 
 			try
 			{
@@ -97,7 +98,6 @@ namespace DayTomato.Droid
 				Log.Debug(TAG, ex.Message);
 			}
 
-
 			// Initializing listview
 			vh.CommentsAdapter = new CommentsAdapter(_context, _suggestions[position].Comments);
 			// Make sure we can see the comments
@@ -112,7 +112,6 @@ namespace DayTomato.Droid
 				vh.AddCommentInput.Visibility = ViewStates.Visible;
 				vh.AddCommentButton.Visibility = ViewStates.Visible;
 			};
-
 			// When the user presses add, add the new comment
 			vh.AddCommentButton.Click += (sender, e) =>
 			{
@@ -132,7 +131,6 @@ namespace DayTomato.Droid
 				vh.ShowComments.Text = "hide comments";
 				vh.AddCommentInput.Text = "";
 			};
-
 			vh.ShowComments.Click += (sender, e) =>
 			{
 				vh.HideComments = !vh.HideComments;
@@ -150,7 +148,6 @@ namespace DayTomato.Droid
 					RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 				}
 			};
-
 			vh.UpButton.Click += async (sender, e) =>
 			{
 				// If the like and dislike button was not pressed, then its fresh

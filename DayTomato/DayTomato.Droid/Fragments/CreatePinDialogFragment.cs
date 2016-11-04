@@ -112,42 +112,18 @@ namespace DayTomato.Droid
 			_imageUrl = "";
 			_cost.Text = "0";
 		}
-		public Boolean isValidCost(String Cost)
-		{
-			//String Cost_Test = ("^[0-9]+$");
-			Regex regex = new Regex(@"^\d$");
-			if (regex.IsMatch(Cost))
-			{
-				Console.WriteLine(" work");
-				return true;
 
-			}
-			else {
-				return false;
-			}	/*
-			if (System.Text.RegularExpressions.Regex.IsMatch(Cost, Cost_Test))
-			{
-				return true;
-			}
-			else {
-				return false;
-			}
-*/
-		}
 		private void SetListeners()
 		{
 			_createPinButton.Click += (sender, e) =>
 			{
 				if (!isValidCost(_cost.Text))
 				{
-
-					Console.WriteLine("asda");
 					_cost.Error = "Cannot Be Empty";
 					_createPin = false;
 
 				}
-					else {
-
+				else {
 					Toast.MakeText(this.Activity, "Created Pin", ToastLength.Short).Show();
 					_createPin = true;
 					Dialog.Dismiss();
@@ -185,6 +161,12 @@ namespace DayTomato.Droid
 				menu.ContentView = list;
 				menu.ShowAtLocation(View, GravityFlags.Center, 0, 0);
 			};
+		}
+
+		private bool isValidCost(string cost)
+		{
+			Regex regex = new Regex(@"[0-9]+");
+			return regex.IsMatch(cost);
 		}
 
 		private async void ChoosePhoto()

@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_trip_dialog_name"
             android:hint="Name this trip"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:inputType="textCapWords" />
         <TextView
             android:text="Type"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -40,7 +41,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_trip_dialog_type"
             android:hint="Foodie? Relaxing? Walkable?"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:inputType="textCapWords" />
         <TextView
             android:text="Description"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -51,7 +53,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_trip_dialog_text_description"
             android:hint="Give a short description"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:inputType="textCapSentences" />
         <TextView
             android:text="Cost"
             android:textAppearance="?android:attr/textAppearanceMedium"
