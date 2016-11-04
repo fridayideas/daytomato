@@ -12,6 +12,11 @@
         android:id="@+id/filter_dialog_title"
         android:textColor="@color/colorPrimary" />
     <CheckBox
+        android:text="All"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_all" />
+    <CheckBox
         android:text="General"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

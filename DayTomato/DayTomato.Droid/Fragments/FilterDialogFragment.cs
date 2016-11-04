@@ -6,6 +6,7 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using System.Collections.Generic;
 
 namespace DayTomato.Droid
 {
@@ -17,11 +18,14 @@ namespace DayTomato.Droid
 		private Button _finishButton;                                   // finish editting pin button
 		private Button _cancelButton;                                   // Cancel editting pin button
 
+		private List<CheckBox> _boxes;
+
+		private CheckBox _all;
+		private CheckBox _general;
 		private CheckBox _food;
 		private CheckBox _poi;
 		private CheckBox _shopping;
 		private CheckBox _outdoors;
-		private CheckBox _general;
 		private CheckBox _cultural;
 		private CheckBox _kids;
 		private CheckBox _walking;
@@ -55,6 +59,20 @@ namespace DayTomato.Droid
 			_biking = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_biking);
 			_driving = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_driving);
 			_budget = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_budget);
+			_all = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_all);
+			_boxes = new List<CheckBox>();
+
+			_boxes.Add(_general);
+			_boxes.Add(_food);
+			_boxes.Add(_poi);
+			_boxes.Add(_shopping);
+			_boxes.Add(_outdoors);
+			_boxes.Add(_cultural);
+			_boxes.Add(_kids);
+			_boxes.Add(_walking);
+			_boxes.Add(_biking);
+			_boxes.Add(_driving);
+			_boxes.Add(_budget);
 
 			_filter = false;
 
@@ -113,6 +131,7 @@ namespace DayTomato.Droid
 			_biking.Checked = _filterOptions[8]; 
 			_driving.Checked = _filterOptions[9];
 			_budget.Checked = _filterOptions[10];
+			_all.Checked = SetAllChecked();
 		}
 
 		private void SetListeners()
@@ -128,6 +147,57 @@ namespace DayTomato.Droid
 				_filter = false;
 				Dialog.Dismiss();
 			};
+
+			_all.Click += (sender, e) =>
+			{
+				_all.Checked = !_all.Checked;
+				if (_all.Checked)
+				{
+					ToggleAllChecked(false);
+				}
+				else
+				{
+					ToggleAllChecked(true);
+				}
+			};
+
+			foreach (var b in _boxes)
+			{
+				b.Click += (sender, e) =>
+				{
+					if (_all.Checked)
+					{
+						ToggleAllChecked(false);
+						b.Checked = true;
+					}
+				};
+			}
+
+		}
+		private void ToggleAllChecked(bool check)
+		{
+			_all.Checked = check;
+			_general.Checked = check;
+			_food.Checked = check;
+			_poi.Checked = check;
+			_shopping.Checked = check;
+			_outdoors.Checked = check;
+			_cultural.Checked = check;
+			_kids.Checked = check;
+			_walking.Checked = check;
+			_biking.Checked = check;
+			_driving.Checked = check;
+			_budget.Checked = check;
+		}
+
+		private bool SetAllChecked()
+		{
+			foreach(var b in _boxes)
+			{
+				if (!b.Checked)
+					return false;
+			}
+			return true;
 		}
 	}
 
