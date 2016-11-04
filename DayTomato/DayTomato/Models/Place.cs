@@ -15,8 +15,41 @@ namespace DayTomato
 		public string Description { get; set; }
 		public List<string> Types { get; set; }
 
-		public Place()
+		public int PlaceType { get; set; }
+
+		public int GuessType(string type)
 		{
+			foreach (string t in Enum.GetNames(typeof(Models.FOOD_TYPES)))
+			{
+				if (t.Equals(type))
+				{
+					return 1;
+				}
+			}
+			foreach (string t in Enum.GetNames(typeof(Models.POI_TYPES)))
+			{
+				if (t.Equals(type))
+				{
+					return 2;
+				}
+			}
+			foreach (string t in Enum.GetNames(typeof(Models.SHOPPING_TYPES)))
+			{
+				if (t.Equals(type))
+				{
+					return 3;
+				}
+			}
+			foreach (string t in Enum.GetNames(typeof(Models.OUTDOOR_TYPES)))
+			{
+				if (t.Equals(type))
+				{
+					return 4;
+				}
+			}
+
+			// General
+			return 0;
 		}
 
 		public class PlaceConverter : JsonConverter
@@ -45,9 +78,15 @@ namespace DayTomato
 						var jat = (JArray)ja[i]["types"];
 						place.Description = "";
 						place.Types = new List<string>();
+						bool first = true;
 						for (int j = 0; j < jat.Count; ++j)
 						{
 							string type = jat[j].Value<string>();
+							if (first)
+							{
+								place.PlaceType = place.GuessType(type);
+								first = false;
+							}
 							place.Types.Add(type);
 							place.Description += (type).Replace('_', ' ') + " ";
 						}

@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Com.Google.Maps.Android.Clustering;
 using Android.Support.V7.App;
 using Plugin.Geolocator.Abstractions;
+using System.Linq;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -30,6 +31,11 @@ namespace DayTomato.Droid.Fragments
 		private Button _cancelLocationButton;
 		private ImageView _selectLocationPin;
 		private TextView _estimateAddress;
+		private Button _filterButton;
+
+		// Filter related
+		private bool[] _filterOptions;
+		private List<Pin> _filteredPins;
 
 		// Map related
 		private GoogleMap _map;
@@ -48,6 +54,7 @@ namespace DayTomato.Droid.Fragments
 
             var view = inflater.Inflate(Resource.Layout.map_fragment, container, false);
 			_pins = new List<Pin>();
+			_filteredPins = new List<Pin>();
 			_markerPins = new Dictionary<long, List<Pin>>();
 			_markerPolygons = new Dictionary<long, List<LatLng>>();
 			_markers = new Dictionary<long, ClusterPin>();
@@ -56,11 +63,34 @@ namespace DayTomato.Droid.Fragments
 			_cancelLocationButton = (Button)view.FindViewById(Resource.Id.map_create_pin_cancel_selection);
 			_selectLocationPin = (ImageView)view.FindViewById(Resource.Id.map_create_pin_select_location_pin);
 			_estimateAddress = (TextView)view.FindViewById(Resource.Id.map_fragment_estimate_address);
+			_filterButton = (Button)view.FindViewById(Resource.Id.map_fragment_filter_button);
 
+			SetFilterOptions();
 			SetListeners();
 
             return view;
         }
+
+		private void SetFilterOptions()
+		{
+			// 0: General
+			// 1: Food
+			// 2: POI
+			// 3: Shopping
+			// 4: Outdoors
+			// 5: Cultural
+			// 6: Kids
+			// 7: Walking
+			// 8: Biking
+			// 9: Driving
+			// 10: Budget
+
+			_filterOptions = new bool[11];
+			for (var i = 0; i < _filterOptions.Length; i++)
+			{
+				_filterOptions[i] = true;
+			}
+		}
 
 		// Void here because we don't need to await the OnStart method
 		public override void OnStart()
@@ -76,7 +106,7 @@ namespace DayTomato.Droid.Fragments
         // Can only be called if map is ready!
         private void CreatePin(Pin pin)
         {
-            // If a marker already exists within a certain diameter
+			// If a marker already exists within a certain diameter
             // Then do not create a new marker, rather put it in dict
             var stack = false;
             var markerId = 0L;
@@ -150,6 +180,7 @@ namespace DayTomato.Droid.Fragments
 		    Task.Run(async () =>
 		    {
                 _pins = await MainActivity.dayTomatoClient.GetPins();
+				_filteredPins = new List<Pin>(_pins);
 
                 // Load pins onto map
                 Activity.RunOnUiThread(() =>
@@ -179,7 +210,7 @@ namespace DayTomato.Droid.Fragments
 		{
 			// Load pins onto map
             // TODO culling by area/viewport
-            _pins.ForEach(CreatePin);
+            _filteredPins.ForEach(CreatePin);
         }
 
 		private void SetListeners()
@@ -222,7 +253,37 @@ namespace DayTomato.Droid.Fragments
 			_selectLocationButton.Click += (sender, e) => 
 			{
 				CreateNewPinDialog();
-			}; 
+			};
+
+			_filterButton.Click += (sender, e) =>
+			{
+				FilterDialog();
+			};
+		}
+
+		private void FilterDialog()
+		{
+			var fm = FragmentManager;
+			var ft = fm.BeginTransaction();
+
+			//Remove fragment else it will crash as it is already added to backstack
+			var prev = fm.FindFragmentByTag("FilterDialog");
+			if (prev != null)
+			{
+				ft.Remove(prev);
+			}
+
+			ft.AddToBackStack(null);
+
+			// Create and show the dialog.
+			var bundle = new Bundle();
+			bundle.PutBooleanArray("FILTER_OPTIONS", _filterOptions);
+
+			var filterDialogFragment = FilterDialogFragment.NewInstance(bundle);
+			filterDialogFragment.FilterDialogClosed += OnFilterDialogClosed;
+
+			//Add fragment
+			filterDialogFragment.Show(fm, "FilterDialog");
 		}
 
         private async void CreateNewPinDialog()
@@ -253,6 +314,7 @@ namespace DayTomato.Droid.Fragments
 			bundle.PutDouble("SELECTED_LOCATION_LONGITUDE", _selectLocation.Longitude);
 			bundle.PutByteArray("SELECTED_LOCATION_IMAGE", place.Image);
 			bundle.PutString("SELECTED_LOCATION_NAME", place.Name);
+			bundle.PutInt("SELECTED_LOCATION_TYPE", place.PlaceType);
 			bundle.PutString("SELECTED_LOCATION_DESCRIPTION", place.Description);
 
 			var createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
@@ -289,6 +351,7 @@ namespace DayTomato.Droid.Fragments
 			bundle.PutByteArray("SELECTED_LOCATION_IMAGE", 
 			                    await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(p.ImageURL));
 			bundle.PutString("SELECTED_LOCATION_NAME", p.Name);
+			bundle.PutInt("SELECTED_LOCATION_TYPE", p.Type);
 			bundle.PutString("SELECTED_LOCATION_DESCRIPTION", p.Description);
 
 			var createPinDialogFragment = CreatePinDialogFragment.NewInstance(bundle);
@@ -422,7 +485,7 @@ namespace DayTomato.Droid.Fragments
 			var account = MainActivity.GetAccount();
 			var pin = new Pin
 			{
-				Type = 0,
+				Type = e.PinType,
 				Name = e.Name,
 				Rating = e.Rating,
 				Description = e.Description,
@@ -444,6 +507,61 @@ namespace DayTomato.Droid.Fragments
 			CreatePin(pin);
 
 			_clusterManager.Cluster();
+		}
+
+		private bool IsInFilter(Pin p)
+		{
+			for (int i = 0; i < _filterOptions.Length; ++i)
+			{
+				if (_filterOptions[i] == true && p.Type == i)
+					return true;
+			}
+			return false;
+		}
+
+		private void OnFilterDialogClosed(object sender, FilterDialogEventArgs e)
+		{
+			/*
+			 * 1. go through all pins:
+			 * 2.   if the pin does not pass filter
+			 * 3.     remove it from filteredPins
+			 * 4.   else if filterPins doesnt have pin
+			 * 5.     add it to filterPins
+			 * 6. update map with filtered pins
+			 */
+
+			_filterOptions = e.FilterOptions;
+			if (e.Filter)
+			{
+				foreach (var p in _pins)
+				{
+					// Remove
+					int index = _filteredPins.FindIndex((t => t.Id.Equals(p.Id)));
+					if (!IsInFilter(p) && index != -1)
+					{
+						_filteredPins.RemoveAt(index);
+					}
+					// Add
+					else if (index == -1)
+					{
+						_filteredPins.Add(p);
+					}
+				}
+
+				_markers = new Dictionary<long, ClusterPin>();
+				_markerPins = new Dictionary<long, List<Pin>>();
+				_markerPolygons = new Dictionary<long, List<LatLng>>();
+				_clusterManager.ClearItems();
+
+				UpdateMap();
+				_clusterManager.Cluster();
+				RefreshMap();
+			}
+		}
+
+		private void RefreshMap()
+		{
+			_clusterManager.OnCameraChange(_map.CameraPosition);
 		}
 
 		private void SwitchLocationButtonState(bool createPin)
