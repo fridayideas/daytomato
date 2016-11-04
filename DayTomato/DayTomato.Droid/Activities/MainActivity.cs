@@ -27,7 +27,7 @@ namespace DayTomato.Droid
 
         private TabLayout _tabLayout;
 		private ViewPager _viewPager;
-		private LatLng _currentLocation;
+		private static LatLng _currentLocation;
 		private static Account _account;
 	    private string _idToken; //IdToken provided by auth0. It is used to authenticate the current user on the server.
 
@@ -120,7 +120,7 @@ namespace DayTomato.Droid
 			return _account;
 		}
 
-		public LatLng GetLocation()
+		public static LatLng GetLocation()
 		{
 			return _currentLocation;
 		}
@@ -144,7 +144,7 @@ namespace DayTomato.Droid
 		 */
 		private void InitTabLayout()
         {
-            _tabLayout.SetTabTextColors(Android.Graphics.Color.White, Android.Graphics.Color.White);
+            _tabLayout.SetTabTextColors(Color.White, Color.White);
             //Fragment array
             var fragments = new Android.Support.V4.App.Fragment[]
             {
@@ -175,7 +175,7 @@ namespace DayTomato.Droid
 			_tabLayout.GetTabAt(2).SetIcon(Resource.Drawable.ic_directions_walk_white_24px);
         }
 
-        public void OnClick(IDialogInterface dialog, int which)
+        public void OnClick(IDialogInterface dialog)
         {
             dialog.Dismiss();
         }
