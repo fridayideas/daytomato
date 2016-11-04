@@ -182,6 +182,7 @@
     <Compile Include="Fragments\ViewTripDialogFragment.cs" />
     <Compile Include="Util\PictureUtil.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
+    <Compile Include="Fragments\FilterDialogFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -240,6 +241,7 @@
     <AndroidResource Include="Resources\layout\create_trip_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\add_pins_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\edit_pin_dialog_fragment.axml" />
+    <AndroidResource Include="Resources\layout\filter_dialog_fragment.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

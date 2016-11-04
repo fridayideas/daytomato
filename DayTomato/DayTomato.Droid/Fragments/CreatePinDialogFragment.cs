@@ -29,6 +29,7 @@ namespace DayTomato.Droid
 		private RatingBar _rating;                                      // Rating user will give
 		private EditText _review;										// Review user will give
         private EditText _cost;                                         // Amount user spent
+		private int _pinType;											// Type of pin
 		private bool _createPin;                                        // Check if they pressed create or not
 		private string _imageUrl;
 
@@ -83,8 +84,8 @@ namespace DayTomato.Droid
 					Location = new LatLng(Arguments.GetDouble("SELECTED_LOCATION_LATITUDE"),
 										  Arguments.GetDouble("SELECTED_LOCATION_LONGITUDE")),
 					CreateDate = DateTime.Today,
-					ImageUrl = _imageUrl
-							
+					ImageUrl = _imageUrl,
+					PinType = _pinType
 				});
 
 				MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
@@ -107,6 +108,7 @@ namespace DayTomato.Droid
 				Log.Error(TAG, ex.Message);
 			}
 			_description.Text = Arguments.GetString("SELECTED_LOCATION_DESCRIPTION", "");
+			_pinType = Arguments.GetInt("SELECTED_LOCATION_TYPE", 0);
 			_imageUrl = "";
 			_cost.Text = "0";
 		}
@@ -267,6 +269,7 @@ namespace DayTomato.Droid
         public double Cost { get; set; }
 		public DateTime CreateDate { get; set; }
 		public string ImageUrl { get; set; }
+		public int PinType { get; set; }
 	}
 
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+    <TextView
+        android:text="Filter by"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_title"
+        android:textColor="@color/colorPrimary" />
+    <CheckBox
+        android:text="General"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_general" />
+    <CheckBox
+        android:text="Food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_food" />
+    <CheckBox
+        android:text="Points of interest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_poi" />
+    <CheckBox
+        android:text="Shopping"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_shopping" />
+    <CheckBox
+        android:text="Outdoors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_outdoors" />
+    <CheckBox
+        android:text="Cultural"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_cultural" />
+    <CheckBox
+        android:text="Kids"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_kids" />
+    <CheckBox
+        android:text="Walking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_walking" />
+    <CheckBox
+        android:text="Biking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_biking" />
+    <CheckBox
+        android:text="Driving"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_driving" />
+    <CheckBox
+        android:text="Budget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_dialog_budget" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1"
+        android:layout_marginTop="8dp">
+        <Button
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/filter_dialog_cancel"
+            android:layout_weight="0.5"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/white" />
+        <Button
+            android:text="Ok"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/filter_dialog_filter"
+            android:layout_weight="0.5"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/white" />
+    </LinearLayout>
+</LinearLayout>
