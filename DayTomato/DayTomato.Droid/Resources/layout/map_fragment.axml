@@ -71,7 +71,7 @@
         android:id="@+id/map_fragment_filter_button"
         android:alpha="0.8"
         android:layout_gravity="bottom"
-        android:layout_margin="16dp" />
+        android:layout_margin="12dp" />
     <AutoCompleteTextView
         android:theme="@style/AutoCompleteTextViewStyle"
         android:id="@+id/map_fragment_search"
