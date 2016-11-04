@@ -10,6 +10,7 @@ using Android.Graphics;
 using Android.Util;
 using Plugin.Media;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace DayTomato.Droid
 {
@@ -19,11 +20,11 @@ namespace DayTomato.Droid
 
         public event EventHandler<CreateTripDialogEventArgs> CreateTripDialogClosed;      // Event handler when user presses create
         private Button _addPinsButton;                                   // Move on to adding pins to the trip button
-        private Button _cancelButton;                                   // Cancel create trip button
-        private EditText _name;                                         // Name user will put
-        private EditText _type;                                         // Type of trip
-        private EditText _description;                                  // Description user will put
-        private EditText _cost;                                         // Amount user spent
+        private Button _cancelButton;                                    // Cancel create trip button
+        private EditText _name;                                          // Name user will put
+        private EditText _type;                                          // Type of trip
+        private EditText _description;                                   // Description user will put
+        private EditText _cost;                                          // Amount user spent
         private bool _createTrip;                                        // Check if they pressed create or not
 
         public static CreateTripDialogFragment NewInstance()
@@ -67,7 +68,7 @@ namespace DayTomato.Droid
                     Name = _name.Text,
                     Type = _type.Text,
                     Description = _description.Text,
-                    //Cost = Convert.ToDouble(_cost.Text),
+                    Cost = Convert.ToDouble(_cost.Text),
                     CreateDate = DateTime.Today,
                 });
 
@@ -79,9 +80,17 @@ namespace DayTomato.Droid
         {
             _addPinsButton.Click += (sender, e) =>
             {
-                //Toast.MakeText(this.Activity, "Created Trip", ToastLength.Short).Show();
-                _createTrip = true;
-                Dialog.Dismiss();
+				if (!isValidCost(_cost.Text))
+				{
+					_cost.Error = "Cannot Be Empty";
+					_createTrip = false;
+
+				}
+				else {
+					Toast.MakeText(this.Activity, "Created Pin", ToastLength.Short).Show();
+					_createTrip = true;
+					Dialog.Dismiss();
+				}
             };
 
             _cancelButton.Click += (sender, e) =>
@@ -90,13 +99,20 @@ namespace DayTomato.Droid
                 Dialog.Dismiss();
             };
         }
-        }
+
+		private bool isValidCost(string cost)
+		{
+			Regex regex = new Regex(@"[0-9]+");
+			return regex.IsMatch(cost);
+		}
+    }
+
     public class CreateTripDialogEventArgs
     {
         public string Name { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
-        //public double Cost { get; set; }
+        public double Cost { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }

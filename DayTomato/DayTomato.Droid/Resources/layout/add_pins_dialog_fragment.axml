@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/add_pins_dialog_autocomplete"
             android:textColor="@color/black"
+            android:inputType="textCapWords"
             android:hint="Type to find a pin to add to this trip" />
         <Button
             android:text="ADD"

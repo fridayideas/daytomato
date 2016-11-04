@@ -52,7 +52,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_pin_dialog_name"
             android:hint="Name of the place"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:inputType="textCapWords" />
         <TextView
             android:text="Description"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -63,7 +64,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/create_pin_dialog_text_description"
             android:hint="Give a short description"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:inputType="textCapSentences" />
         <TextView
             android:text="Rating"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -95,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <EditText
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textCapSentences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/create_pin_dialog_review"

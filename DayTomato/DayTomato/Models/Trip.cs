@@ -26,8 +26,8 @@ namespace DayTomato.Models
 		public int Likes { get; set; }
         [JsonProperty("description")]
 		public string Description { get; set; }
-        //[JsonProperty("cost", DefaultValueHandling = DefaultValueHandling.Populate)]
-		//public double Cost { get; set; }
+        [JsonProperty("cost", DefaultValueHandling = DefaultValueHandling.Populate)]
+		public double Cost { get; set; }
         [JsonProperty("rating", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public float Rating { get; set; }
         [JsonProperty("comments", TypeNameHandling = TypeNameHandling.Auto)]
@@ -36,5 +36,24 @@ namespace DayTomato.Models
 		public List<string> LikedBy { get; set; }
 		[JsonProperty("dislikedBy")]
 		public List<string> DislikedBy { get; set; }
+
+		public Trip() { }
+
+		public Trip(CreateTrip trip, List<Pin> pins)
+		{
+			Id = trip.Id;
+			Pins = pins;
+			Name = trip.Name;
+			Type = trip.Type;
+			LinkedAccount = trip.LinkedAccount;
+			CreateDate = trip.CreateDate;
+			Likes = trip.Likes;
+			Description = trip.Description;
+			Cost = trip.Cost;
+			Rating = trip.Rating;
+			Comments = trip.Comments;
+			LikedBy = trip.LikedBy;
+			DislikedBy = trip.DislikedBy;
+		}
     }
 }
