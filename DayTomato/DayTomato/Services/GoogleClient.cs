@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -9,6 +10,8 @@ namespace DayTomato
 	{
 		HttpClient httpClient;
 		private readonly string GOOGLE_API_KEY = "AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA";
+		private readonly string GOOGLE_PLACES_AUTO_COMPLETE_BASE_URL = "https://maps.googleapis.com/maps/api/place/autocomplete/json?";
+		private readonly string GOOGLE_GEOCODING_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 		private readonly string GOOGLE_PLACES_BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
 		private readonly string GOOGLE_PLACES_PHOTO_BASE_URL = "https://maps.googleapis.com/maps/api/place/photo?";
 		private readonly string GOOGLE_RANK_BY = "distance";
@@ -47,6 +50,39 @@ namespace DayTomato
 			}
 
 			return place;
+		}
+
+		public async Task<string[]> PredictPlaces(string input , double lat, double lng)
+		{
+			string[] predictions;
+			// Example:
+			// https://maps.googleapis.com/maps/api/place/autocomplete/xml?
+			// input=Amoeba&types=establishment&location=37.76999,-122.44696&radius=500&key=YOUR_API_KEY
+
+			var uri = new Uri(GOOGLE_PLACES_AUTO_COMPLETE_BASE_URL
+							  + "input=" + input
+							  + "&location=" + lat + "," + lng
+							  + "&key=" + GOOGLE_API_KEY);
+
+			var result = "";
+			var response = await httpClient.GetAsync(uri);
+			if (response.IsSuccessStatusCode)
+			{
+				result = await response.Content.ReadAsStringAsync();
+				var Jsonobject = JsonConvert.DeserializeObject<Place.RootObject>(result);
+				List<Place.Prediction> googlePredictions = Jsonobject.predictions;
+				predictions = new string[googlePredictions.Count];
+
+				int index = 0;
+				foreach (Place.Prediction p in googlePredictions)
+				{
+					predictions[index] = p.description;
+					index++;
+				}
+				return predictions;
+			}
+
+			return new string[] { };
 		}
 	}
 }

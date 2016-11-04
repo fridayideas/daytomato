@@ -69,5 +69,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/map_fragment_filter_button"
-        android:alpha="0.8" />
+        android:alpha="0.8"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp" />
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_fragment_search"
+        android:hint="Search DayTomato"
+        android:layout_margin="16dp"
+        android:inputType="textCapWords" />
 </FrameLayout>

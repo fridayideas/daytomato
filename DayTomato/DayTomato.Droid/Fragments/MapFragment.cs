@@ -15,6 +15,8 @@ using Com.Google.Maps.Android.Clustering;
 using Android.Support.V7.App;
 using Plugin.Geolocator.Abstractions;
 using System.Linq;
+using Android.Views.InputMethods;
+using Android.InputMethodServices;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -32,6 +34,9 @@ namespace DayTomato.Droid.Fragments
 		private ImageView _selectLocationPin;
 		private TextView _estimateAddress;
 		private Button _filterButton;
+		private AutoCompleteTextView _mapSearch;
+		private ArrayAdapter _mapSearchAdapter;
+		private string[] _mapSearchPredictions;
 
 		// Filter related
 		private bool[] _filterOptions;
@@ -64,6 +69,11 @@ namespace DayTomato.Droid.Fragments
 			_selectLocationPin = (ImageView)view.FindViewById(Resource.Id.map_create_pin_select_location_pin);
 			_estimateAddress = (TextView)view.FindViewById(Resource.Id.map_fragment_estimate_address);
 			_filterButton = (Button)view.FindViewById(Resource.Id.map_fragment_filter_button);
+			_mapSearch = (AutoCompleteTextView)view.FindViewById(Resource.Id.map_fragment_search);
+			_mapSearchAdapter = new ArrayAdapter<string>(Activity, 
+			                                             Android.Resource.Layout.SimpleDropDownItem1Line, 
+			                                             _mapSearchPredictions);
+			_mapSearch.Adapter = _mapSearchAdapter;
 
 			SetFilterOptions();
 			SetListeners();
@@ -259,6 +269,22 @@ namespace DayTomato.Droid.Fragments
 			{
 				FilterDialog();
 			};
+
+			_mapSearch.TextChanged += async (sender, e) => 
+			{
+				_mapSearchPredictions = await MainActivity.googleClient.PredictPlaces(e.Text.ToString(),
+																					 _currentLocation.Latitude,
+																					 _currentLocation.Longitude);
+			};
+
+			_mapSearch.ItemClick += async (Sender, e) =>
+			{
+				//to soft keyboard hide
+				InputMethodManager inputManager = (InputMethodManager)Context.GetSystemService(Context.GetSystemService.inputManager);
+				inputManager.HideSoftInputFromWindow(_mapSearch.WindowToken, HideSoftInputFlags.NotAlways);
+
+				//await MainActivity.googleClient.Geocode();
+			}
 		}
 
 		private void FilterDialog()
