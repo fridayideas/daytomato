@@ -17,6 +17,7 @@ using Plugin.Geolocator.Abstractions;
 using System.Linq;
 using Android.Views.InputMethods;
 using Android.InputMethodServices;
+using Android.Util;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -269,26 +270,40 @@ namespace DayTomato.Droid.Fragments
 
 			_mapSearch.TextChanged += async (sender, e) => 
 			{
-				_mapSearchPredictions = await MainActivity.googleClient.PredictPlaces(e.Text.ToString(),
-																					 _currentLocation.Latitude,
-																					 _currentLocation.Longitude);
-				_mapSearchAdapter = new ArrayAdapter(Activity, 
-				                                     Android.Resource.Layout.SimpleDropDownItem1Line, 
-				                                     _mapSearchPredictions);
-				_mapSearch.Adapter = _mapSearchAdapter;
+				try
+				{
+					_mapSearchPredictions = await MainActivity.googleClient.PredictPlaces(e.Text.ToString(),
+																						 _currentLocation.Latitude,
+																						 _currentLocation.Longitude);
+					_mapSearchAdapter = new ArrayAdapter(Activity,
+														 Android.Resource.Layout.SimpleDropDownItem1Line,
+														 _mapSearchPredictions);
+					_mapSearch.Adapter = _mapSearchAdapter;
+				}
+				catch (Exception ex)
+				{
+					Log.Error(TAG, ex.Message);
+				}
 			};
 
 			_mapSearch.ItemClick += async (Sender, e) =>
 			{
-				var imm = (InputMethodManager)Context.GetSystemService(Android.Content.Context.InputMethodService);
-				imm.HideSoftInputFromWindow(_mapSearch.WindowToken, 0);
-
-				if (_mapSearch.Text != string.Empty)
+				try
 				{
-					Coordinate coords = await MainActivity.googleClient.Geocode(_mapSearch.Text);
-					UpdateCameraPosition(new LatLng(coords.latitude, coords.longitude));
-					_mapSearch.Text = "";
-					_mapSearch.ClearFocus();
+					var imm = (InputMethodManager)Context.GetSystemService(Android.Content.Context.InputMethodService);
+					imm.HideSoftInputFromWindow(_mapSearch.WindowToken, 0);
+
+					if (_mapSearch.Text != string.Empty)
+					{
+						Coordinate coords = await MainActivity.googleClient.Geocode(_mapSearch.Text);
+						UpdateCameraPosition(new LatLng(coords.latitude, coords.longitude));
+						_mapSearch.Text = "";
+						_mapSearch.ClearFocus();
+					}
+				}
+				catch (Exception ex)
+				{
+					Log.Error(TAG, ex.Message);
 				}
 			};
 		}
@@ -593,12 +608,19 @@ namespace DayTomato.Droid.Fragments
 
 		private void UpdateCameraPosition(LatLng position)
 		{
-			CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
-			builder.Target(position);
-			builder.Zoom(16);
-			CameraPosition cameraPosition = builder.Build();
-			CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
-			_map.AnimateCamera(cameraUpdate);
+
+			CameraPosition cameraPosition = new CameraPosition.Builder()
+			.Target(position)
+			.Zoom(20)
+			.Bearing(0)
+			.Tilt(45)
+			.Build();
+			_map.AnimateCamera(CameraUpdateFactory.NewCameraPosition(cameraPosition));
+			
+			//CameraUpdate cameraUpdate = CameraUpdateFactory.NewLatLngZoom(position, 20);
+
+
+			//_map.AnimateCamera(cameraUpdate);
 		}
 
 		private void RefreshMap()
