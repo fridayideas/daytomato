@@ -242,6 +242,7 @@
     <AndroidResource Include="Resources\layout\add_pins_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\edit_pin_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\filter_dialog_fragment.axml" />
+    <AndroidResource Include="Resources\drawable\rounded.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

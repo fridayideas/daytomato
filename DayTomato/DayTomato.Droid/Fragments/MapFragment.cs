@@ -15,6 +15,8 @@ using Com.Google.Maps.Android.Clustering;
 using Android.Support.V7.App;
 using Plugin.Geolocator.Abstractions;
 using System.Linq;
+using Android.Views.InputMethods;
+using Android.InputMethodServices;
 
 namespace DayTomato.Droid.Fragments
 {
@@ -32,6 +34,9 @@ namespace DayTomato.Droid.Fragments
 		private ImageView _selectLocationPin;
 		private TextView _estimateAddress;
 		private Button _filterButton;
+		private AutoCompleteTextView _mapSearch;
+		private ArrayAdapter _mapSearchAdapter;
+		private string[] _mapSearchPredictions;
 
 		// Filter related
 		private bool[] _filterOptions;
@@ -64,6 +69,8 @@ namespace DayTomato.Droid.Fragments
 			_selectLocationPin = (ImageView)view.FindViewById(Resource.Id.map_create_pin_select_location_pin);
 			_estimateAddress = (TextView)view.FindViewById(Resource.Id.map_fragment_estimate_address);
 			_filterButton = (Button)view.FindViewById(Resource.Id.map_fragment_filter_button);
+			_mapSearch = (AutoCompleteTextView)view.FindViewById(Resource.Id.map_fragment_search);
+			_mapSearch.Threshold = 1;
 
 			SetFilterOptions();
 			SetListeners();
@@ -258,6 +265,31 @@ namespace DayTomato.Droid.Fragments
 			_filterButton.Click += (sender, e) =>
 			{
 				FilterDialog();
+			};
+
+			_mapSearch.TextChanged += async (sender, e) => 
+			{
+				_mapSearchPredictions = await MainActivity.googleClient.PredictPlaces(e.Text.ToString(),
+																					 _currentLocation.Latitude,
+																					 _currentLocation.Longitude);
+				_mapSearchAdapter = new ArrayAdapter(Activity, 
+				                                     Android.Resource.Layout.SimpleDropDownItem1Line, 
+				                                     _mapSearchPredictions);
+				_mapSearch.Adapter = _mapSearchAdapter;
+			};
+
+			_mapSearch.ItemClick += async (Sender, e) =>
+			{
+				var imm = (InputMethodManager)Context.GetSystemService(Android.Content.Context.InputMethodService);
+				imm.HideSoftInputFromWindow(_mapSearch.WindowToken, 0);
+
+				if (_mapSearch.Text != string.Empty)
+				{
+					Coordinate coords = await MainActivity.googleClient.Geocode(_mapSearch.Text);
+					UpdateCameraPosition(new LatLng(coords.latitude, coords.longitude));
+					_mapSearch.Text = "";
+					_mapSearch.ClearFocus();
+				}
 			};
 		}
 
@@ -557,6 +589,16 @@ namespace DayTomato.Droid.Fragments
 				_clusterManager.Cluster();
 				RefreshMap();
 			}
+		}
+
+		private void UpdateCameraPosition(LatLng position)
+		{
+			CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
+			builder.Target(position);
+			builder.Zoom(16);
+			CameraPosition cameraPosition = builder.Build();
+			CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+			_map.AnimateCamera(cameraUpdate);
 		}
 
 		private void RefreshMap()

@@ -115,5 +115,47 @@ namespace DayTomato
 				throw new NotImplementedException();
 			}
 		}
+
+		// Google Places JSON To C#
+		public class MatchedSubstring
+		{
+			[JsonProperty(PropertyName = "length")]
+			public int length { get; set; }
+			[JsonProperty(PropertyName = "offset")]
+			public int offset { get; set; }
+		}
+
+		public class Term
+		{
+			[JsonProperty(PropertyName = "offset")]
+			public int offset { get; set; }
+			[JsonProperty(PropertyName = "value")]
+			public string value { get; set; }
+		}
+
+		public class Prediction
+		{
+			[JsonProperty(PropertyName = "description")]
+			public string description { get; set; }
+			[JsonProperty(PropertyName = "id")]
+			public string id { get; set; }
+			[JsonProperty(PropertyName = "matched_substrings")]
+			public List<MatchedSubstring> matched_substrings { get; set; }
+			[JsonProperty(PropertyName = "reference")]
+			public string reference { get; set; }
+			[JsonProperty(PropertyName = "terms")]
+			public List<Term> terms { get; set; }
+			[JsonProperty(PropertyName = "types")]
+			public List<string> types { get; set; }
+		}
+
+		public class RootObject
+		{
+			[JsonProperty(PropertyName = "predictions")]
+			public List<Prediction> predictions { get; set; }
+			[JsonProperty(PropertyName = "status")]
+			public string status { get; set; }
+		}
+		// Google Places JSON To C#
 	}
 }

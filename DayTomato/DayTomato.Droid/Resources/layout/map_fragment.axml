@@ -69,5 +69,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/map_fragment_filter_button"
-        android:alpha="0.8" />
+        android:alpha="0.8"
+        android:layout_gravity="bottom"
+        android:layout_margin="12dp" />
+    <AutoCompleteTextView
+        android:theme="@style/AutoCompleteTextViewStyle"
+        android:id="@+id/map_fragment_search"
+        android:hint="Search DayTomato"
+        android:inputType="textCapWords"
+        android:textColor="@color/black"
+        android:textColorHint="#ff898989"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded"
+        android:layout_margin="12dp" />
 </FrameLayout>
