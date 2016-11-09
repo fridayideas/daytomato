@@ -57,7 +57,7 @@ namespace DayTomato.Droid
 		private void SetCreateTripOnClick(object sender, System.EventArgs e)
 		{
 			Intent intent = new Intent(this, typeof(CreateTripActivity));
-			StartActivity(intent);
+			StartActivityForResult(intent, Constants.CREATE_TRIP_REQUEST);
 		}
 
 		private void SetViewPlacesOnClick(object sender, System.EventArgs e)
@@ -70,6 +70,18 @@ namespace DayTomato.Droid
 		{
 			Intent intent = new Intent(this, typeof(MapActivity));
 			StartActivity(intent);
+		}
+
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (requestCode == Constants.CREATE_TRIP_REQUEST)
+			{
+				if (resultCode == Result.Ok)
+				{
+					Toast.MakeText(this, "Your trip was created", ToastLength.Long);
+				}
+			}
 		}
 
 		public override void OnBackPressed()

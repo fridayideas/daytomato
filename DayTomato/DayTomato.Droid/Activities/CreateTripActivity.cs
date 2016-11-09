@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -43,9 +44,7 @@ namespace DayTomato.Droid
 			_frame = (FrameLayout)FindViewById(Resource.Id.create_trip_frame);
 
 			_detailsFragment = CreateTripDetailsFragment.NewInstance();
-			_detailsFragment.CreateTripDetailsFinished += OnDetailsFinished;
 			_pinsFragment = AddPinsFragment.NewInstance();
-			_pinsFragment.AddPinsFinished += OnAddPins;
 
 			FragmentManager
 				.BeginTransaction()
@@ -55,57 +54,17 @@ namespace DayTomato.Droid
 			SetListeners();
 		}
 
-		private void OnDetailsFinished(object sender, CreateTripDetailsEventArgs e)
-		{
-			var account = MainActivity.GetAccount();
-			_trip = new CreateTrip();
-
-			_trip.Type = e.Type;
-			_trip.Name = e.Name;
-			_trip.Description = e.Description;
-			_trip.Cost = e.Cost;
-			_trip.LinkedAccount = account.Username;
-			_trip.CreateDate = e.CreateDate;
-			_trip.LikedBy = new List<string>();
-			_trip.DislikedBy = new List<string>();
-			_trip.Comments = new List<Comment>();
-			_trip.Likes = 0;
-			_trip.Rating = 0;
-		}
-
-		private async void OnAddPins(object sender, AddPinsEventArgs e)
-		{
-			_trip.Pins = e.PinsIds;
-			_trip.Id = await MainActivity.dayTomatoClient.CreateTrip(_trip);
-			_tripCreated = _trip.Id != null ? true : false;
-			CreateTrip();
-		}
-
 		private void SetListeners()
 		{
 			_nextButton.Click += (sender, e) =>
 			{
 				if (_step == Step.DETAILS)
 				{
-					if (_detailsFragment.FinalizeTripDetails())
-					{
-						_step = Step.PINS;
-						FragmentManager
-							.BeginTransaction()
-							.Replace(_frame.Id, _pinsFragment, "AddPinsFragment")
-							.Commit();
-					}
+					SetTripDetails();
 				}
 				else if (_step == Step.PINS)
 				{
-					if (_pinsFragment.FinalizePins())
-					{
-						FragmentManager
-						   .BeginTransaction()
-						   .Remove(_pinsFragment)
-						   .Commit();
-						
-					}
+					SetTripPins();
 				}
 			};
 
@@ -115,9 +74,46 @@ namespace DayTomato.Droid
 			};
 		}
 
-		private void CreateTrip()
+		private void SetTripDetails()
 		{
-			Toast.MakeText(this, "Your trip was created", ToastLength.Short);
+			CreateTrip trip = _detailsFragment.FinalizeTripDetails();
+			if (trip != null)
+			{
+				_step = Step.PINS;
+				FragmentManager
+					.BeginTransaction()
+					.Replace(_frame.Id, _pinsFragment, "AddPinsFragment")
+					.Commit();
+
+				// Trip filled with details
+				_trip = trip;
+			}
+		}
+
+		private void SetTripPins()
+		{
+			List<Pin> pins = _pinsFragment.FinalizePins();
+			if (pins != null)
+			{
+				FragmentManager
+				   .BeginTransaction()
+				   .Remove(_pinsFragment)
+				   .Commit();
+
+				// Trip filled with pins
+				_trip.Pins = pins.Select(p => p.Id).ToList();
+
+				// Now trip can be created
+				CreateTrip();
+			}
+		}
+
+		private async void CreateTrip()
+		{
+			MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
+			_trip.Id = await MainActivity.dayTomatoClient.CreateTrip(_trip);
+			_tripCreated = _trip.Id != null;
+
 			Intent returnIntent = new Intent();
 
 			if (_tripCreated)
@@ -142,7 +138,7 @@ namespace DayTomato.Droid
 			switch (item.ItemId)
 			{
 				case Android.Resource.Id.Home:
-					CreateTrip();
+					Finish();
 					return true;
 
 				default:

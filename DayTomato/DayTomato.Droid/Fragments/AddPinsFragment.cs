@@ -1,5 +1,4 @@
 
-using System;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
@@ -14,7 +13,6 @@ namespace DayTomato.Droid
     public class AddPinsFragment : Fragment
     {
 
-        public event EventHandler<AddPinsEventArgs> AddPinsFinished;    // Event handler when user presses create
 		private Button _addPin;
 		private List<Pin> _addedPins;                                   // Array of added pins
 		private List<string> _addedPinsIds;
@@ -79,27 +77,10 @@ namespace DayTomato.Droid
 			};
 		}
 
-        public bool FinalizePins()
+        public List<Pin> FinalizePins()
         {
-            // Store and output data to the parent fragment
-            if (AddPinsFinished != null)
-            { 
-                AddPinsFinished(this, new AddPinsEventArgs
-                {
-                    PinsIds = _addedPinsIds,
-					Pins = _addedPins
-                });
-				return true;
-            }
-			return false;
+			// Store and output data to the parent fragment
+			return _addedPins;
         }
-
-        
-    }
-
-    public class AddPinsEventArgs
-    {
-        public List<string> PinsIds { get; set; }
-		public List<Pin> Pins { get; set; }
     }
 }

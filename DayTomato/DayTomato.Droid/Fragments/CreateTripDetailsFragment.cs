@@ -5,13 +5,13 @@ using Android.Views;
 using Android.Widget;
 using System.Text.RegularExpressions;
 using Android.App;
+using DayTomato.Models;
 
 namespace DayTomato.Droid
 {
     public class CreateTripDetailsFragment : DialogFragment
     {
 
-        public event EventHandler<CreateTripDetailsEventArgs> CreateTripDetailsFinished;      // Event handler when user presses create
         private EditText _name;                                          // Name user will put
         private EditText _type;                                          // Type of trip
         private EditText _description;                                   // Description user will put
@@ -31,51 +31,45 @@ namespace DayTomato.Droid
             _description = (EditText)view.FindViewById(Resource.Id.create_trip_dialog_text_description);
             _cost = (EditText)view.FindViewById(Resource.Id.create_trip_dialog_cost);
 
-			_cost.TextChanged += (sender, e) => 
-			{
-				if (!IsValidInput(e.Text.ToString()))
-				{
-					_cost.Error = "Please enter a valid cost";
-				}
-			};
-
             return view;
         }
 
-        public bool FinalizeTripDetails()
+        public CreateTrip FinalizeTripDetails()
 		{
-			if (!IsValidInput(_cost.Text)) return false;
-            // Store and output data to the parent fragment
-			if (CreateTripDetailsFinished != null)
-            {
-                CreateTripDetailsFinished(this, new CreateTripDetailsEventArgs
-                {
-                    Name = _name.Text,
-                    Type = _type.Text,
-                    Description = _description.Text,
-                    Cost = Convert.ToDouble(_cost.Text),
-                    CreateDate = DateTime.Today,
-                });
+			if (!IsValidInput())
+			{
+				return null;
+			}
+			CreateTrip trip = new CreateTrip();
+			trip.Name = _name.Text;
+			trip.Type = _type.Text;
+			trip.Description = _description.Text;
+			trip.Cost = Convert.ToDouble(_cost.Text);
+			trip.CreateDate = DateTime.Today;
 
-                MainActivity.UpdateAccount(MainActivity.GetAccount().Id, 1, 1);
-				return true;
-            }
-			return false;
+			return trip;
         }
 
-		private bool IsValidInput(string cost)
+		private bool IsValidInput()
 		{
-			Regex regex = new Regex(@"[0-9]+");
-			return regex.IsMatch(cost);
-		}
-    }
+			bool cost = true;
+			bool name = true;
 
-    public class CreateTripDetailsEventArgs
-    {
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
-        public double Cost { get; set; }
-        public DateTime CreateDate { get; set; }
+			// Cost validation
+			Regex regex = new Regex(@"[0-9]+");
+			if (!regex.IsMatch(_cost.Text))
+			{
+				_cost.Error = "Please enter a valid cost";
+				cost = false;
+			}
+			// Name validation
+			if (_name.Text == null || _name.Text == "")
+			{
+				_name.Error = "Please enter a valid name";
+				name = false;
+			}
+
+			return cost && name;
+		}
     }
 }

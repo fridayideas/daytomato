@@ -136,6 +136,7 @@ namespace DayTomato.Droid
 			{
 				if (resultCode == Result.Ok)
 				{
+					Toast.MakeText(this, "Your trip was created", ToastLength.Long);
 					RefreshTrips();
 				}
 			}
