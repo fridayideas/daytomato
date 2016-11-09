@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Support.V7.Widget;
@@ -40,7 +41,7 @@ namespace DayTomato.Droid
 		{
 			// Inflate the viewholder
 			View itemView = LayoutInflater.From(parent.Context).
-						Inflate(Resource.Layout.trip_suggestion_view_holder, parent, false);
+						Inflate(Resource.Layout.trip_view_holder, parent, false);
 
 			// Create a ViewHolder to hold view references inside the CardView
 			TripSuggestionViewHolder vh = new TripSuggestionViewHolder(itemView, OnClick);

@@ -11,13 +11,6 @@
         android:layout_height="match_parent"
         android:padding="16dp">
         <TextView
-            android:text="Create a trip"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_pin_dialog_title" />
-        <TextView
             android:text="Name"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
@@ -71,27 +64,5 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="0dp" />
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:text="Cancel"
-                android:background="@color/material_grey_300"
-                android:textColor="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/create_trip_dialog_cancel_button"
-                android:layout_margin="10dp"
-                android:layout_weight="0.5" />
-            <Button
-                android:text="Next"
-                android:background="@color/colorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/create_trip_dialog_add_pins_button"
-                android:layout_margin="10dp"
-                android:layout_weight="0.5" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

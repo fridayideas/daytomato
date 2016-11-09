@@ -1,12 +1,11 @@
 ﻿
 using System;
-
-using Android.Support.V4.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
 using System.Collections.Generic;
+using Android.App;
 
 namespace DayTomato.Droid
 {

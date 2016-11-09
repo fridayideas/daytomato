@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
@@ -10,15 +11,15 @@ using Android.Widget;
 
 namespace DayTomato.Droid
 {
-	public class HomeFeedAdapter : RecyclerView.Adapter
+	public class PlacesAdapter : RecyclerView.Adapter
 	{
-		private static readonly string TAG = "HOME_FEED_ADAPTER";
+		private static readonly string TAG = "PLACES_ADAPTER";
 		private List<Feed> _feed;
 		private const int FEED_NOTIFICATION = 0;
 		private const int FEED_PIN = 1;
 		private Activity _context;
 
-		public HomeFeedAdapter(List<Feed> feed, Activity context)
+		public PlacesAdapter(List<Feed> feed, Activity context)
 		{
 			_feed = feed;
 			_context = context;

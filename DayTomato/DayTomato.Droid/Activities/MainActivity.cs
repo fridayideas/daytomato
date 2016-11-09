@@ -1,12 +1,7 @@
-﻿using Android.App;
+﻿
+using Android.App;
 using Android.OS;
-using Android.Support.V4.App;
 using Android.Content;
-using Android.Support.Design.Widget;
-using Android.Runtime;
-using Android.Support.V4.View;
-using DayTomato.Droid.Fragments;
-using Java.Lang;
 using DayTomato.Services;
 using Android.Gms.Maps.Model;
 using System.Threading.Tasks;
@@ -17,17 +12,29 @@ using Java.IO;
 using Android.Graphics;
 using Newtonsoft.Json.Linq;
 using Plugin.Geolocator.Abstractions;
+using Android.Widget;
+using Android.Support.V7.Widget;
+using Android.Support.V4.Widget;
+using Android.Support.Design.Widget;
+using Android.Locations;
+using Android.Support.V7.App;
 
 namespace DayTomato.Droid
 {
     [Activity(Icon = "@drawable/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-    public class MainActivity : FragmentActivity, ViewPager.IOnPageChangeListener
+    public class MainActivity : AppCompatActivity
 	{
+		
 		private static readonly string TAG = "MAIN_ACTIVITY";
 
-        private TabLayout _tabLayout;
-		private ViewPager _viewPager;
+		private AutoCompleteTextView _cityAutocomplete;
+		private Button _cityControlPanelButton;
+		private RecyclerView _myTripsRecyclerView;
+		private DrawerLayout _drawer;
+		private NavigationView _navigation;
+
 		private static LatLng _currentLocation;
+		private string _locality;
 		private static Account _account;
 	    private string _idToken; //IdToken provided by auth0. It is used to authenticate the current user on the server.
 
@@ -43,8 +50,30 @@ namespace DayTomato.Droid
 
             SetContentView(Resource.Layout.Main);
 
-            Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
-            toolbar.SetTitle(Resource.String.application_name);
+			this.Window.SetSoftInputMode(Android.Views.SoftInput.StateAlwaysHidden);
+
+			// Autocomplete text view
+			_cityAutocomplete = FindViewById<AutoCompleteTextView>(Resource.Id.main_city_autocomplete);
+			// Go to control panel button
+			_cityControlPanelButton = FindViewById<Button>(Resource.Id.main_start_control_panel_button);
+			// My Trips recyclerview
+			_myTripsRecyclerView = FindViewById<RecyclerView>(Resource.Id.main_my_trips_recycler_view);
+			// Main drawer
+			_drawer = FindViewById<DrawerLayout>(Resource.Id.main_drawer);
+			// Main drawer navigation
+			_navigation = FindViewById<NavigationView>(Resource.Id.main_nav_view);
+
+			var toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
+			SetSupportActionBar(toolbar);
+			toolbar.SetTitle(Resource.String.application_name);
+			SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+			SupportActionBar.SetHomeButtonEnabled(true);
+			SupportActionBar.SetHomeAsUpIndicator(Resource.Drawable.ic_menu_white_24px);
+
+			// Create ActionBarDrawerToggle button and add it to the toolbar
+			var drawerToggle = new ActionBarDrawerToggle(this, _drawer, toolbar, Resource.String.drawer_open, Resource.String.drawer_close);
+			_drawer.AddDrawerListener(drawerToggle);
+			drawerToggle.SyncState();
 
             //Set ID token provided by LoginActivity
             _idToken = Intent.GetStringExtra("AuthIdToken");
@@ -55,23 +84,74 @@ namespace DayTomato.Droid
 			googleClient = new GoogleClient();
 
             // Get location
+			_currentLocation = new LatLng(0, 0);
             Locator = CrossGeolocator.Current;
-            await Locator.StartListeningAsync(1, 0);
+			await Locator.StartListeningAsync(1, 0);
             Locator.PositionChanged += (sender, args) =>
             {
                 var pos = args.Position;
                 _currentLocation = new LatLng(pos.Latitude, pos.Longitude);
             };
-            //_currentLocation = await GetUserLocation();
-            _currentLocation = new LatLng(0, 0);
 
 			// Get user account
 			_account = await GetUserAccount();
 
-            // Tabs
-            _tabLayout = FindViewById<TabLayout>(Resource.Id.main_sliding_tabs);
-            InitTabLayout();
+			SetListeners();
+			SetInstances();
         }
+
+		private void SetListeners()
+		{
+			_navigation.NavigationItemSelected += SetNavigationOnClick;
+			_cityControlPanelButton.Click += SetCityControlPanelButtonOnClick;
+		}
+
+		private void SetInstances()
+		{
+			SetButtonLocation();
+		}
+
+		private async void SetButtonLocation()
+		{
+			_currentLocation = await GetUserLocation();
+
+			var geo = new Geocoder(this);
+			var addresses = await geo.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 1);
+
+			_locality = "Current Location";
+			if (addresses.Count > 0)
+			{
+				_locality = addresses[0].Locality;
+			}
+
+			_cityControlPanelButton.Text = "Explore " + _locality;
+		}
+
+		private void SetCityControlPanelButtonOnClick(object sender, System.EventArgs e)
+		{
+			Intent intent = new Intent(this, typeof(TripControlPanel));
+			intent.PutExtra("TRIP_LOCALITY", _locality);
+			StartActivityForResult(intent, Constants.TRIP_CONTROL_PANEL_REQUEST);
+		}
+
+		private void SetNavigationOnClick(object sender, NavigationView.NavigationItemSelectedEventArgs e)
+		{
+			switch (e.MenuItem.ItemId)
+			{
+				case (Resource.Id.nav_home):
+					// React on 'nav_home' selection
+					break;
+				case (Resource.Id.nav_map):
+					//
+					break;
+				case (Resource.Id.nav_about):
+					break;
+				case (Resource.Id.nav_feedBack):
+					break;
+			}
+			// Close drawer
+			_drawer.CloseDrawers();
+		}
 
         /// <summary>
         /// Call GetAccount in core to obtain 
@@ -139,107 +219,7 @@ namespace DayTomato.Droid
 			}
 		}
 
-		/*
-		 * TABS SECTION
-		 */
-		private void InitTabLayout()
-        {
-            _tabLayout.SetTabTextColors(Color.White, Color.White);
-            //Fragment array
-            var fragments = new Android.Support.V4.App.Fragment[]
-            {
-                new HomeFragment(),
-                new MapFragment(),
-				new TripFragment()
-            };
-            //Tab title array
-            var titles = CharSequence.ArrayFromStringArray(new[] {
-                "Home",
-                "Search map",
-				"Plan a Trip"
-            });
 
-            _viewPager = FindViewById<ViewPager>(Resource.Id.main_viewpager);
-            //viewpager holding fragment array and tab title text
-            _viewPager.Adapter = new TabsFragmentPagerAdapter(SupportFragmentManager, fragments, titles);
-			_viewPager.AddOnPageChangeListener(this);
-            // Give the TabLayout the ViewPager 
-            _tabLayout.SetupWithViewPager(_viewPager);
-            SetIcons();
-        }
-
-        void SetIcons()
-        {
-            _tabLayout.GetTabAt(0).SetIcon(Resource.Drawable.ic_home_white_24dp);
-            _tabLayout.GetTabAt(1).SetIcon(Resource.Drawable.ic_place_white_24dp);
-			_tabLayout.GetTabAt(2).SetIcon(Resource.Drawable.ic_directions_walk_white_24px);
-        }
-
-        public void OnClick(IDialogInterface dialog)
-        {
-            dialog.Dismiss();
-        }
-
-		public void OnPageScrollStateChanged(int state)
-		{
-			return;
-		}
-
-		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-		{
-			return;
-		}
-
-		public void OnPageSelected(int position)
-		{
-			switch (position)
-			{
-				// Home Fragment
-				case 0:
-					HomeFragment.UpdateHomePage();
-					break;
-				// Map Fragment
-				case 1:
-					break;
-				// Trip Fragment
-				case 2:
-					break;
-			}
-		}
-
-	    public override void OnBackPressed(){}//Do nothing when back button pressed
-
-	    public class TabsFragmentPagerAdapter : FragmentPagerAdapter
-        {
-            private readonly Android.Support.V4.App.Fragment[] fragments;
-
-            private readonly ICharSequence[] titles;
-
-            public TabsFragmentPagerAdapter(Android.Support.V4.App.FragmentManager fm,
-                                            Android.Support.V4.App.Fragment[] fragments, 
-                                            ICharSequence[] titles) : base(fm)
-            {
-                this.fragments = fragments;
-                this.titles = titles;
-            }
-            public override int Count
-            {
-                get
-                {
-                    return fragments.Length;
-                }
-            }
-
-            public override Android.Support.V4.App.Fragment GetItem(int position)
-            {
-                return fragments[position];
-            }
-
-            public override ICharSequence GetPageTitleFormatted(int position)
-            {
-                return titles[position];
-            }
-        }
     }
 
 	public static class Picture

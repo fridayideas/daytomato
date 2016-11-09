@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 
-using Android.Support.V4.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
@@ -16,6 +14,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Android.Graphics.Drawables;
 using System.Text.RegularExpressions;
+using Android.App;
 
 namespace DayTomato.Droid
 {
