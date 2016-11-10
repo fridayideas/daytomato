@@ -175,7 +175,7 @@ namespace DayTomato.Droid
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude + PolyRadius),
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude - PolyRadius)
 				};
-				var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, BitmapDescriptorFactory.FromResource(Resource.Drawable.GTPin));
+				var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
 				_clusterManager.AddItem(m);
 
 				// Add new pin
