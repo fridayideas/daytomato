@@ -40,7 +40,8 @@ namespace DayTomato.Droid
                 mImageView.SetImageResource(newMarkerItem.getIcon());
                 mIconGenerator.SetBackground(TRANSPARENT_DRAWABLE);
                 Bitmap icon = mIconGenerator.MakeIcon();
-                markerOptions.SetIcon(BitmapDescriptorFactory.FromBitmap(icon)); //Here you retrieve BitmapDescriptor from ClusterItem and set it as marker icon
+                Bitmap resized = Bitmap.CreateScaledBitmap(icon, 110, 166, false);
+                markerOptions.SetIcon(BitmapDescriptorFactory.FromBitmap(resized)); //Here you retrieve BitmapDescriptor from ClusterItem and set it as marker icon
             }
             markerOptions.Visible(true);
         }
