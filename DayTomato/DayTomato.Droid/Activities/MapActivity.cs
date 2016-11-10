@@ -175,8 +175,23 @@ namespace DayTomato.Droid
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude + PolyRadius),
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude - PolyRadius)
 				};
-				var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
-				_clusterManager.AddItem(m);
+
+                var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
+
+                if (pin.Type == 1)
+                { 
+                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
+                } else if (pin.Type == 2)
+                {
+                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBiPin);
+                } /*else if (pin.Type == 3)
+                {
+                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
+                }*/ else if (pin.Type == 4)
+                {
+                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBPin);
+                }
+                _clusterManager.AddItem(m);
 
 				// Add new pin
 				_markers.Add(m.Id, m);
