@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Android.App;
 using Android.OS;
 using Android.Content;
@@ -18,6 +19,7 @@ using Android.Support.V4.Widget;
 using Android.Support.Design.Widget;
 using Android.Locations;
 using Android.Support.V7.App;
+using Android.Views.InputMethods;
 
 namespace DayTomato.Droid
 {
@@ -43,8 +45,10 @@ namespace DayTomato.Droid
         public static DayTomatoClient dayTomatoClient;
 		public static ImgurClient imgurClient;
 		public static GoogleClient googleClient;
+	    private string[] _citySearchPredictions;
+	    private ArrayAdapter _citySearchAdapter;
 
-        protected override async void OnCreate(Bundle bundle)
+	    protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
@@ -104,7 +108,37 @@ namespace DayTomato.Droid
 		{
 			_navigation.NavigationItemSelected += SetNavigationOnClick;
 			_cityControlPanelButton.Click += SetCityControlPanelButtonOnClick;
-		}
+
+            _cityAutocomplete.TextChanged += async (sender, e) =>
+            {
+                try
+                {
+                    _citySearchPredictions = await MainActivity.googleClient.PredictPlaces(e.Text.ToString(),
+                                                                                         _currentLocation.Latitude,
+                                                                                         _currentLocation.Longitude);
+                    _citySearchAdapter = new ArrayAdapter(this,
+                                                         Android.Resource.Layout.SimpleDropDownItem1Line,
+                                                         _citySearchPredictions);
+                    _cityAutocomplete.Adapter = _citySearchAdapter;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(TAG, ex.Message);
+                }
+            };
+
+            //TODO: Add further functionality that depends on user selection 
+            //_cityAutocomplete.ItemClick += async (Sender, e) =>
+            //{
+            //    try
+            //    {
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Log.Error(TAG, ex.Message);
+            //    }
+            //};
+        }
 
 		private void SetInstances()
 		{
