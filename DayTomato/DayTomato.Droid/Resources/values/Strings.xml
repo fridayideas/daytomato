@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="application_name">DayTomato</string>
+
+  <string name="drawer_open">Open</string>
+  <string name="drawer_close">Close</string>
   
   <!-- Home Page -->
   <string name="home_pins_text">Pins</string>

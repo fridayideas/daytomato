@@ -162,18 +162,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Fragments\AddPinsDialogFragment.cs" />
+    <Compile Include="Fragments\AddPinsFragment.cs" />
     <Compile Include="Fragments\EditPinDialogFragment.cs" />
-    <Compile Include="Fragments\CreateTripDialogFragment.cs" />
-    <Compile Include="Fragments\MapFragment.cs" />
-    <Compile Include="Fragments\HomeFragment.cs" />
+    <Compile Include="Fragments\CreateTripDetailsFragment.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Fragments\CreatePinDialogFragment.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Adapters\ViewPinAdapter.cs" />
-    <Compile Include="Fragments\TripFragment.cs" />
-    <Compile Include="Adapters\HomeFeedAdapter.cs" />
+    <Compile Include="Adapters\PlacesAdapter.cs" />
     <Compile Include="Adapters\ViewTripAdapter.cs" />
     <Compile Include="Util\PolyUtil.cs" />
     <Compile Include="Util\ClusterPin.cs" />
@@ -183,6 +180,12 @@
     <Compile Include="Util\PictureUtil.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="Fragments\FilterDialogFragment.cs" />
+    <Compile Include="Activities\TripControlPanel.cs" />
+    <Compile Include="Activities\MapActivity.cs" />
+    <Compile Include="Activities\CreateTripActivity.cs" />
+    <Compile Include="Activities\PlacesActivity.cs" />
+    <Compile Include="Activities\TripsActivity.cs" />
+    <Compile Include="Util\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -204,13 +207,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_place_black_24dp.png" />
     <AndroidResource Include="Resources\drawable\select_location_pin.xml" />
     <AndroidResource Include="Resources\layout\create_pin_dialog_fragment.axml" />
-    <AndroidResource Include="Resources\layout\home_fragment.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\Main.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\map_fragment.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\view_pin_dialog_fragment.axml" />
@@ -219,10 +216,9 @@
     <AndroidResource Include="Resources\drawable\down_arrow_unfilled.xml" />
     <AndroidResource Include="Resources\drawable\up_arrow_filled.xml" />
     <AndroidResource Include="Resources\drawable\up_arrow_unfilled.xml" />
-    <AndroidResource Include="Resources\layout\trip_fragment.axml" />
     <AndroidResource Include="Resources\drawable\ic_directions_walk_white_24px.xml" />
     <AndroidResource Include="Resources\layout\home_feed_notification_view_holder.axml" />
-    <AndroidResource Include="Resources\layout\trip_suggestion_view_holder.axml" />
+    <AndroidResource Include="Resources\layout\trip_view_holder.axml" />
     <None Include="DLL\GoogleMapsUtilityBinding.dll" />
     <AndroidResource Include="Resources\layout\comment_view_holder.axml" />
     <AndroidResource Include="Resources\drawable\three_dots.png" />
@@ -238,11 +234,20 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon.png" />
-    <AndroidResource Include="Resources\layout\create_trip_dialog_fragment.axml" />
-    <AndroidResource Include="Resources\layout\add_pins_dialog_fragment.axml" />
+    <AndroidResource Include="Resources\layout\create_trip_details_fragment.axml" />
+    <AndroidResource Include="Resources\layout\add_pins_fragment.axml" />
     <AndroidResource Include="Resources\layout\edit_pin_dialog_fragment.axml" />
     <AndroidResource Include="Resources\layout\filter_dialog_fragment.axml" />
     <AndroidResource Include="Resources\drawable\rounded.xml" />
+    <AndroidResource Include="Resources\menu\main_nav_menu.xml" />
+    <AndroidResource Include="Resources\drawable\ic_menu_black_24px.svg" />
+    <AndroidResource Include="Resources\drawable\ic_menu_white_24px.svg" />
+    <AndroidResource Include="Resources\layout\trip_control_panel.axml" />
+    <AndroidResource Include="Resources\layout\map_activity.axml" />
+    <AndroidResource Include="Resources\layout\places_activity.axml" />
+    <AndroidResource Include="Resources\layout\trip_activity.axml" />
+    <AndroidResource Include="Resources\layout\create_trip_activity.axml" />
+    <AndroidResource Include="Resources\drawable\ic_add_white_24px.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

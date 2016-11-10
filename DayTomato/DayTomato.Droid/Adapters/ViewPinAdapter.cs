@@ -1,6 +1,6 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
-using System.IO;
 using Android.App;
 using Android.Graphics;
 using Android.Support.V7.Widget;
@@ -8,7 +8,6 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
-using Plugin.Media;
 
 namespace DayTomato.Droid
 {

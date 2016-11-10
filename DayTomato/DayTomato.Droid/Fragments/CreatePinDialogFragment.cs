@@ -1,7 +1,5 @@
 ﻿
 using System;
-
-using Android.Support.V4.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
@@ -12,7 +10,8 @@ using Android.Util;
 using Plugin.Media;
 using System.IO;
 using System.Text.RegularExpressions;
-using Android.Support.Design.Widget;
+using Android.App;
+
 namespace DayTomato.Droid
 {
 	public class CreatePinDialogFragment : DialogFragment

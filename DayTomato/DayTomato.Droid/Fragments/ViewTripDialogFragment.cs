@@ -1,6 +1,4 @@
 ﻿
-using System.Collections.Generic;
-using Android.Support.V4.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
@@ -9,8 +7,7 @@ using Android.Widget;
 using DayTomato.Models;
 using Newtonsoft.Json;
 using System;
-using Android.Graphics.Drawables;
-using System.Threading.Tasks;
+using Android.App;
 
 namespace DayTomato.Droid
 {

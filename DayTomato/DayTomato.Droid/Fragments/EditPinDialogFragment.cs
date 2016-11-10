@@ -1,21 +1,17 @@
 ﻿
 using System;
-
-using Android.Support.V4.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using Android.Gms.Maps.Model;
 using Android.Graphics;
 using Android.Util;
 using Plugin.Media;
 using System.IO;
 using DayTomato.Models;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using Android.Graphics.Drawables;
 using System.Text.RegularExpressions;
+using Android.App;
 
 namespace DayTomato.Droid
 {
@@ -56,8 +52,8 @@ namespace DayTomato.Droid
 			_review = (EditText)view.FindViewById(Resource.Id.edit_pin_dialog_review);
             _cost = (EditText)view.FindViewById(Resource.Id.edit_pin_dialog_cost);
             
-			this.Dialog.SetCancelable(true);
-			this.Dialog.SetCanceledOnTouchOutside(true);
+			Dialog.SetCancelable(true);
+			Dialog.SetCanceledOnTouchOutside(true);
 
 			SetInstances();
 			SetListeners();
@@ -70,7 +66,7 @@ namespace DayTomato.Droid
 			Dialog.Window.SetLayout(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
 		}
 
-		public override async void OnDismiss(IDialogInterface dialog)
+		public override void OnDismiss(IDialogInterface dialog)
 		{
 			base.OnDismiss(dialog);
 
@@ -134,7 +130,7 @@ namespace DayTomato.Droid
 
 				}
 				else {
-					Toast.MakeText(this.Activity, "Created Pin", ToastLength.Short).Show();
+					Toast.MakeText(Activity, "Created Pin", ToastLength.Short).Show();
 					_editPin = true;
 					Dialog.Dismiss();
 				}
@@ -184,7 +180,7 @@ namespace DayTomato.Droid
 			await CrossMedia.Current.Initialize();
 			if (!CrossMedia.Current.IsPickPhotoSupported)
 			{
-				Toast.MakeText(this.Activity, "Cannot choose photos", ToastLength.Short);
+				Toast.MakeText(Activity, "Cannot choose photos", ToastLength.Short);
 				return;
 			}
 
@@ -216,7 +212,7 @@ namespace DayTomato.Droid
 			await CrossMedia.Current.Initialize();
 			if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
 			{
-				Toast.MakeText(this.Activity, "No Camera available", ToastLength.Short);
+				Toast.MakeText(Activity, "No Camera available", ToastLength.Short);
 				return;
 			}
 

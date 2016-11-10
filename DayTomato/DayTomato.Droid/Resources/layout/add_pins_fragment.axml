@@ -11,13 +11,6 @@
         android:layout_height="match_parent"
         android:padding="16dp">
         <TextView
-            android:text="Create a trip"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_pin_dialog_title" />
-        <TextView
             android:text="Activities in this trip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
@@ -29,7 +22,7 @@
             android:id="@+id/add_pins_dialog_autocomplete"
             android:textColor="@color/black"
             android:inputType="textCapWords"
-            android:hint="Type to find a pin to add to this trip" />
+            android:hint="Type to find a place to add to this trip" />
         <Button
             android:text="ADD"
             android:layout_width="wrap_content"
@@ -42,31 +35,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/add_pins_dialog_listpins"
             android:textColor="@color/black" />
-        <android.support.v4.widget.Space
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:text="Cancel"
-                android:background="@color/material_grey_300"
-                android:textColor="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/add_pins_dialog_cancel_button"
-                android:layout_margin="10dp"
-                android:layout_weight="0.5" />
-            <Button
-                android:text="Create"
-                android:background="@color/colorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/add_pins_dialog_create_button"
-                android:layout_margin="10dp"
-                android:layout_weight="0.5" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:minWidth="25px"
+            android:minHeight="25px" />
     </LinearLayout>
 </ScrollView>
