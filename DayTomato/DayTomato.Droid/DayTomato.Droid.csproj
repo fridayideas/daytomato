@@ -172,6 +172,7 @@
     <Compile Include="Adapters\ViewPinAdapter.cs" />
     <Compile Include="Adapters\PlacesAdapter.cs" />
     <Compile Include="Adapters\ViewTripAdapter.cs" />
+    <Compile Include="Util\ClusterRenderer.cs" />
     <Compile Include="Util\PolyUtil.cs" />
     <Compile Include="Util\ClusterPin.cs" />
     <Compile Include="Fragments\ViewPinDialogFragment.cs" />
