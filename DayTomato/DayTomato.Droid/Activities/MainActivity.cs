@@ -113,9 +113,7 @@ namespace DayTomato.Droid
             {
                 try
                 {
-                    _citySearchPredictions = await MainActivity.googleClient.PredictPlaces(e.Text.ToString(),
-                                                                                         _currentLocation.Latitude,
-                                                                                         _currentLocation.Longitude);
+                    _citySearchPredictions = await googleClient.PredictCities(e.Text.ToString());
                     _citySearchAdapter = new ArrayAdapter(this,
                                                          Android.Resource.Layout.SimpleDropDownItem1Line,
                                                          _citySearchPredictions);

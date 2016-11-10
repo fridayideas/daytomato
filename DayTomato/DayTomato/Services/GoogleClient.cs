@@ -86,7 +86,40 @@ namespace DayTomato
 			return new string[] { };
 		}
 
-		public async Task<Models.Coordinate> Geocode(string address)
+        public async Task<string[]> PredictCities(string input)
+        {
+            string[] predictions;
+            // Example:
+            // https://maps.googleapis.com/maps/api/place/autocomplete/xml?
+            // input=Amoeba&types=establishment&location=37.76999,-122.44696&radius=500&key=YOUR_API_KEY
+
+            var uri = new Uri(GOOGLE_PLACES_AUTO_COMPLETE_BASE_URL
+                              + "input=" + input
+                              + "&types=(cities)"
+                              + "&key=" + GOOGLE_API_KEY);
+
+            var result = "";
+            var response = await httpClient.GetAsync(uri);
+            if (response.IsSuccessStatusCode)
+            {
+                result = await response.Content.ReadAsStringAsync();
+                var Jsonobject = JsonConvert.DeserializeObject<Place.RootObject>(result);
+                List<Place.Prediction> googlePredictions = Jsonobject.predictions;
+                predictions = new string[googlePredictions.Count];
+
+                int index = 0;
+                foreach (Place.Prediction p in googlePredictions)
+                {
+                    predictions[index] = p.description;
+                    index++;
+                }
+                return predictions;
+            }
+
+            return new string[] { };
+        }
+
+        public async Task<Models.Coordinate> Geocode(string address)
 		{
 			Models.Coordinate coords = new Models.Coordinate(0,0);
 			// Example:
