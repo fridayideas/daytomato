@@ -13,14 +13,22 @@ namespace DayTomato.Droid
 		public long Id { get; private set; }
 		public string Title { get; set; }
 		public LatLng Position { get; set; }
+        public BitmapDescriptor icon;
 
-		public ClusterPin(double lat, double lng)
+		public ClusterPin(double lat, double lng, string title, BitmapDescriptor icon)
 		{
 			Position = new LatLng(lat, lng);
+            Title = title;
+            this.icon = icon;
 
 			// Ensure that each cluster pin has a unique Id
 			Id = Interlocked.Increment(ref nextID);
 		}
 
-	}
+        public BitmapDescriptor getIcon()
+        {
+            return icon;
+        }
+
+    }
 }

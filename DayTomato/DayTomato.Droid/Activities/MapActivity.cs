@@ -60,6 +60,7 @@ namespace DayTomato.Droid
 		private Dictionary<long, List<LatLng>> _markerPolygons;
 		private Dictionary<long, ClusterPin> _markers;
 		private ClusterManager _clusterManager;
+        private ClusterRenderer _clusterRenderer;
 		private const double PolyRadius = 0.0001;
 
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -174,7 +175,7 @@ namespace DayTomato.Droid
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude + PolyRadius),
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude - PolyRadius)
 				};
-				var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude) { Title = pin.Name };
+				var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, BitmapDescriptorFactory.FromResource(Resource.Drawable.GTPin));
 				_clusterManager.AddItem(m);
 
 				// Add new pin
@@ -199,7 +200,8 @@ namespace DayTomato.Droid
 
 			// Clustering
 			_clusterManager = new ClusterManager(this, _map);
-			_clusterManager.SetOnClusterItemClickListener(this);
+            _clusterRenderer = new ClusterRenderer(this, _map, _clusterManager);
+            _clusterManager.SetOnClusterItemClickListener(this);
 			_clusterManager.SetAlgorithm(new Com.Google.Maps.Android.Clustering.Algo.PreCachingAlgorithmDecorator
 										 (new Com.Google.Maps.Android.Clustering.Algo.GridBasedAlgorithm()));
 			// Map Listeners
