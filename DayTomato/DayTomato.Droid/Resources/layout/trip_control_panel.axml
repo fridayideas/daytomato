@@ -28,25 +28,10 @@
                 android:layout_columnWeight="0.5"
                 android:textColor="@color/white"
                 android:layout_centerHorizontal="true"
-                android:adjustViewBounds="true"
                 android:layout_margin="4dp"
                 android:background="@drawable/tripbutton"
-                android:cropToPadding="false"
-                android:gravity="center_horizontal|bottom" />
-            <Button
-                android:text="Create a trip"
-                android:id="@+id/trip_control_panel_create_trip"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_rowWeight="0.5"
-                android:layout_columnWeight="0.5"
-                android:textColor="@color/white"
-                android:layout_centerHorizontal="true"
-                android:adjustViewBounds="true"
-                android:layout_margin="4dp"
-                android:background="@drawable/createtripbutton"
-                android:cropToPadding="false"
-                android:gravity="center_horizontal|bottom" />
+                android:gravity="center_horizontal|bottom"
+                android:padding="8dp" />
             <Button
                 android:text="View places"
                 android:id="@+id/trip_control_panel_view_local_places"
@@ -56,11 +41,10 @@
                 android:layout_columnWeight="0.5"
                 android:textColor="@color/white"
                 android:layout_centerHorizontal="true"
-                android:adjustViewBounds="true"
                 android:layout_margin="4dp"
                 android:background="@drawable/viewplacesbutton"
-                android:cropToPadding="false"
-                android:gravity="center_horizontal|bottom" />
+                android:gravity="center_horizontal|bottom"
+                android:padding="8dp" />
             <Button
                 android:text="View map"
                 android:id="@+id/trip_control_panel_view_map"
@@ -70,11 +54,23 @@
                 android:layout_columnWeight="0.5"
                 android:textColor="@color/white"
                 android:layout_centerHorizontal="true"
-                android:adjustViewBounds="true"
                 android:layout_margin="4dp"
                 android:background="@drawable/viewmapbutton"
-                android:cropToPadding="false"
-                android:gravity="center_horizontal|bottom" />
+                android:gravity="center_horizontal|bottom"
+                android:padding="8dp" />
+            <Button
+                android:text="Create a trip"
+                android:id="@+id/trip_control_panel_create_trip"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_rowWeight="0.5"
+                android:layout_columnWeight="0.5"
+                android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="4dp"
+                android:background="@drawable/createtripbutton"
+                android:gravity="center_horizontal|bottom"
+                android:padding="8dp" />
         </GridLayout>
     </FrameLayout>
 </LinearLayout>
