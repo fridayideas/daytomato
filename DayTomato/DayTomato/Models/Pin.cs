@@ -232,7 +232,9 @@ namespace DayTomato.Models
 		movie_theater,
 		pet_store,
 		pharmacy,
+        store,
 		shoe_store,
+        shopping,
 		shopping_mall,
 		spa
 	}
@@ -255,7 +257,6 @@ namespace DayTomato.Models
 		meal_delivery,
 		meal_takeaway,
 		restaurant,
-		store,
 		coffee,
 		tea,
 		pubs,

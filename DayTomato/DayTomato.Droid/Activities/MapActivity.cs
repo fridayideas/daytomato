@@ -185,7 +185,7 @@ namespace DayTomato.Droid
                 // Set the custom icon for pins of type 1-4
                 if (pin.Type == 1){ m = setIcon(pin.Rating, m, "T");} // Food
                 else if (pin.Type == 2) { m = setIcon(pin.Rating, m, "Bi"); } // POI
-                //else if (pin.Type == 3) { m = setIcon(pin.Rating, m, "Bag"); } // Shopping
+                else if (pin.Type == 3) { m = setIcon(pin.Rating, m, "P"); } // Shopping
                 else if (pin.Type == 4) { m = setIcon(pin.Rating, m, "B"); } // Outdoor
 
                 _clusterManager.AddItem(m);
