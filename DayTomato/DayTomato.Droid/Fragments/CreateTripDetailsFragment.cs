@@ -46,6 +46,7 @@ namespace DayTomato.Droid
 			trip.Description = _description.Text;
 			trip.Cost = Convert.ToDouble(_cost.Text);
 			trip.CreateDate = DateTime.Today;
+			trip.LinkedAccount = MainActivity.GetAccount().Username;
 
 			return trip;
         }
@@ -54,6 +55,8 @@ namespace DayTomato.Droid
 		{
 			bool cost = true;
 			bool name = true;
+			bool type = true;
+			bool description = true;
 
 			// Cost validation
 			Regex regex = new Regex(@"[0-9]+");
@@ -69,7 +72,21 @@ namespace DayTomato.Droid
 				name = false;
 			}
 
-			return cost && name;
+			// Type validation
+			if (_type.Text == null || _type.Text == "")
+			{
+				_type.Error = "Please enter a valid type";
+				type = false;
+			}
+
+			// Description validation
+			if (_description.Text == null || _description.Text == "")
+			{
+				_name.Error = "Please enter a valid description";
+				description = false;
+			}
+
+			return cost && name && type && description;
 		}
     }
 }

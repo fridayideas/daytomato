@@ -91,12 +91,16 @@ namespace DayTomato.Droid
 				// Trip filled with details
 				_trip = trip;
 			}
+			else
+			{
+				Toast.MakeText(this, "Please enter the trip details", ToastLength.Long).Show();
+			}
 		}
 
 		private void SetTripPins()
 		{
 			_pins = _pinsFragment.FinalizePins();
-			if (_pins != null)
+			if (_pins != null && _pins.Count > 0)
 			{
 				FragmentManager
 				   .BeginTransaction()
@@ -108,6 +112,10 @@ namespace DayTomato.Droid
 
 				// Now trip can be created
 				CreateTrip();
+			}
+			else
+			{
+				Toast.MakeText(this, "Please enter at least one place", ToastLength.Long).Show();
 			}
 		}
 

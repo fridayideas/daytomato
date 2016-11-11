@@ -60,5 +60,30 @@ namespace DayTomato.Droid
 
 			return (int)inSampleSize;
 		}
+
+		public static Bitmap StitchImages(Bitmap[] bitmaps)
+		{
+			const int offset = 20;
+			Bitmap final = null;
+			int width = 0;
+			int height = 0;
+			for (int i = 0; i < bitmaps.Length; ++i)
+			{
+				width += bitmaps[i].Width;
+				height = bitmaps[i].Height;
+			}
+			final = Bitmap.CreateBitmap((width + bitmaps.Length * offset) * 2, 
+			                            height * 2, 
+			                            Bitmap.Config.Argb8888);
+
+			Canvas stitched = new Canvas(final);
+			for (int i = 0; i < bitmaps.Length; ++i)
+			{
+				Bitmap copy = Bitmap.CreateScaledBitmap(bitmaps[i], bitmaps[i].Width * 2, bitmaps[i].Height * 2, true);
+				stitched.DrawBitmap(copy, (copy.Width * i) + (i * offset), 0, null);
+			}
+
+			return final;
+		}
 	}
 }

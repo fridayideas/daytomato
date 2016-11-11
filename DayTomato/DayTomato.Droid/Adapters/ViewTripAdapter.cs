@@ -1,7 +1,9 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.App;
+using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
@@ -73,8 +75,8 @@ namespace DayTomato.Droid
 			vh.Account.Text = _suggestions[position].LinkedAccount;
 			vh.Likes.Text = _suggestions[position].Likes.ToString();
 			vh.Description.Text = _suggestions[position].Description;
-			vh.Cost.Text = "$" + _suggestions[position].Cost;
-			vh.Rating.Text = "Rating " + _suggestions[position].Rating;
+			SetCost(vh, _suggestions[position].Cost);
+			SetImage(vh, _suggestions[position].Pins);
 
 			try
 			{
@@ -217,6 +219,52 @@ namespace DayTomato.Droid
 			};
 		}
 
+		private void SetCost(TripSuggestionViewHolder vh, double cost)
+		{
+			if (cost > 0.0)
+			{
+				vh.Cost.Text = "$" + cost;
+			}
+			else
+			{
+				vh.Cost.Text = "FREE";
+			}
+		}
+
+		private async void SetImage(TripSuggestionViewHolder vh, List<Pin> pins)
+		{
+			List<string> imageUrls = pins.Select(p => p.ImageURL).ToList();
+			Bitmap[] bitmaps = new Bitmap[imageUrls.Count];
+
+			for (int i = 0; i < bitmaps.Length; ++i)
+			{
+				var imageUrl = imageUrls[i];
+				if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
+				{
+					try
+					{
+						var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
+						var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+						bitmaps[i] = imageBitmap;
+					}
+					catch (Exception ex)
+					{
+						Log.Error(TAG, ex.Message);
+					}
+				}
+			}
+			try
+			{
+				Bitmap bitmap = PictureUtil.StitchImages(bitmaps);
+				vh.StitchedImages.SetImageBitmap(bitmap);
+			}
+			catch (Exception ex)
+			{
+				Log.Error(TAG, ex.Message);
+				vh.StitchedImages.SetImageBitmap(null);
+			}
+		}
+
 		//This will fire any event handlers that are registered with our ItemClick
 		//event.
 		private void OnClick(int position)
@@ -239,8 +287,8 @@ namespace DayTomato.Droid
 		public TextView Likes { get; private set; }
 		public ImageView DownButton { get; private set; }
 		public TextView Description { get; private set; }
+		public ImageView StitchedImages { get; private set; }
 		public TextView Cost { get; private set; }
-		public TextView Rating { get; private set; }
 		public TextView AddComment { get; private set; }
 		public EditText AddCommentInput { get; private set; }
 		public Button AddCommentButton { get; private set; }
@@ -261,8 +309,8 @@ namespace DayTomato.Droid
 			Likes = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_likes);
 			DownButton = itemView.FindViewById<ImageView>(Resource.Id.trip_suggestion_down_button);
 			Description = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_description);
+			StitchedImages = itemView.FindViewById<ImageView>(Resource.Id.trip_suggestion_stitched_images);
 			Cost = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_cost);
-			Rating = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_rating);
 			AddComment = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_add_comment);
 			AddCommentInput = itemView.FindViewById<EditText>(Resource.Id.trip_suggestion_comment_edit_text);
 			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.trip_suggestion_add_comment_button);
