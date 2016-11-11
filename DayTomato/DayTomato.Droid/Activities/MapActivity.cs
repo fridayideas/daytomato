@@ -22,6 +22,7 @@ using DayTomato.Models;
 using Newtonsoft.Json;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
+using Android.Content.Res;
 
 namespace DayTomato.Droid
 {
@@ -60,6 +61,7 @@ namespace DayTomato.Droid
 		private Dictionary<long, List<LatLng>> _markerPolygons;
 		private Dictionary<long, ClusterPin> _markers;
 		private ClusterManager _clusterManager;
+        private ClusterRenderer _clusterRenderer;
 		private const double PolyRadius = 0.0001;
 
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -174,8 +176,19 @@ namespace DayTomato.Droid
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude + PolyRadius),
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude - PolyRadius)
 				};
-				var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude) { Title = pin.Name };
-				_clusterManager.AddItem(m);
+
+                var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name);
+                if (pin.Type == 0)
+                {
+                    pin.Type = pin.GuessType(pin.Description);
+                }
+                // Set the custom icon for pins of type 1-4
+                if (pin.Type == 1){ m = setIcon(pin.Rating, m, "T");} // Food
+                else if (pin.Type == 2) { m = setIcon(pin.Rating, m, "Bi"); } // POI
+                else if (pin.Type == 3) { m = setIcon(pin.Rating, m, "P"); } // Shopping
+                else if (pin.Type == 4) { m = setIcon(pin.Rating, m, "B"); } // Outdoor
+
+                _clusterManager.AddItem(m);
 
 				// Add new pin
 				_markers.Add(m.Id, m);
@@ -189,6 +202,43 @@ namespace DayTomato.Droid
 			}
 		}
 
+        private ClusterPin setIcon(float rating, ClusterPin m, string file)
+        {
+            if (rating < 2) {
+                file = file + "Pin1";
+                try
+                {
+                    m.iconResId = (int)typeof(Resource.Drawable).GetField(file).GetValue(null);
+                }catch(Exception ex)
+                {
+                    Log.Error("icon error", ex.Message);
+                }
+                return m;
+            } else if (rating >= 2 && rating <= 4)
+            {
+                file = file + "Pin2";
+                try
+                {
+                    m.iconResId = (int)typeof(Resource.Drawable).GetField(file).GetValue(null);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("icon error", ex.Message);
+                }
+                return m;
+            }
+            file = file + "Pin3";
+            try
+            {
+                m.iconResId = (int)typeof(Resource.Drawable).GetField(file).GetValue(null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("icon error", ex.Message);
+            }
+            return m;
+        }
+
 		// Almost like a callback, gets called when the map is loaded
 		public void OnMapReady(GoogleMap googleMap)
 		{
@@ -199,7 +249,8 @@ namespace DayTomato.Droid
 
 			// Clustering
 			_clusterManager = new ClusterManager(this, _map);
-			_clusterManager.SetOnClusterItemClickListener(this);
+            _clusterRenderer = new ClusterRenderer(this, _map, _clusterManager);
+            _clusterManager.SetOnClusterItemClickListener(this);
 			_clusterManager.SetAlgorithm(new Com.Google.Maps.Android.Clustering.Algo.PreCachingAlgorithmDecorator
 										 (new Com.Google.Maps.Android.Clustering.Algo.GridBasedAlgorithm()));
 			// Map Listeners
