@@ -51,7 +51,7 @@ namespace DayTomato.Droid
 		private void SetViewTripsOnClick(object sender, System.EventArgs e)
 		{
 			Intent intent = new Intent(this, typeof(TripsActivity));
-			StartActivity(intent);
+			StartActivityForResult(intent, Constants.ADD_TRIP_REQUEST);
 		}
 
 		private void SetCreateTripOnClick(object sender, System.EventArgs e)
@@ -79,7 +79,7 @@ namespace DayTomato.Droid
 			{
 				if (resultCode == Result.Ok)
 				{
-					Toast.MakeText(this, "Your trip was created", ToastLength.Long);
+					Toast.MakeText(this, "Your trip was created", ToastLength.Long).Show();
 				}
 			}
 		}

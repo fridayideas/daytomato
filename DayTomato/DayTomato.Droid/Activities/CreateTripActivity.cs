@@ -18,11 +18,14 @@ namespace DayTomato.Droid
 		private Button _nextButton;                                   // Move on to adding pins to the trip button
 		private Button _cancelButton;                                    // Cancel create trip button
 		private FrameLayout _frame;
-		private CreateTrip _trip;
-		private enum Step { DETAILS, PINS };
-		private Step _step = Step.DETAILS;
+
 		private CreateTripDetailsFragment _detailsFragment;
 		private AddPinsFragment _pinsFragment;
+
+		private CreateTrip _trip;
+		List<Pin> _pins;
+		private enum Step { DETAILS, PINS };
+		private Step _step = Step.DETAILS;
 		private bool _tripCreated;
 
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -92,8 +95,8 @@ namespace DayTomato.Droid
 
 		private void SetTripPins()
 		{
-			List<Pin> pins = _pinsFragment.FinalizePins();
-			if (pins != null)
+			_pins = _pinsFragment.FinalizePins();
+			if (_pins != null)
 			{
 				FragmentManager
 				   .BeginTransaction()
@@ -101,7 +104,7 @@ namespace DayTomato.Droid
 				   .Commit();
 
 				// Trip filled with pins
-				_trip.Pins = pins.Select(p => p.Id).ToList();
+				_trip.Pins = _pins.Select(p => p.Id).ToList();
 
 				// Now trip can be created
 				CreateTrip();
@@ -118,6 +121,8 @@ namespace DayTomato.Droid
 
 			if (_tripCreated)
 			{
+				//TODO: Send request to server to add to my trips
+				MainActivity.AddToMyTrips(new Trip(_trip, _pins));
 				SetResult(Result.Ok, returnIntent);
 			}
 			else

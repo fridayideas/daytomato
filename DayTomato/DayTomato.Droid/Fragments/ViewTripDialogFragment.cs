@@ -13,12 +13,13 @@ namespace DayTomato.Droid
 {
 	public class ViewTripDialogFragment : DialogFragment
 	{
-		public event EventHandler<ViewTripDialogEventArgs> ViewTripDialogClosed;
+
 		private Trip _trip;
 		private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
 		private ViewPinAdapter _adapter;
 		private TextView _title;
+		private TextView _addToMyTrips;
 		private Button _return;
 		private Button _directions;
 
@@ -38,14 +39,15 @@ namespace DayTomato.Droid
 			_directions = view.FindViewById<Button>(Resource.Id.view_trip_dialog_map_button);
 			_return = view.FindViewById<Button>(Resource.Id.view_trip_dialog_return_button);
 			_title = view.FindViewById<TextView>(Resource.Id.view_trip_dialog_title);
+			_addToMyTrips = view.FindViewById<TextView>(Resource.Id.view_trip_add_to_my_trips);
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_trip_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
 			_adapter = new ViewPinAdapter(_trip.Pins, Activity);
 			_recyclerView.SetAdapter(_adapter);
 
-			this.Dialog.SetCancelable(true);
-			this.Dialog.SetCanceledOnTouchOutside(true);
+			Dialog.SetCancelable(true);
+			Dialog.SetCanceledOnTouchOutside(true);
 
 			SetInstances();
 			SetListeners();
@@ -62,13 +64,6 @@ namespace DayTomato.Droid
 		public override void OnDismiss(IDialogInterface dialog)
 		{
 			base.OnDismiss(dialog);
-			// Store and output data to the parent fragment
-			if (ViewTripDialogClosed != null)
-			{
-				ViewTripDialogClosed(this, new ViewTripDialogEventArgs
-				{
-				});
-			}
 		}
 
 		private void SetInstances()
@@ -78,25 +73,33 @@ namespace DayTomato.Droid
 
 		private void SetListeners()
 		{
-			_return.Click += (sender, e) =>
-			{
-				Dialog.Dismiss();
-			};
-			_directions.Click += (sender, e) => 
-			{
-				string coords = "";
-				foreach (var p in _trip.Pins)
-				{
-					coords += "/" + p.Coordinate.latitude + "," + p.Coordinate.longitude;
-				}
-				var geoUri = Android.Net.Uri.Parse("https://www.google.com/maps/dir/" + coords);
-				var mapIntent = new Intent(Intent.ActionView, geoUri);
-				StartActivity(mapIntent);
-			};
+			_return.Click += Return;
+			_directions.Click += ShowDirections;
+			_addToMyTrips.Click += AddToMyTrips;
 		}
-	}
 
-	public class ViewTripDialogEventArgs
-	{
+		private void Return(object sender, EventArgs e)
+		{
+			Dialog.Dismiss();
+		}
+
+		private void ShowDirections(object sender, EventArgs e)
+		{
+			string coords = "";
+			foreach (var p in _trip.Pins)
+			{
+				coords += "/" + p.Coordinate.latitude + "," + p.Coordinate.longitude;
+			}
+			var geoUri = Android.Net.Uri.Parse("https://www.google.com/maps/dir/" + coords);
+			var mapIntent = new Intent(Intent.ActionView, geoUri);
+			StartActivity(mapIntent);
+		}
+
+		private void AddToMyTrips(object sender, EventArgs e)
+		{
+			//TODO: Send request to server to add to my trips
+			MainActivity.AddToMyTrips(_trip);
+			Toast.MakeText(Activity, "Added " + _trip.Name + " to your trips", ToastLength.Long).Show();
+		}
 	}
 }

@@ -19,21 +19,28 @@ using Android.Support.V4.Widget;
 using Android.Support.Design.Widget;
 using Android.Locations;
 using Android.Support.V7.App;
-using Android.Views.InputMethods;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace DayTomato.Droid
 {
     [Activity(Icon = "@drawable/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-    public class MainActivity : AppCompatActivity
+	public class MainActivity : AppCompatActivity
 	{
-		
+
 		private static readonly string TAG = "MAIN_ACTIVITY";
 
 		private AutoCompleteTextView _cityAutocomplete;
 		private Button _cityControlPanelButton;
-		private RecyclerView _myTripsRecyclerView;
+
 		private DrawerLayout _drawer;
 		private NavigationView _navigation;
+
+		private static List<Trip> _myTrips;
+		private static bool _refresh = false;
+		private ViewTripAdapter _adapter;
+		private RecyclerView _recyclerView;
+		private LinearLayoutManager _layoutManager;
 
 		private static LatLng _currentLocation;
 		private string _locality;
@@ -48,20 +55,20 @@ namespace DayTomato.Droid
 	    private string[] _citySearchPredictions;
 	    private ArrayAdapter _citySearchAdapter;
 
-	    protected override async void OnCreate(Bundle bundle)
+	    protected override async void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
+            base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.Main);
 
-			this.Window.SetSoftInputMode(Android.Views.SoftInput.StateAlwaysHidden);
+			Window.SetSoftInputMode(Android.Views.SoftInput.StateAlwaysHidden);
 
 			// Autocomplete text view
 			_cityAutocomplete = FindViewById<AutoCompleteTextView>(Resource.Id.main_city_autocomplete);
 			// Go to control panel button
 			_cityControlPanelButton = FindViewById<Button>(Resource.Id.main_start_control_panel_button);
 			// My Trips recyclerview
-			_myTripsRecyclerView = FindViewById<RecyclerView>(Resource.Id.main_my_trips_recycler_view);
+			_recyclerView = FindViewById<RecyclerView>(Resource.Id.main_my_trips_recycler_view);
 			// Main drawer
 			_drawer = FindViewById<DrawerLayout>(Resource.Id.main_drawer);
 			// Main drawer navigation
@@ -104,6 +111,12 @@ namespace DayTomato.Droid
 			SetInstances();
         }
 
+		protected override void OnResume()
+		{
+			base.OnResume();
+			RefreshMyTrips();
+		}
+
 		private void SetListeners()
 		{
 			_navigation.NavigationItemSelected += SetNavigationOnClick;
@@ -141,6 +154,7 @@ namespace DayTomato.Droid
 		private void SetInstances()
 		{
 			SetButtonLocation();
+			GetMyTrips();
 		}
 
 		private async void SetButtonLocation()
@@ -159,11 +173,68 @@ namespace DayTomato.Droid
 			_cityControlPanelButton.Text = "Explore " + _locality;
 		}
 
+		private void GetMyTrips()
+		{
+			//TODO: Get my trips from server
+			_myTrips = new List<Trip>();
+
+			_layoutManager = new LinearLayoutManager(this);
+			_recyclerView.SetLayoutManager(_layoutManager);
+			_adapter = new ViewTripAdapter(_myTrips, this);
+			_adapter.HandleClick += OnHandleClick;
+			_recyclerView.SetAdapter(_adapter);
+		}
+
+		public static void AddToMyTrips(Trip trip)
+		{
+			if (!_myTrips.Contains(trip))
+			{
+				_myTrips.Add(trip);
+				_refresh = true;
+			}
+		}
+
+		private void RefreshMyTrips()
+		{
+			if (_refresh && _adapter != null)
+			{
+				_adapter.NotifyDataSetChanged();
+				_refresh = false;
+			}
+		}
+
+		private void OnHandleClick(object sender, int position)
+		{
+			var tripData = JsonConvert.SerializeObject(_myTrips[position]);
+
+			var fm = FragmentManager;
+			var ft = fm.BeginTransaction();
+
+			//Remove fragment else it will crash as it is already added to backstack
+			var prev = fm.FindFragmentByTag("ViewTripDialog");
+			if (prev != null)
+			{
+				ft.Remove(prev);
+			}
+
+			ft.AddToBackStack(null);
+
+			// Create and show the dialog.
+			var bundle = new Bundle();
+			bundle.PutString("VIEW_TRIP_TITLE", _myTrips[position].Name);
+			bundle.PutString("VIEW_TRIP_DATA", tripData);
+
+			var viewTripDialogFragment = ViewTripDialogFragment.NewInstance(bundle);
+
+			//Add fragment
+			viewTripDialogFragment.Show(fm, "ViewTripDialog");
+		}
+
 		private void SetCityControlPanelButtonOnClick(object sender, System.EventArgs e)
 		{
 			Intent intent = new Intent(this, typeof(TripControlPanel));
 			intent.PutExtra("TRIP_LOCALITY", _locality);
-			StartActivityForResult(intent, Constants.TRIP_CONTROL_PANEL_REQUEST);
+			StartActivityForResult(intent, Constants.TRIP_CONTROL_PANEL);
 		}
 
 		private void SetNavigationOnClick(object sender, NavigationView.NavigationItemSelectedEventArgs e)
@@ -218,7 +289,7 @@ namespace DayTomato.Droid
 				Log.Error(TAG, tc.Message);
 				_currentLocation = new LatLng(0.0, 0.0);
 			}
-			catch (System.Exception ex)
+			catch (Exception ex)
 			{
 				Log.Error(TAG, ex.ToString());
 				_currentLocation = new LatLng(0.0, 0.0);
@@ -250,9 +321,7 @@ namespace DayTomato.Droid
 				await dayTomatoClient.UpdateAccountPins(accountId, pins);
 			}
 		}
-
-
-    }
+	}
 
 	public static class Picture
 	{
