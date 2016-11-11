@@ -35,6 +35,10 @@ namespace DayTomato.Droid
 
 		private DrawerLayout _drawer;
 		private NavigationView _navigation;
+		private TextView _username;
+		private TextView _places;
+		private TextView _seeds;
+		private ImageView _pic;
 
 		private static List<Trip> _myTrips;
 		private static bool _refresh = false;
@@ -115,6 +119,7 @@ namespace DayTomato.Droid
 		{
 			base.OnResume();
 			RefreshMyTrips();
+			RefreshAccount();
 		}
 
 		private void SetListeners()
@@ -155,6 +160,22 @@ namespace DayTomato.Droid
 		{
 			SetButtonLocation();
 			GetMyTrips();
+			SetNavigationMenu();
+		}
+
+		private void SetNavigationMenu()
+		{
+			_username = _navigation.FindViewById<TextView>(Resource.Id.nav_header_username);
+			_places = _navigation.FindViewById<TextView>(Resource.Id.nav_header_places);
+			_seeds = _navigation.FindViewById<TextView>(Resource.Id.nav_header_seeds);
+			_pic = _navigation.FindViewById<ImageView>(Resource.Id.nav_header_profile_picture);
+
+			_username.Text = _account.Username;
+			Bitmap bmp = BitmapFactory.DecodeByteArray(_account.ProfilePicture, 0, _account.ProfilePicture.Length);
+			bmp = PictureUtil.CircleBitmap(bmp, bmp.Width/2);
+			_pic.SetImageBitmap(bmp);
+			_places.Text = _account.Pins.ToString();
+			_seeds.Text = _account.Seeds.ToString();
 		}
 
 		private async void SetButtonLocation()
@@ -203,6 +224,15 @@ namespace DayTomato.Droid
 			}
 		}
 
+		private void RefreshAccount()
+		{
+			if (_account != null)
+			{
+				_places.Text = _account.Pins.ToString();
+				_seeds.Text = _account.Seeds.ToString();
+			}
+		}
+
 		private void OnHandleClick(object sender, int position)
 		{
 			var tripData = JsonConvert.SerializeObject(_myTrips[position]);
@@ -241,15 +271,24 @@ namespace DayTomato.Droid
 		{
 			switch (e.MenuItem.ItemId)
 			{
-				case (Resource.Id.nav_home):
-					// React on 'nav_home' selection
+				case (Resource.Id.nav_view_trips):
+					Intent trips = new Intent(this, typeof(TripsActivity));
+					StartActivity(trips);
+					break;
+				case (Resource.Id.nav_view_places):
+					Intent places = new Intent(this, typeof(PlacesActivity));
+					StartActivity(places);
 					break;
 				case (Resource.Id.nav_map):
-					//
+					Intent maps = new Intent(this, typeof(MapActivity));
+					StartActivity(maps);
 					break;
-				case (Resource.Id.nav_about):
+				case (Resource.Id.nav_create_trip):
+					Intent create = new Intent(this, typeof(CreateTripActivity));
+					StartActivity(create);
 					break;
-				case (Resource.Id.nav_feedBack):
+				case (Resource.Id.nav_logout):
+					//TODO: LOGOUT
 					break;
 			}
 			// Close drawer
