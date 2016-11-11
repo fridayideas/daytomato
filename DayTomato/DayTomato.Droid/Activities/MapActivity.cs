@@ -177,19 +177,52 @@ namespace DayTomato.Droid
 				};
 
                 var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
-
-                if (pin.Type == 1)
-                { 
+                if (pin.Type == 0)
+                {
+                    pin.Type = pin.GuessType(pin.Description);
+                }
+                if (pin.Type == 1) //Food types
+                {
+                    if (pin.Rating < 2) 
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
+                    } else if (pin.Rating >= 2 && pin.Rating < 4)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.RTPin);
+                    } else if (pin.Rating >= 4)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GoTPin);
+                    }
+                } else if (pin.Type == 2) //POI types
+                {
+                    if(pin.Rating < 2)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBiPin);
+                    } else if (pin.Rating >= 2 && pin.Rating < 4)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.SBiPin);
+                    }
+                    else if (pin.Rating >= 4)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GBiPin);
+                    }
+                } /*else if (pin.Type == 3) //Shopping types
+                {
                     m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
-                } else if (pin.Type == 2)
+                }*/ else if (pin.Type == 4) //Outdoor types
                 {
-                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBiPin);
-                } /*else if (pin.Type == 3)
-                {
-                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
-                }*/ else if (pin.Type == 4)
-                {
-                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBPin);
+                    if (pin.Rating < 2)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBPin);
+                    }
+                    else if (pin.Rating >= 2 && pin.Rating < 4)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.SBPin);
+                    }
+                    else if (pin.Rating >= 4)
+                    {
+                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GBPin);
+                    }
                 }
                 _clusterManager.AddItem(m);
 
