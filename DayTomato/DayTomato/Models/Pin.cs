@@ -76,7 +76,7 @@ namespace DayTomato.Models
 	
 		public int GuessType(string type)
 		{
-			type.ToLower();
+			type = type.ToLower();
 			string[] types = type.Split(' ');
 			for (int i = 0; i < types.Length; i++)
 			{
