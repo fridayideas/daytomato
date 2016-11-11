@@ -136,7 +136,7 @@ namespace DayTomato.Droid
 			{
 				if (resultCode == Result.Ok)
 				{
-					Toast.MakeText(this, "Your trip was created", ToastLength.Long);
+					Toast.MakeText(this, "Your trip was created", ToastLength.Long).Show();
 					RefreshTrips();
 				}
 			}
@@ -154,7 +154,6 @@ namespace DayTomato.Droid
 				case Android.Resource.Id.Home:
 					Finish();
 					return true;
-
 				default:
 					return base.OnOptionsItemSelected(item);
 			}
