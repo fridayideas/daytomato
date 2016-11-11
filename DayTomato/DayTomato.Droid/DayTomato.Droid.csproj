@@ -356,31 +356,31 @@
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\GTPin.png" />
+    <AndroidResource Include="Resources\drawable\TPin1.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\BBiPin.png" />
+    <AndroidResource Include="Resources\drawable\BiPin1.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\BBPin.png" />
+    <AndroidResource Include="Resources\drawable\BPin1.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\GBiPin.png" />
+    <AndroidResource Include="Resources\drawable\BiPin3.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\GBPin.png" />
+    <AndroidResource Include="Resources\drawable\BPin3.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\GoTPin.png" />
+    <AndroidResource Include="Resources\drawable\TPin3.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\RTPin.png" />
+    <AndroidResource Include="Resources\drawable\TPin2.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\SBiPin.png" />
+    <AndroidResource Include="Resources\drawable\BiPin2.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\SBPin.png" />
+    <AndroidResource Include="Resources\drawable\BPin2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.24.2.1\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.24.2.1\build\Xamarin.Android.Support.Vector.Drawable.targets')" />

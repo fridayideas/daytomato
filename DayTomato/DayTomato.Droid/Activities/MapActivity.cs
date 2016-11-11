@@ -22,6 +22,7 @@ using DayTomato.Models;
 using Newtonsoft.Json;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
+using Android.Content.Res;
 
 namespace DayTomato.Droid
 {
@@ -176,54 +177,17 @@ namespace DayTomato.Droid
 					new LatLng(pin.Coordinate.latitude + PolyRadius, pin.Coordinate.longitude - PolyRadius)
 				};
 
-                var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
+                var m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name);
                 if (pin.Type == 0)
                 {
                     pin.Type = pin.GuessType(pin.Description);
                 }
-                if (pin.Type == 1) //Food types
-                {
-                    if (pin.Rating < 2) 
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
-                    } else if (pin.Rating >= 2 && pin.Rating < 4)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.RTPin);
-                    } else if (pin.Rating >= 4)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GoTPin);
-                    }
-                } else if (pin.Type == 2) //POI types
-                {
-                    if(pin.Rating < 2)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBiPin);
-                    } else if (pin.Rating >= 2 && pin.Rating < 4)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.SBiPin);
-                    }
-                    else if (pin.Rating >= 4)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GBiPin);
-                    }
-                } /*else if (pin.Type == 3) //Shopping types
-                {
-                    m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GTPin);
-                }*/ else if (pin.Type == 4) //Outdoor types
-                {
-                    if (pin.Rating < 2)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.BBPin);
-                    }
-                    else if (pin.Rating >= 2 && pin.Rating < 4)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.SBPin);
-                    }
-                    else if (pin.Rating >= 4)
-                    {
-                        m = new ClusterPin(pin.Coordinate.latitude, pin.Coordinate.longitude, pin.Name, Resource.Drawable.GBPin);
-                    }
-                }
+                // Set the custom icon for pins of type 1-4
+                if (pin.Type == 1){ m = setIcon(pin.Rating, m, "T");} // Food
+                else if (pin.Type == 2) { m = setIcon(pin.Rating, m, "Bi"); } // POI
+                //else if (pin.Type == 3) { m = setIcon(pin.Rating, m, "Bag"); } // Shopping
+                else if (pin.Type == 4) { m = setIcon(pin.Rating, m, "B"); } // Outdoor
+
                 _clusterManager.AddItem(m);
 
 				// Add new pin
@@ -237,6 +201,43 @@ namespace DayTomato.Droid
 				_markerPins[markerId].Add(pin);
 			}
 		}
+
+        private ClusterPin setIcon(float rating, ClusterPin m, string file)
+        {
+            if (rating < 2) {
+                file = file + "Pin1";
+                try
+                {
+                    m.iconResId = (int)typeof(Resource.Drawable).GetField(file).GetValue(null);
+                }catch(Exception ex)
+                {
+                    Log.Error("icon error", ex.Message);
+                }
+                return m;
+            } else if (rating >= 2 && rating <= 4)
+            {
+                file = file + "Pin2";
+                try
+                {
+                    m.iconResId = (int)typeof(Resource.Drawable).GetField(file).GetValue(null);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("icon error", ex.Message);
+                }
+                return m;
+            }
+            file = file + "Pin3";
+            try
+            {
+                m.iconResId = (int)typeof(Resource.Drawable).GetField(file).GetValue(null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("icon error", ex.Message);
+            }
+            return m;
+        }
 
 		// Almost like a callback, gets called when the map is loaded
 		public void OnMapReady(GoogleMap googleMap)

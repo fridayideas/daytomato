@@ -18,28 +18,28 @@ namespace DayTomato.Droid
 
 	public class ClusterRenderer : DefaultClusterRenderer
 	{
-        private static Drawable TRANSPARENT_DRAWABLE = new ColorDrawable(Color.Transparent);
-        IconGenerator mIconGenerator;
-        ImageView mImageView;
+        private Drawable TRANSPARENT_DRAWABLE = new ColorDrawable(Color.Transparent);
+        IconGenerator _iconGenerator;
+        ImageView _imageView;
         
 
         public ClusterRenderer(Context context, GoogleMap map, ClusterManager clusterManager) : base(context, map, clusterManager)
         {
             clusterManager.SetRenderer(this);
 
-            mIconGenerator = new IconGenerator(context);
-            mImageView = new ImageView(context);
-            mIconGenerator.SetContentView(mImageView);
+            _iconGenerator = new IconGenerator(context);
+            _imageView = new ImageView(context);
+            _iconGenerator.SetContentView(_imageView);
         }
         
         protected override void OnBeforeClusterItemRendered(Java.Lang.Object markerItem, MarkerOptions markerOptions)
         {
             var newMarkerItem = (ClusterPin)markerItem;
-            if (newMarkerItem.getIcon() != 0)
+            if (newMarkerItem.iconResId != 0)
             {
-                mImageView.SetImageResource(newMarkerItem.getIcon());
-                mIconGenerator.SetBackground(TRANSPARENT_DRAWABLE);
-                Bitmap icon = mIconGenerator.MakeIcon();
+                _imageView.SetImageResource(newMarkerItem.iconResId);
+                _iconGenerator.SetBackground(TRANSPARENT_DRAWABLE);
+                Bitmap icon = _iconGenerator.MakeIcon();
                 Bitmap resized = Bitmap.CreateScaledBitmap(icon, (int)((double)icon.Width/1.5), (int)((double)icon.Height/1.5), false);
                 markerOptions.SetIcon(BitmapDescriptorFactory.FromBitmap(resized)); //Here you retrieve BitmapDescriptor from ClusterItem and set it as marker icon
             }
