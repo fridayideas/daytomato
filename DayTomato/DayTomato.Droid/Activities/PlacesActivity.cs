@@ -14,17 +14,21 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
+using Android.Support.Design.Widget;
 
 namespace DayTomato.Droid
 {
 	[Activity(Label = "PlacesActivity")]
 	public class PlacesActivity : AppCompatActivity
 	{
-		private List<Feed> _feed;
+		private List<Pin> _pins;
 
-		private RecyclerView _recyclerView;
+        // Button to create new pin
+        private FloatingActionButton _createPin;
+
+        private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
-		private PlacesAdapter _adapter;
+		private ViewPinAdapter _adapter;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -41,10 +45,11 @@ namespace DayTomato.Droid
 
 			InitInstances();
 
-			_recyclerView = FindViewById<RecyclerView>(Resource.Id.places_recycler_view);
+            _createPin = (FloatingActionButton)FindViewById(Resource.Id.places_create_pin_fab);
+            _recyclerView = FindViewById<RecyclerView>(Resource.Id.places_recycler_view);
 			_layoutManager = new LinearLayoutManager(this);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new PlacesAdapter(_feed, this);
+			_adapter = new ViewPinAdapter(_pins, this);
 			_recyclerView.SetAdapter(_adapter);
 		}
 
@@ -60,16 +65,13 @@ namespace DayTomato.Droid
 			pd.SetMessage("Loading...");
 
 			// Get feed from server
-			_feed = new List<Feed>();
+			_pins = new List<Pin>();
 
 			var pins = await MainActivity.dayTomatoClient.GetHotPins();
 			foreach (var p in pins)
 			{
-				_feed.Add(new Feed
-				{
-					Pin = p,
-					Type = Feed.FEED_PIN
-				});
+                _pins.Add(p);
+                
 			}
 			_adapter.NotifyDataSetChanged();
 			pd.Hide();
