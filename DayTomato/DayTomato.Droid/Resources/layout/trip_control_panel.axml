@@ -20,37 +20,61 @@
             android:columnCount="2"
             android:layout_margin="8dp">
             <Button
-                android:text="View Trips"
+                android:text="View trips"
                 android:id="@+id/trip_control_panel_view_trips"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_rowWeight="0.5"
                 android:layout_columnWeight="0.5"
                 android:textColor="@color/white"
-                android:background="@color/colorPrimary"
-                android:layout_margin="4dp" />
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:layout_margin="4dp"
+                android:background="@drawable/tripbutton"
+                android:cropToPadding="false"
+                android:gravity="center_horizontal|bottom" />
             <Button
-                android:text="Create A Trip"
+                android:text="Create a trip"
                 android:id="@+id/trip_control_panel_create_trip"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_rowWeight="0.5"
                 android:layout_columnWeight="0.5"
                 android:textColor="@color/white"
-                android:background="#9575CD"
-                android:layout_margin="4dp" />
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:layout_margin="4dp"
+                android:background="@drawable/createtripbutton"
+                android:cropToPadding="false"
+                android:gravity="center_horizontal|bottom" />
             <Button
-                android:text="View Places"
+                android:text="View places"
                 android:id="@+id/trip_control_panel_view_local_places"
-                android:layout_columnWeight="0.5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_rowWeight="0.5"
+                android:layout_columnWeight="0.5"
                 android:textColor="@color/white"
-                android:background="#4CAF50"
-                android:layout_margin="4dp" />
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:layout_margin="4dp"
+                android:background="@drawable/viewplacesbutton"
+                android:cropToPadding="false"
+                android:gravity="center_horizontal|bottom" />
             <Button
-                android:text="View Map"
+                android:text="View map"
                 android:id="@+id/trip_control_panel_view_map"
-                android:layout_columnWeight="0.5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_rowWeight="0.5"
-                android:background="#64B5F6"
+                android:layout_columnWeight="0.5"
                 android:textColor="@color/white"
-                android:layout_margin="4dp" />
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:layout_margin="4dp"
+                android:background="@drawable/viewmapbutton"
+                android:cropToPadding="false"
+                android:gravity="center_horizontal|bottom" />
         </GridLayout>
     </FrameLayout>
 </LinearLayout>

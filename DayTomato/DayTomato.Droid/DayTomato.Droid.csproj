@@ -248,6 +248,11 @@
     <AndroidResource Include="Resources\layout\trip_activity.axml" />
     <AndroidResource Include="Resources\layout\create_trip_activity.axml" />
     <AndroidResource Include="Resources\drawable\ic_add_white_24px.xml" />
+    <AndroidResource Include="Resources\drawable\trip_button_image.png" />
+    <AndroidResource Include="Resources\drawable\createtripbutton.xml" />
+    <AndroidResource Include="Resources\drawable\tripbutton.xml" />
+    <AndroidResource Include="Resources\drawable\viewmapbutton.xml" />
+    <AndroidResource Include="Resources\drawable\viewplacesbutton.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
