@@ -120,10 +120,11 @@ namespace DayTomato.Droid
 			vh.PinDescription.Text = _pins[position].Description;
 			vh.PinReview.Text = _pins[position].Review;
 			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
-            vh.PinRating.Text = "Rating: " + _pins[position].Rating;
+            vh.PinRating.Rating = _pins[position].Rating;
+			vh.PinRatingText.Text = _pins[position].Rating.ToString();
 
 			double cost = _pins[position].Cost;
-			vh.PinCost.Text = "Cost: $" + cost;
+			SetCost(vh, cost);
 
 			// Initializing listview
 			vh.CommentsAdapter = new CommentsAdapter(_context, _pins[position].Comments);
@@ -271,9 +272,19 @@ namespace DayTomato.Droid
 					menu.Show();
 				};
 			}
-            
 		}
-       
+
+        private void SetCost(ViewPinViewHolder vh, double cost)
+		{
+			if (cost > 0.0)
+			{
+				vh.PinCost.Text = "$" + cost;
+			}
+			else
+			{
+				vh.PinCost.Text = "FREE";
+			}
+		}
     }
 
 	public class ViewPinViewHolder : RecyclerView.ViewHolder
@@ -286,7 +297,8 @@ namespace DayTomato.Droid
 		public TextView PinDescription { get; private set; }
 		public TextView PinReview { get; private set; }
         public TextView PinCost { get; private set; }
-        public TextView PinRating { get; private set; }
+        public RatingBar PinRating { get; private set; }
+		public TextView PinRatingText { get; private set; }
 		public TextView PinLinkedAccount { get; private set; }
 		public TextView AddComment { get; private set; }
 		public EditText AddCommentInput { get; private set; }
@@ -307,7 +319,8 @@ namespace DayTomato.Droid
 			PinDescription = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_description);
 			PinReview = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_review);
             PinCost = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_cost);
-            PinRating = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_rating);
+            PinRating = itemView.FindViewById<RatingBar>(Resource.Id.pin_view_holder_rating);
+			PinRatingText = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_rating_text);
 			PinLinkedAccount = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_account);
 			CommentsListView = itemView.FindViewById<LinearLayout>(Resource.Id.pin_view_holder_comment_list);
 			AddComment = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_add_comment);

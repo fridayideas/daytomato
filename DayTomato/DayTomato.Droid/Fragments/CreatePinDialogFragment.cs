@@ -118,7 +118,7 @@ namespace DayTomato.Droid
 			{
 				if (!isValidCost(_cost.Text))
 				{
-					_cost.Error = "Cannot Be Empty";
+					_cost.Error = "Please enter a valid cost";
 					_createPin = false;
 
 				}
