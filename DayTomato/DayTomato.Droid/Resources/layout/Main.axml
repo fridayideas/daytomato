@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include layout="@layout/app_bar" />
+        <include
+            layout="@layout/app_bar" />
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -22,22 +23,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/main_city_autocomplete"
-                android:textColor="@color/black"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/hint_text"
                 android:hint="Which city are you interested in?" />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/main_start_control_panel_button"
                 android:text="Current Location"
-                android:textColor="@color/white" />
+                style="@style/Widget.AppCompat.Button.Colored" />
             <TextView
                 android:text="My Trips"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/main_my_trips_text"
-                android:textColor="@color/black"
-                android:layout_marginTop="8dp" />
+                style="@style/Subheading"/>
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

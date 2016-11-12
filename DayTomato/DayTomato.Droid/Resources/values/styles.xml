@@ -53,4 +53,12 @@
   <style name="RatingBar" parent="@android:style/Widget.RatingBar">
     <item name="colorControlActivated">#FFAB00</item>
   </style>
+
+  <style name="Subheading">
+    <item name="android:textColor">@color/secondary_text</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:paddingLeft">16dp</item>
+    <item name="android:paddingTop">16dp</item>
+  
+  </style>
 </resources>
