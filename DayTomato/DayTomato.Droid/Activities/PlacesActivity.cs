@@ -15,6 +15,7 @@ using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
 using Android.Support.Design.Widget;
+using DayTomato.Droid.Adapters;
 
 namespace DayTomato.Droid
 {

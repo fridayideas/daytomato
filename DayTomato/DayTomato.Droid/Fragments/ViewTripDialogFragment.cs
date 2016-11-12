@@ -8,6 +8,7 @@ using DayTomato.Models;
 using Newtonsoft.Json;
 using System;
 using Android.App;
+using DayTomato.Droid.Adapters;
 
 namespace DayTomato.Droid
 {
