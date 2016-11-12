@@ -1,6 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Graphics;
 using Android.Support.V7.Widget;
@@ -9,17 +9,17 @@ using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
 
-namespace DayTomato.Droid
+namespace DayTomato.Droid.Adapters
 {
 	public class ViewPinAdapter : RecyclerView.Adapter
 	{
-		private readonly string TAG = "VIEW_PIN_ADAPTER";
-		private List<Pin> _pins;
+	    private const string Tag = "VIEW_PIN_ADAPTER";
+	    private List<Pin> _pins;
 		private List<bool> _pinLiked;
 		private List<bool> _pinDisliked;
-		private Activity _context;
-		private ViewPinDialogFragment _parent;
-		private Account _account;
+		private readonly Activity _context;
+		private readonly ViewPinDialogFragment _parent;
+		private readonly Account _account;
 
 		public ViewPinAdapter(List<Pin> pins, Activity context)
 		{
@@ -30,43 +30,35 @@ namespace DayTomato.Droid
 			_account = MainActivity.GetAccount();
 		}
 
-        public ViewPinAdapter(List<Pin> pins, Activity context, ViewPinDialogFragment parent)
+        public ViewPinAdapter(List<Pin> pins, Activity context, ViewPinDialogFragment parent) : this(pins, context)
         {
-            _pins = pins;
-            _pinLiked = new List<bool>(new bool[pins.Count]);
-            _pinDisliked = new List<bool>(new bool[pins.Count]);
-            _context = context;
 			_account = MainActivity.GetAccount();
             _parent = parent;
         }
 
-        public List<Pin> GetItems()
+        public IEnumerable<Pin> GetItems()
 		{
 			return _pins;
 		}
 
-		public override int ItemCount
-		{
-			get { return _pins.Count; }
-		}
+		public override int ItemCount => _pins.Count;
 
-		public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
+	    public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
 		{
 			// Inflate the viewholder
-			View itemView = LayoutInflater.From(parent.Context).
-						Inflate(Resource.Layout.pin_view_holder, parent, false);
+			var itemView = LayoutInflater.From(parent.Context)
+                .Inflate(Resource.Layout.pin_view_holder, parent, false);
 
 			// Create a ViewHolder to hold view references inside the CardView
-			ViewPinViewHolder vh = new ViewPinViewHolder(itemView);
-			return vh;
+			return new ViewPinViewHolder(itemView);
 		}
 
-		public void RefreshComments(LinearLayout ll, CommentsAdapter ca)
+	    private void RefreshComments(LinearLayout ll, CommentsAdapter ca)
 		{
-			ll.RemoveAllViews();
-			for (int i = 0; i < ca.Count; i++)
+		    ll.RemoveAllViews();
+			for (var i = 0; i < ca.Count; i++)
 			{
-				View v = ca.GetView(i, null, ll);
+				var v = ca.GetView(i, null, ll);
 				ll.AddView(v);
 			}
 			ca.NotifyDataSetChanged();
@@ -74,11 +66,12 @@ namespace DayTomato.Droid
 
 		public override async void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
-			ViewPinViewHolder vh = holder as ViewPinViewHolder;
+            var vh = (ViewPinViewHolder)holder;
+		    var pin = _pins[position]; 
 
-			// Pin imageURL 
-			var imageUrl = _pins[position].ImageURL;
-			if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
+            // Pin imageURL 
+		    var imageUrl = pin.ImageURL;
+			if (!string.IsNullOrEmpty(imageUrl) && !imageUrl.Equals("none"))
 			{
 				try
 				{
@@ -88,15 +81,15 @@ namespace DayTomato.Droid
 				}
 				catch(Exception ex)
 				{
-					Log.Error(TAG, ex.Message);
+					Log.Error(Tag, ex.Message);
 				}
 			}
 
-			vh.PinName.Text = _pins[position].Name;
-			vh.PinLikes.Text = _pins[position].Likes.ToString();
+			vh.PinName.Text = pin.Name;
+			vh.PinLikes.Text = pin.Likes.ToString();
 			try
 			{
-				if (_pins[position].LikedBy.Contains(_account.Id))
+				if (pin.LikedBy.Contains(_account.Id))
 				{
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
@@ -104,7 +97,7 @@ namespace DayTomato.Droid
 					_pinDisliked[position] = false;
 
 				}
-				else if (_pins[position].DislikedBy.Contains(_account.Id))
+				else if (pin.DislikedBy.Contains(_account.Id))
 				{
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
@@ -114,20 +107,19 @@ namespace DayTomato.Droid
 			}
 			catch (Exception ex)
 			{
-				Log.Debug(TAG, ex.Message);
+				Log.Debug(Tag, ex.Message);
 			}
 
-			vh.PinDescription.Text = _pins[position].Description;
-			vh.PinReview.Text = _pins[position].Review;
-			vh.PinLinkedAccount.Text = _pins[position].LinkedAccount;
-            vh.PinRating.Rating = _pins[position].Rating;
-			vh.PinRatingText.Text = _pins[position].Rating.ToString();
+			vh.PinDescription.Text = pin.Description;
+			vh.PinReview.Text = pin.Review;
+			vh.PinLinkedAccount.Text = pin.LinkedAccount;
+            vh.PinRating.Rating = pin.Rating;
+		    vh.PinRatingText.Text = pin.Rating.ToString();
 
-			double cost = _pins[position].Cost;
-			SetCost(vh, cost);
+            vh.PinCost.Text = pin.Cost > 0.0 ? $"${pin.Cost}" : "FREE";
 
 			// Initializing listview
-			vh.CommentsAdapter = new CommentsAdapter(_context, _pins[position].Comments);
+			vh.CommentsAdapter = new CommentsAdapter(_context, pin.Comments);
 			// Make sure we can see the comments
 			if (!vh.HideComments)
 			{
@@ -147,12 +139,10 @@ namespace DayTomato.Droid
 				vh.AddCommentInput.Visibility = ViewStates.Gone;
 				vh.AddCommentButton.Visibility = ViewStates.Gone;
 
-				if (_pins[position].Comments.Count > 0 && _pins[position].Comments[_pins[position].Comments.Count - 1].Text == vh.AddCommentInput.Text)
+				if (pin.Comments.Count > 0 && pin.Comments.Last().Text == vh.AddCommentInput.Text)
 					return; 
-				_pins[position].Comments.Add(new Comment(_account.Id, vh.AddCommentInput.Text, DateTime.Today));
-				await MainActivity.dayTomatoClient.AddCommentToPin(_pins[position],
-																   vh.AddCommentInput.Text,
-																   _account.Id);
+				pin.Comments.Add(new Comment(_account.Id, vh.AddCommentInput.Text, DateTime.Today));
+				await MainActivity.dayTomatoClient.AddCommentToPin(pin, vh.AddCommentInput.Text, _account.Id);
 				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 				vh.HideComments = !vh.HideComments;
 				vh.CommentsListView.Visibility = ViewStates.Visible;
@@ -160,22 +150,22 @@ namespace DayTomato.Droid
 				vh.AddCommentInput.Text = "";
 			};
 
-			vh.ShowComments.Click += (sender, e) => 
+			vh.ShowComments.Click += (sender, args) =>
 			{
-				vh.HideComments = !vh.HideComments;
-				if (vh.HideComments)
-				{
-					vh.CommentsListView.RemoveAllViews();
-					vh.CommentsListView.Visibility = ViewStates.Gone;
-					vh.ShowComments.Text = "show comments";
-					vh.CommentsAdapter.NotifyDataSetChanged();
-				}
-				else
-				{
-					vh.CommentsListView.Visibility = ViewStates.Visible;
-					vh.ShowComments.Text = "hide comments";
-					RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
-				}
+			    vh.HideComments = !vh.HideComments;
+			    if (vh.HideComments)
+			    {
+			        vh.CommentsListView.RemoveAllViews();
+			        vh.CommentsListView.Visibility = ViewStates.Gone;
+			        vh.ShowComments.Text = "show comments";
+			        vh.CommentsAdapter.NotifyDataSetChanged();
+			    }
+			    else
+			    {
+			        vh.CommentsListView.Visibility = ViewStates.Visible;
+			        vh.ShowComments.Text = "hide comments";
+			        RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
+			    }
 			};
 
 			vh.UpButton.Click += async (sender, e) =>
@@ -185,14 +175,14 @@ namespace DayTomato.Droid
 				{
 					_pinLiked[position] = true;
 					_pinDisliked[position] = false;
-					_pins[position].Likes++;
-					vh.PinLikes.Text = _pins[position].Likes.ToString();
+					pin.Likes++;
+					vh.PinLikes.Text = pin.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
+					if (!pin.LikedBy.Contains(_account.Id) && !pin.DislikedBy.Contains(_account.Id))
 					{
-						_pins[position].LikedBy.Add(_account.Id);
-						await MainActivity.dayTomatoClient.LikePin(_pins[position].Id, _account);
+						pin.LikedBy.Add(_account.Id);
+						await MainActivity.dayTomatoClient.LikePin(pin.Id, _account);
 					}
 				}
 				// Else we need to "reset" the likes
@@ -200,14 +190,13 @@ namespace DayTomato.Droid
 				{
 					_pinLiked[position] = false;
 					_pinDisliked[position] = false;
-					_pins[position].Likes++;
-					vh.PinLikes.Text = _pins[position].Likes.ToString();
+					pin.Likes++;
+					vh.PinLikes.Text = pin.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (_pins[position].DislikedBy.Contains(_account.Id))
+					if (pin.DislikedBy.Remove(_account.Id))
 					{
-						_pins[position].DislikedBy.Remove(_account.Id);
-						await MainActivity.dayTomatoClient.RemoveVotePin(_pins[position].Id, _account);
+						await MainActivity.dayTomatoClient.RemoveVotePin(pin.Id, _account);
 					}
 				}
 			};
@@ -218,95 +207,80 @@ namespace DayTomato.Droid
 				{
 					_pinLiked[position] = false;
 					_pinDisliked[position] = true;
-					_pins[position].Likes--;
-					vh.PinLikes.Text = _pins[position].Likes.ToString();
+					pin.Likes--;
+					vh.PinLikes.Text = pin.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
-					if (!_pins[position].LikedBy.Contains(_account.Id) && !_pins[position].DislikedBy.Contains(_account.Id))
+					if (!pin.LikedBy.Contains(_account.Id) && !pin.DislikedBy.Contains(_account.Id))
 					{
-						_pins[position].DislikedBy.Add(_account.Id);
-						await MainActivity.dayTomatoClient.DislikePin(_pins[position].Id, _account);
+						pin.DislikedBy.Add(_account.Id);
+						await MainActivity.dayTomatoClient.DislikePin(pin.Id, _account);
 					}
-
 				}
 				// Else we need to "reset" the likes
 				else if (_pinLiked[position])
 				{
 					_pinLiked[position] = false;
 					_pinDisliked[position] = false;
-					_pins[position].Likes--;
-					vh.PinLikes.Text = _pins[position].Likes.ToString();
+					pin.Likes--;
+					vh.PinLikes.Text = pin.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (_pins[position].LikedBy.Contains(_account.Id))
+					if (pin.LikedBy.Remove(_account.Id))
 					{
-						_pins[position].LikedBy.Remove(_account.Id);
-						await MainActivity.dayTomatoClient.RemoveVotePin(_pins[position].Id, _account);
+						await MainActivity.dayTomatoClient.RemoveVotePin(pin.Id, _account);
 					}
 				}
 			};
-			if (_pins[position].LinkedAccount == MainActivity.GetAccount().Id)
+			if (pin.LinkedAccount == _account.Id)
 			{
 				vh.ViewMenu.Visibility = ViewStates.Visible;
 				vh.ViewMenu.Click += (sender, e) =>
 			   	{
-				   	Android.Support.V7.Widget.PopupMenu menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu, (int)GravityFlags.End);
+				   	var menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.ViewMenu, (int)GravityFlags.End);
 				   	menu.Inflate(Resource.Menu.view_pin_popup_menu);
 
 				   	menu.MenuItemClick += async (s1, arg1) =>
 				   	{
-					   	string command = arg1.Item.TitleFormatted.ToString();
+					   	var command = arg1.Item.TitleFormatted.ToString();
 					   	if (command.Equals("Delete"))
 					   	{
-							await MainActivity.dayTomatoClient.DeletePin(_pins[position]);
+							await MainActivity.dayTomatoClient.DeletePin(pin);
 						   	_pins.RemoveAt(position);
 						   	NotifyItemRemoved(position);
 						   	NotifyDataSetChanged();
 						}
-                        if (command.Equals("Edit"))
+                        else if (command.Equals("Edit"))
                         {
-                            string pinId = _pins[position].Id;
-                            _parent.EditPinDialog(pinId, position);
+                            _parent.EditPinDialog(pin.Id, position);
                         }
                     };
 					menu.Show();
 				};
 			}
 		}
-
-        private void SetCost(ViewPinViewHolder vh, double cost)
-		{
-			if (cost > 0.0)
-			{
-				vh.PinCost.Text = "$" + cost;
-			}
-			else
-			{
-				vh.PinCost.Text = "FREE";
-			}
-		}
     }
 
 	public class ViewPinViewHolder : RecyclerView.ViewHolder
 	{
-		public ImageView PinImage { get; private set; }
-		public TextView PinName { get; private set; }
-		public ImageView UpButton { get; private set; }
-		public TextView PinLikes { get; private set; }
-		public ImageView DownButton { get; private set; }
-		public TextView PinDescription { get; private set; }
-		public TextView PinReview { get; private set; }
-        public TextView PinCost { get; private set; }
-        public RatingBar PinRating { get; private set; }
-		public TextView PinRatingText { get; private set; }
-		public TextView PinLinkedAccount { get; private set; }
-		public TextView AddComment { get; private set; }
-		public EditText AddCommentInput { get; private set; }
-		public Button AddCommentButton { get; private set; }
-		public TextView ShowComments { get; private set; }
-		public ImageView ViewMenu { get; private set; }
+		public ImageView PinImage { get; }
+		public TextView PinName { get; }
+		public ImageView UpButton { get; }
+		public TextView PinLikes { get; }
+		public ImageView DownButton { get; }
+		public TextView PinDescription { get; }
+		public TextView PinReview { get; }
+        public TextView PinCost { get; }
+        public RatingBar PinRating { get; }
+		public TextView PinRatingText { get; }
+		public TextView PinLinkedAccount { get; }
+		public TextView AddComment { get; }
+		public EditText AddCommentInput { get; }
+		public Button AddCommentButton { get; }
+		public TextView ShowComments { get; }
+		public ImageView ViewMenu { get; }
 		public bool HideComments { get; set; }
-		public LinearLayout CommentsListView { get; set; }
+		public LinearLayout CommentsListView { get; }
 		public CommentsAdapter CommentsAdapter { get; set; }
 
 		public ViewPinViewHolder(View itemView) : base(itemView)

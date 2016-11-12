@@ -20,6 +20,7 @@ using Android.Support.Design.Widget;
 using Android.Locations;
 using Android.Support.V7.App;
 using System.Collections.Generic;
+using DayTomato.Droid.Adapters;
 using Newtonsoft.Json;
 
 namespace DayTomato.Droid
