@@ -49,8 +49,6 @@ namespace DayTomato.Droid
             _recyclerView = FindViewById<RecyclerView>(Resource.Id.places_recycler_view);
 			_layoutManager = new LinearLayoutManager(this);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins, this);
-			_recyclerView.SetAdapter(_adapter);
 		}
 
 		protected override void OnResume()
@@ -65,15 +63,10 @@ namespace DayTomato.Droid
 			pd.SetMessage("Loading...");
 
 			// Get feed from server
-			_pins = new List<Pin>();
+			_pins = await MainActivity.dayTomatoClient.GetHotPins();
+			_adapter = new ViewPinAdapter(_pins, this);
+			_recyclerView.SetAdapter(_adapter);
 
-			var pins = await MainActivity.dayTomatoClient.GetHotPins();
-			foreach (var p in pins)
-			{
-                _pins.Add(p);
-                
-			}
-			_adapter.NotifyDataSetChanged();
 			pd.Hide();
 		}
 
