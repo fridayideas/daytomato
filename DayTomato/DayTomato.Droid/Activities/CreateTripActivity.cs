@@ -134,6 +134,20 @@ namespace DayTomato.Droid
 			Finish();
 		}
 
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (requestCode == Constants.CREATE_PLACE_REQUEST)
+			{
+				if (resultCode == Result.Ok)
+				{
+					Toast.MakeText(this, "Your place was created", ToastLength.Long).Show();
+					string pinId = data.GetStringExtra("CREATE_PLACE_RESULT");
+					_pinsFragment.AddPin(pinId);
+				}
+			}
+		}
+
 		public override bool OnOptionsItemSelected(IMenuItem item)
 		{
 			switch (item.ItemId)
