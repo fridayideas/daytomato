@@ -1,14 +1,15 @@
 ﻿
 using System.Collections.Generic;
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using DayTomato.Models;
 using Android.Support.Design.Widget;
-using Android.Content;
-using Android.Widget;
+using DayTomato.Droid.Adapters;
 
 namespace DayTomato.Droid
 {

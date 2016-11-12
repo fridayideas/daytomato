@@ -11,6 +11,7 @@ using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using DayTomato.Droid.Adapters;
 using DayTomato.Models;
 using Newtonsoft.Json;
 
