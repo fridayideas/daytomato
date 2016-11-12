@@ -1,7 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Graphics;
 using Android.Support.V7.Widget;
@@ -10,20 +10,20 @@ using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
 
-namespace DayTomato.Droid
+namespace DayTomato.Droid.Adapters
 {
 	public class ViewTripAdapter : RecyclerView.Adapter
 	{
-		//Create an Event so that our our clients can act when a user clicks
-		//on each individual item.
+		// Create an Event so that our our clients can act when a user clicks
+		// on each individual item.
 		public event EventHandler<int> HandleClick;
 
 		private readonly string TAG = "VIEW_TRIP_ADAPTER";
 		private List<Trip> _suggestions;
 		private List<bool> _tripLiked;
 		private List<bool> _tripDisliked;
-		private Activity _context;
-		private Account _account;
+		private readonly Activity _context;
+		private readonly Account _account;
 
 		public ViewTripAdapter(List<Trip> suggestions, Activity context)
 		{
@@ -34,28 +34,24 @@ namespace DayTomato.Droid
 			_account = MainActivity.GetAccount();
 		}
 
-		public override int ItemCount
-		{
-			get { return _suggestions.Count; }
-		}
+		public override int ItemCount => _suggestions.Count;
 
-		public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
+	    public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
 		{
 			// Inflate the viewholder
-			View itemView = LayoutInflater.From(parent.Context).
-						Inflate(Resource.Layout.trip_view_holder, parent, false);
+			var itemView = LayoutInflater.From(parent.Context)
+                .Inflate(Resource.Layout.trip_view_holder, parent, false);
 
 			// Create a ViewHolder to hold view references inside the CardView
-			TripSuggestionViewHolder vh = new TripSuggestionViewHolder(itemView, OnClick);
-			return vh;
+			return new TripSuggestionViewHolder(itemView, OnClick);
 		}
 
-		public void RefreshComments(LinearLayout ll, CommentsAdapter ca)
+	    private void RefreshComments(LinearLayout ll, CommentsAdapter ca)
 		{
 			ll.RemoveAllViews();
-			for (int i = 0; i < ca.Count; i++)
+			for (var i = 0; i < ca.Count; i++)
 			{
-				View v = ca.GetView(i, null, ll);
+				var v = ca.GetView(i, null, ll);
 				ll.AddView(v);
 			}
 			ca.NotifyDataSetChanged();
@@ -63,32 +59,29 @@ namespace DayTomato.Droid
 
 		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
-			TripSuggestionViewHolder vh = holder as TripSuggestionViewHolder;
-			vh.Name.Text = _suggestions[position].Name;
-			vh.Type.Text = _suggestions[position].Type;
-			vh.Pins.Text = "";
-			foreach (var p in _suggestions[position].Pins)
-			{
-				vh.Pins.Text += p.Name + "\n";
-			}
-			vh.CreateDate.Text = "created " + _suggestions[position].CreateDate.ToLongDateString();
-			vh.Account.Text = _suggestions[position].LinkedAccount;
-			vh.Likes.Text = _suggestions[position].Likes.ToString();
-			vh.Description.Text = _suggestions[position].Description;
-			SetCost(vh, _suggestions[position].Cost);
-			SetImage(vh, _suggestions[position].Pins);
+            var vh = (TripSuggestionViewHolder)holder;
+		    var trip = _suggestions[position];
+		    vh.Name.Text = trip.Name;
+			vh.Type.Text = trip.Type;
+		    vh.Pins.Text = trip.Pins
+                .Aggregate("", (text, pin) => text + pin.Name + "\n");
+			vh.CreateDate.Text = "created " + trip.CreateDate.ToLongDateString();
+			vh.Account.Text = trip.LinkedAccount;
+			vh.Likes.Text = trip.Likes.ToString();
+			vh.Description.Text = trip.Description;
+		    vh.Cost.Text = trip.Cost > 0.0 ? $"${trip.Cost}" : "FREE";
+			SetImage(vh, trip.Pins);
 
 			try
 			{
-				if (_suggestions[position].LikedBy.Contains(_account.Id))
+				if (trip.LikedBy.Contains(_account.Id))
 				{
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
 					_tripLiked[position] = true;
 					_tripDisliked[position] = false;
-
 				}
-				else if (_suggestions[position].DislikedBy.Contains(_account.Id))
+				else if (trip.DislikedBy.Contains(_account.Id))
 				{
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
@@ -102,7 +95,7 @@ namespace DayTomato.Droid
 			}
 
 			// Initializing listview
-			vh.CommentsAdapter = new CommentsAdapter(_context, _suggestions[position].Comments);
+			vh.CommentsAdapter = new CommentsAdapter(_context, trip.Comments);
 			// Make sure we can see the comments
 			if (!vh.HideComments)
 			{
@@ -121,13 +114,11 @@ namespace DayTomato.Droid
 				vh.AddCommentInput.Visibility = ViewStates.Gone;
 				vh.AddCommentButton.Visibility = ViewStates.Gone;
 
-				Account account = MainActivity.GetAccount();
-				if (_suggestions[position].Comments.Count > 0 && _suggestions[position].Comments[_suggestions[position].Comments.Count - 1].Text == vh.AddCommentInput.Text)
+				var account = MainActivity.GetAccount();
+				if (trip.Comments.Count > 0 && trip.Comments.Last().Text == vh.AddCommentInput.Text)
 					return;
-				_suggestions[position].Comments.Add(new Comment(account.Id, vh.AddCommentInput.Text, DateTime.Today));
-				//await MainActivity.dayTomatoClient.AddCommentToTrip(_suggestions[position],
-				//												   vh.AddCommentInput.Text,
-				//												   account.Id);
+				trip.Comments.Add(new Comment(account.Id, vh.AddCommentInput.Text, DateTime.Today));
+				// await MainActivity.dayTomatoClient.AddCommentToTrip(_suggestions[position], vh.AddCommentInput.Text, account.Id);
 				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 				vh.HideComments = !vh.HideComments;
 				vh.CommentsListView.Visibility = ViewStates.Visible;
@@ -158,14 +149,14 @@ namespace DayTomato.Droid
 				{
 					_tripLiked[position] = true;
 					_tripDisliked[position] = false;
-					_suggestions[position].Likes++;
-					vh.Likes.Text = _suggestions[position].Likes.ToString();
+					trip.Likes++;
+					vh.Likes.Text = trip.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_filled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (!_suggestions[position].LikedBy.Contains(_account.Id) && !_suggestions[position].DislikedBy.Contains(_account.Id))
+					if (!trip.LikedBy.Contains(_account.Id) && !trip.DislikedBy.Contains(_account.Id))
 					{
-						_suggestions[position].LikedBy.Add(_account.Id);
-						await MainActivity.dayTomatoClient.LikeTrip(_suggestions[position].Id, _account);
+						trip.LikedBy.Add(_account.Id);
+						await MainActivity.dayTomatoClient.LikeTrip(trip.Id, _account);
 					}
 				}
 				// Else we need to "reset" the likes
@@ -173,14 +164,13 @@ namespace DayTomato.Droid
 				{
 					_tripLiked[position] = false;
 					_tripDisliked[position] = false;
-					_suggestions[position].Likes++;
-					vh.Likes.Text = _suggestions[position].Likes.ToString();
+					trip.Likes++;
+					vh.Likes.Text = trip.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (_suggestions[position].DislikedBy.Contains(_account.Id))
+					if (trip.DislikedBy.Remove(_account.Id))
 					{
-						_suggestions[position].DislikedBy.Remove(_account.Id);
-						await MainActivity.dayTomatoClient.RemoveVoteTrip(_suggestions[position].Id, _account);
+						await MainActivity.dayTomatoClient.RemoveVoteTrip(trip.Id, _account);
 					}
 				}
 			};
@@ -191,14 +181,14 @@ namespace DayTomato.Droid
 				{
 					_tripLiked[position] = false;
 					_tripDisliked[position] = true;
-					_suggestions[position].Likes--;
-					vh.Likes.Text = _suggestions[position].Likes.ToString();
+					trip.Likes--;
+					vh.Likes.Text = trip.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_filled);
-					if (!_suggestions[position].LikedBy.Contains(_account.Id) && !_suggestions[position].DislikedBy.Contains(_account.Id))
+					if (!trip.LikedBy.Contains(_account.Id) && !trip.DislikedBy.Contains(_account.Id))
 					{
-						_suggestions[position].DislikedBy.Add(_account.Id);
-						await MainActivity.dayTomatoClient.DislikeTrip(_suggestions[position].Id, _account);
+						trip.DislikedBy.Add(_account.Id);
+						await MainActivity.dayTomatoClient.DislikeTrip(trip.Id, _account);
 					}
 				}
 				// Else we need to "reset" the likes
@@ -206,56 +196,40 @@ namespace DayTomato.Droid
 				{
 					_tripLiked[position] = false;
 					_tripDisliked[position] = false;
-					_suggestions[position].Likes--;
-					vh.Likes.Text = _suggestions[position].Likes.ToString();
+					trip.Likes--;
+					vh.Likes.Text = trip.Likes.ToString();
 					vh.UpButton.SetImageResource(Resource.Drawable.up_arrow_unfilled);
 					vh.DownButton.SetImageResource(Resource.Drawable.down_arrow_unfilled);
-					if (_suggestions[position].LikedBy.Contains(_account.Id))
+					if (trip.LikedBy.Remove(_account.Id))
 					{
-						_suggestions[position].LikedBy.Remove(_account.Id);
-						await MainActivity.dayTomatoClient.RemoveVoteTrip(_suggestions[position].Id, _account);
+						await MainActivity.dayTomatoClient.RemoveVoteTrip(trip.Id, _account);
 					}
 				}
 			};
 		}
 
-		private void SetCost(TripSuggestionViewHolder vh, double cost)
-		{
-			if (cost > 0.0)
-			{
-				vh.Cost.Text = "$" + cost;
-			}
-			else
-			{
-				vh.Cost.Text = "FREE";
-			}
-		}
+	    private async void SetImage(TripSuggestionViewHolder vh, IEnumerable<Pin> pins)
+	    {
+            var imageUrls = pins.Select(p => p.ImageURL)
+                .Where(url => !string.IsNullOrEmpty(url) && url != "none");
+	        var bitmaps = await Task.WhenAll(imageUrls.Select(async imageUrl =>
+	        {
+	            try
+	            {
+	                var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
+	                var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+	                return imageBitmap;
+	            }
+	            catch (Exception ex)
+	            {
+	                Log.Error(TAG, ex.Message);
+	                return null;
+	            }
+	        }).Where(bmp => bmp != null));
 
-		private async void SetImage(TripSuggestionViewHolder vh, List<Pin> pins)
-		{
-			List<string> imageUrls = pins.Select(p => p.ImageURL).ToList();
-			Bitmap[] bitmaps = new Bitmap[imageUrls.Count];
-
-			for (int i = 0; i < bitmaps.Length; ++i)
-			{
-				var imageUrl = imageUrls[i];
-				if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
-				{
-					try
-					{
-						var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
-						var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-						bitmaps[i] = imageBitmap;
-					}
-					catch (Exception ex)
-					{
-						Log.Error(TAG, ex.Message);
-					}
-				}
-			}
 			try
 			{
-				Bitmap bitmap = PictureUtil.StitchImages(bitmaps);
+				var bitmap = PictureUtil.StitchImages(bitmaps);
 				vh.StitchedImages.SetImageBitmap(bitmap);
 			}
 			catch (Exception ex)
@@ -265,37 +239,32 @@ namespace DayTomato.Droid
 			}
 		}
 
-		//This will fire any event handlers that are registered with our ItemClick
-		//event.
+		// This will fire any event handlers that are registered with our ItemClick event.
 		private void OnClick(int position)
 		{
-			if (HandleClick != null)
-			{
-				HandleClick(this, position);
-			}
-		}
+            HandleClick?.Invoke(this, position);
+        }
 	}
 
 	public class TripSuggestionViewHolder : RecyclerView.ViewHolder
 	{
-		public TextView Name { get; private set; }
-		public TextView Type { get; private set; }
-		public TextView Pins { get; private set; }
-		public TextView CreateDate { get; private set; }
-		public TextView Account { get; private set; }
-		public ImageView UpButton { get; private set; }
-		public TextView Likes { get; private set; }
-		public ImageView DownButton { get; private set; }
-		public TextView Description { get; private set; }
-		public ImageView StitchedImages { get; private set; }
-		public TextView Cost { get; private set; }
-		public TextView AddComment { get; private set; }
-		public EditText AddCommentInput { get; private set; }
-		public Button AddCommentButton { get; private set; }
-		public TextView ShowComments { get; private set; }
-		public ImageView ViewMenu { get; private set; }
+		public TextView Name { get; }
+		public TextView Type { get; }
+		public TextView Pins { get; }
+		public TextView CreateDate { get; }
+		public TextView Account { get; }
+		public ImageView UpButton { get; }
+		public TextView Likes { get; }
+		public ImageView DownButton { get; }
+		public TextView Description { get; }
+		public ImageView StitchedImages { get; }
+		public TextView Cost { get; }
+		public TextView AddComment { get; }
+		public EditText AddCommentInput { get; }
+		public Button AddCommentButton { get; }
+		public TextView ShowComments { get; }
 		public bool HideComments { get; set; }
-		public LinearLayout CommentsListView { get; set; }
+		public LinearLayout CommentsListView { get; }
 		public CommentsAdapter CommentsAdapter { get; set; }
 
 		public TripSuggestionViewHolder(View itemView, Action<int> listener) : base(itemView)
