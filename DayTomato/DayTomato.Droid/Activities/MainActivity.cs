@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 namespace DayTomato.Droid
 {
     [Activity(Icon = "@drawable/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
-	public class MainActivity : AppCompatActivity
+	public class MainActivity : AppCompatActivity, DeleteTripListener
 	{
 
 		private static readonly string TAG = "MAIN_ACTIVITY";
@@ -36,7 +36,9 @@ namespace DayTomato.Droid
 
 		private DrawerLayout _drawer;
 		private NavigationView _navigation;
+		private TextView _myTripsEmpty;
 		private TextView _username;
+		private TextView _email;
 		private TextView _places;
 		private TextView _seeds;
 		private ImageView _pic;
@@ -78,6 +80,7 @@ namespace DayTomato.Droid
 			_drawer = FindViewById<DrawerLayout>(Resource.Id.main_drawer);
 			// Main drawer navigation
 			_navigation = FindViewById<NavigationView>(Resource.Id.main_nav_view);
+			_myTripsEmpty = FindViewById<TextView>(Resource.Id.main_my_trips_empty);
 
 			var toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
 			SetSupportActionBar(toolbar);
@@ -127,7 +130,8 @@ namespace DayTomato.Droid
 		{
 			_navigation.NavigationItemSelected += SetNavigationOnClick;
 			_cityControlPanelButton.Click += SetCityControlPanelButtonOnClick;
-
+			_myTripsEmpty.Click += SearchLocalTripsClick;
+			_recyclerView.ChildViewRemoved += MyTripsElementRemoved;
             _cityAutocomplete.TextChanged += async (sender, e) =>
             {
                 try
@@ -170,8 +174,10 @@ namespace DayTomato.Droid
 			_places = _navigation.FindViewById<TextView>(Resource.Id.nav_header_places);
 			_seeds = _navigation.FindViewById<TextView>(Resource.Id.nav_header_seeds);
 			_pic = _navigation.FindViewById<ImageView>(Resource.Id.nav_header_profile_picture);
+			_email = _navigation.FindViewById<TextView>(Resource.Id.nav_header_email);
 
 			_username.Text = _account.Username;
+			_email.Text = _account.Email;
 			Bitmap bmp = BitmapFactory.DecodeByteArray(_account.ProfilePicture, 0, _account.ProfilePicture.Length);
 			bmp = PictureUtil.CircleBitmap(bmp, bmp.Width/2);
 			_pic.SetImageBitmap(bmp);
@@ -211,9 +217,19 @@ namespace DayTomato.Droid
 		{
 			if (!_myTrips.Contains(trip))
 			{
-				_myTrips.Add(trip);
+				Trip copy = trip;
+				copy.LinkedAccountId = _account.Id;
+				// TODO: server add to my trips
+				_myTrips.Add(copy);
 				_refresh = true;
 			}
+		}
+
+		public void OnDeleteTrip(Trip trip)
+		{
+			// TODO: server remove from my trips
+			_myTrips.Remove(trip);
+			_refresh = true;
 		}
 
 		private void RefreshMyTrips()
@@ -222,6 +238,7 @@ namespace DayTomato.Droid
 			{
 				_adapter.NotifyDataSetChanged();
 				_refresh = false;
+				_myTripsEmpty.Visibility = _adapter.ItemCount > 0 ? Android.Views.ViewStates.Gone : Android.Views.ViewStates.Visible;
 			}
 		}
 
@@ -261,11 +278,22 @@ namespace DayTomato.Droid
 			viewTripDialogFragment.Show(fm, "ViewTripDialog");
 		}
 
+		private void SearchLocalTripsClick(object sender, System.EventArgs e)
+		{
+			Intent trips = new Intent(this, typeof(TripsActivity));
+			StartActivity(trips);
+		}
+
 		private void SetCityControlPanelButtonOnClick(object sender, System.EventArgs e)
 		{
 			Intent intent = new Intent(this, typeof(TripControlPanel));
 			intent.PutExtra("TRIP_LOCALITY", _locality);
 			StartActivityForResult(intent, Constants.TRIP_CONTROL_PANEL);
+		}
+
+		private void MyTripsElementRemoved(object sender, Android.Views.ViewGroup.ChildViewRemovedEventArgs e)
+		{
+			_myTripsEmpty.Visibility = _adapter.ItemCount > 0 ? Android.Views.ViewStates.Gone : Android.Views.ViewStates.Visible;
 		}
 
 		private void SetNavigationOnClick(object sender, NavigationView.NavigationItemSelectedEventArgs e)
@@ -311,6 +339,7 @@ namespace DayTomato.Droid
             _account.Username = (string)googleAccInfoObj["given_name"];
 		    string imageurl = (string)googleAccInfoObj["picture"];
             _account.ProfilePicture = await dayTomatoClient.GetImageBitmapFromUrlAsync(imageurl);
+			_account.Email = (string)googleAccInfoObj["email"];
 
             return _account;
 		}

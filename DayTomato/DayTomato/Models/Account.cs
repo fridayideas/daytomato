@@ -23,6 +23,7 @@ namespace DayTomato.Models
 		[JsonProperty("pins", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public int Pins { get; set; }
 		public Byte[] ProfilePicture { get; set; }
+		public string Email { get; set; }
 		public SeedLevels Privilege { get; set; }
 	    public string UserJson { get; set; }
         public string AccessToken { get; set; }

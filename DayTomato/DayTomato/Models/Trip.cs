@@ -20,6 +20,8 @@ namespace DayTomato.Models
 		public string Type { get; set; }
         [JsonProperty("linkedAccount")]
 		public string LinkedAccount { get; set; }
+		[JsonProperty("linkedAccountId")]
+		public string LinkedAccountId { get; set; }
         [JsonProperty("createDate")]
 		public DateTime CreateDate { get; set; }
         [JsonProperty("likes", DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -46,6 +48,7 @@ namespace DayTomato.Models
 			Name = trip.Name;
 			Type = trip.Type;
 			LinkedAccount = trip.LinkedAccount;
+			LinkedAccountId = trip.LinkedAccountId;
 			CreateDate = trip.CreateDate;
 			Likes = trip.Likes;
 			Description = trip.Description;

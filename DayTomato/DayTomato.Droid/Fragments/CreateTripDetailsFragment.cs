@@ -47,6 +47,7 @@ namespace DayTomato.Droid
 			trip.Cost = Convert.ToDouble(_cost.Text);
 			trip.CreateDate = DateTime.Today;
 			trip.LinkedAccount = MainActivity.GetAccount().Username;
+			trip.LinkedAccountId = MainActivity.GetAccount().Id;
 
 			return trip;
         }

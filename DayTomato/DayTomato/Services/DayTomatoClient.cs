@@ -62,6 +62,13 @@ namespace DayTomato.Services
             return "";
         }
 
+		public async Task<bool> DeleteTrip(string tripId)
+		{
+			var uri = new Uri(BASE_URL + "/api/trips/" + tripId);
+			var response = await httpClient.DeleteAsync(uri);
+			return response.IsSuccessStatusCode;
+		}
+
 		// Like Trip
 		public async Task<bool> LikeTrip(string tripId, Account account)
 		{
