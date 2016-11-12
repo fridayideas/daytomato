@@ -43,8 +43,8 @@ namespace DayTomato.Droid
 			SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(true);
 
 			_nextButton = (Button)FindViewById(Resource.Id.create_trip_next_button);
-			_cancelButton = (Button)FindViewById(Resource.Id.create_trip_cancel_button);
-			_frame = (FrameLayout)FindViewById(Resource.Id.create_trip_frame);
+            _cancelButton = (Button)FindViewById(Resource.Id.create_trip_cancel_button);
+            _frame = (FrameLayout)FindViewById(Resource.Id.create_trip_frame);
 
 			_detailsFragment = CreateTripDetailsFragment.NewInstance();
 			_pinsFragment = AddPinsFragment.NewInstance();
@@ -71,11 +71,11 @@ namespace DayTomato.Droid
 				}
 			};
 
-			_cancelButton.Click += (sender, e) =>
-			{
-				Finish();
-			};
-		}
+            _cancelButton.Click += (sender, e) =>
+            {
+                Finish();
+            };
+        }
 
 		private void SetTripDetails()
 		{

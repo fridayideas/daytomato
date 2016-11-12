@@ -62,9 +62,18 @@ namespace DayTomato.Droid
 			_createPin.Click += OnCreatePin;
 		}
 
-		private void OnCreatePin(object sender, System.EventArgs e)
+		private async void OnCreatePin(object sender, System.EventArgs e)
 		{
-			
+			ProgressDialog pd = new ProgressDialog(this);
+			pd.Show();
+			pd.SetMessage("Loading...");
+
+			// Get feed from server
+			_pins = await MainActivity.dayTomatoClient.GetHotPins();
+			_adapter = new ViewPinAdapter(_pins, this);
+			_recyclerView.SetAdapter(_adapter);
+
+			pd.Hide();
 		}
 
 		public override void OnBackPressed()

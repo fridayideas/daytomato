@@ -72,7 +72,7 @@ namespace DayTomato.Droid
 			ca.NotifyDataSetChanged();
 		}
 
-		public async override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+		public override async void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
 			ViewPinViewHolder vh = holder as ViewPinViewHolder;
 
