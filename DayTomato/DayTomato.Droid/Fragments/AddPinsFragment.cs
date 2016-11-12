@@ -61,14 +61,13 @@ namespace DayTomato.Droid
 
 		private void OnItemClick(object sender, AdapterView.ItemClickEventArgs e)
 		{ 
-			Pin _pin = _allPins[e.Position];
-			if (_pin != null)
+			Pin pin = _allPins[e.Position];
+			if (pin != null)
 			{
-				_addedPins.Add(_pin);
-				_addedPinsIds.Add(_pin.Id);
+				_addedPins.Add(pin);
+				_addedPinsIds.Add(pin.Id);
 				Toast.MakeText(Activity, "Added Pin", ToastLength.Short).Show();
 				_listPins.Text += _autocompleteTextView.Text + "\n";
-				_pin = null;
 				_autocompleteTextView.Text = "";
 			}
 			else
@@ -80,7 +79,19 @@ namespace DayTomato.Droid
 		private void OnCreatePinClick(object sender, System.EventArgs e)
 		{
 			Intent intent = new Intent(Activity, typeof(MapActivity));
-			StartActivityForResult(intent, Constants.CREATE_PLACE_REQUEST);
+			intent.PutExtra("CREATE_PLACE_REQUEST", true);
+			Activity.StartActivityForResult(intent, Constants.CREATE_PLACE_REQUEST);
+		}
+
+		public async void AddPin(string pinId)
+		{
+			Pin pin = await MainActivity.dayTomatoClient.GetPin(pinId);
+			_autoCompleteAdapter.Add(pin.Name);
+			_autoCompleteAdapter.NotifyDataSetChanged();
+			_addedPins.Add(pin);
+			_addedPinsIds.Add(pinId);
+			Toast.MakeText(Activity, "Added Pin", ToastLength.Short).Show();
+			_listPins.Text += pin.Name + "\n";
 		}
 
 		public List<Pin> FinalizePins()

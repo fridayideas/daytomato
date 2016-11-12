@@ -7,6 +7,8 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using DayTomato.Models;
 using Android.Support.Design.Widget;
+using Android.Content;
+using Android.Widget;
 
 namespace DayTomato.Droid
 {
@@ -24,7 +26,7 @@ namespace DayTomato.Droid
 			base.OnCreate(savedInstanceState);
 
 			SetContentView(Resource.Layout.places_activity);
-			var toolbar = FindViewById<Toolbar>(Resource.Id.main_toolbar);
+			var toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
 			SetSupportActionBar(toolbar);
 			SupportActionBar.Title = "Local Places";
 			SupportActionBar.SetDisplayHomeAsUpEnabled(true);
@@ -32,9 +34,13 @@ namespace DayTomato.Droid
 			SupportActionBar.SetDisplayShowHomeEnabled(true);
 			SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(true);
 
-			_createPin = FindViewById<FloatingActionButton>(Resource.Id.place_create_pin);
-
 			InitInstances();
+
+			_createPin = FindViewById<FloatingActionButton>(Resource.Id.place_create_pin);
+			_recyclerView = FindViewById<RecyclerView>(Resource.Id.places_recycler_view);
+			_layoutManager = new LinearLayoutManager(this);
+			_recyclerView.SetLayoutManager(_layoutManager);
+
 			SetListeners();
 		}
 
@@ -43,26 +49,21 @@ namespace DayTomato.Droid
 			base.OnResume();
 		}
 
-		private async void InitInstances()
+		private async void RefreshPlaces()
 		{
-			ProgressDialog pd = new ProgressDialog(this);
-			pd.Show();
-			pd.SetMessage("Loading...");
 			_pins = await MainActivity.dayTomatoClient.GetHotPins();
-			_recyclerView = FindViewById<RecyclerView>(Resource.Id.places_recycler_view);
-			_layoutManager = new LinearLayoutManager(this);
-			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new ViewPinAdapter(_pins, this);
-			_recyclerView.SetAdapter(_adapter);
-			pd.Hide();
+			_adapter.NotifyDataSetChanged();
 		}
 
-		private void SetListeners()
+		private async void AddPlace(string pinId)
 		{
-			_createPin.Click += OnCreatePin;
+			Pin pin = await MainActivity.dayTomatoClient.GetPin(pinId);
+			_pins.Add(pin);
+			_adapter.NotifyItemInserted(_pins.Count);
+			_recyclerView.SmoothScrollToPosition(_adapter.ItemCount);
 		}
 
-		private async void OnCreatePin(object sender, System.EventArgs e)
+		private async void InitInstances()
 		{
 			ProgressDialog pd = new ProgressDialog(this);
 			pd.Show();
@@ -74,6 +75,32 @@ namespace DayTomato.Droid
 			_recyclerView.SetAdapter(_adapter);
 
 			pd.Hide();
+		}
+
+		private void SetListeners()
+		{
+			_createPin.Click += OnCreatePin;
+		}
+
+		private void OnCreatePin(object sender, System.EventArgs e)
+		{
+			Intent intent = new Intent(this, typeof(MapActivity));
+			intent.PutExtra("CREATE_PLACE_REQUEST", true);
+			StartActivityForResult(intent, Constants.CREATE_PLACE_REQUEST);
+		}
+
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (requestCode == Constants.CREATE_PLACE_REQUEST)
+			{
+				if (resultCode == Result.Ok)
+				{
+					Toast.MakeText(this, "Your place was created", ToastLength.Long).Show();
+					string pinId = data.GetStringExtra("CREATE_PLACE_RESULT");
+					AddPlace(pinId);
+				}
+			}
 		}
 
 		public override void OnBackPressed()
