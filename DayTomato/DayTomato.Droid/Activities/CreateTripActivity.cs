@@ -16,7 +16,6 @@ namespace DayTomato.Droid
 	{
 
 		private Button _nextButton;                                   // Move on to adding pins to the trip button
-		private Button _cancelButton;                                    // Cancel create trip button
 		private FrameLayout _frame;
 
 		private CreateTripDetailsFragment _detailsFragment;
@@ -43,7 +42,6 @@ namespace DayTomato.Droid
 			SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(true);
 
 			_nextButton = (Button)FindViewById(Resource.Id.create_trip_next_button);
-            _cancelButton = (Button)FindViewById(Resource.Id.create_trip_cancel_button);
             _frame = (FrameLayout)FindViewById(Resource.Id.create_trip_frame);
 
 			_detailsFragment = CreateTripDetailsFragment.NewInstance();
@@ -70,11 +68,6 @@ namespace DayTomato.Droid
 					SetTripPins();
 				}
 			};
-
-            _cancelButton.Click += (sender, e) =>
-            {
-                Finish();
-            };
         }
 
 		private void SetTripDetails()
@@ -139,11 +132,6 @@ namespace DayTomato.Droid
 			}
 
 			Finish();
-		}
-
-		public override void OnBackPressed()
-		{
-			base.OnBackPressed();
 		}
 
 		public override bool OnOptionsItemSelected(IMenuItem item)
