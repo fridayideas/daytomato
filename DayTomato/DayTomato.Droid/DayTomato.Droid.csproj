@@ -170,7 +170,6 @@
     <Compile Include="Fragments\CreatePinDialogFragment.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Adapters\ViewPinAdapter.cs" />
-    <Compile Include="Adapters\PlacesAdapter.cs" />
     <Compile Include="Adapters\ViewTripAdapter.cs" />
     <Compile Include="Util\ClusterRenderer.cs" />
     <Compile Include="Util\PolyUtil.cs" />
@@ -221,10 +220,7 @@
     <AndroidResource Include="Resources\layout\trip_view_holder.axml" />
     <None Include="DLL\GoogleMapsUtilityBinding.dll" />
     <AndroidResource Include="Resources\layout\comment_view_holder.axml" />
-    <AndroidResource Include="Resources\drawable\three_dots.png" />
-    <AndroidResource Include="Resources\drawable\dots.png" />
     <AndroidResource Include="Resources\menu\view_pin_popup_menu.xml" />
-    <AndroidResource Include="Resources\layout\places_view_holder.axml" />
     <AndroidResource Include="Resources\drawable\ic_directions_black_48px.xml" />
     <AndroidResource Include="Resources\layout\view_trip_dialog_fragment.axml" />
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
@@ -258,6 +254,7 @@
     <AndroidResource Include="Resources\drawable\ic_explore_black_24px.xml" />
     <AndroidResource Include="Resources\drawable\ic_map_black_24px.xml" />
     <AndroidResource Include="Resources\drawable\ic_photo_camera_black_24px.xml" />
+    <AndroidResource Include="Resources\drawable\ic_more_vert_black_24px.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

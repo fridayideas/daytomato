@@ -15,25 +15,26 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView2" />
+            android:id="@+id/add_pins_title" />
         <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/add_pins_dialog_autocomplete"
+            android:id="@+id/add_pins_autocomplete"
             android:textColor="@color/black"
             android:inputType="textCapWords"
-            android:hint="Type to find a place to add to this trip" />
-        <Button
-            android:text="ADD"
-            android:layout_width="wrap_content"
+            android:hint="Type to find a place to add to this trip"
+            android:completionThreshold="1" />
+        <TextView
+            android:text="Create New Place"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/add_pins_dialog_add_button"
-            android:background="@color/colorPrimary"
-            android:layout_gravity="right" />
+            android:id="@+id/add_pins_create_pin"
+            android:textColor="#616161"
+            android:textStyle="bold" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/add_pins_dialog_listpins"
+            android:id="@+id/add_pins_listpins"
             android:textColor="@color/black" />
         <LinearLayout
             android:orientation="horizontal"

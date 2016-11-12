@@ -6,6 +6,7 @@ using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using DayTomato.Models;
+using Android.Support.Design.Widget;
 
 namespace DayTomato.Droid
 {
@@ -13,9 +14,10 @@ namespace DayTomato.Droid
 	public class PlacesActivity : AppCompatActivity
 	{
 		private List<Pin> _pins;
-		private RecyclerView _recyclerView;
+        private FloatingActionButton _createPin;
+        private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
-		private PlacesAdapter _adapter;
+		private ViewPinAdapter _adapter;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -30,7 +32,10 @@ namespace DayTomato.Droid
 			SupportActionBar.SetDisplayShowHomeEnabled(true);
 			SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(true);
 
+			_createPin = FindViewById<FloatingActionButton>(Resource.Id.place_create_pin);
+
 			InitInstances();
+			SetListeners();
 		}
 
 		protected override void OnResume()
@@ -47,9 +52,19 @@ namespace DayTomato.Droid
 			_recyclerView = FindViewById<RecyclerView>(Resource.Id.places_recycler_view);
 			_layoutManager = new LinearLayoutManager(this);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new PlacesAdapter(_pins, this);
+			_adapter = new ViewPinAdapter(_pins, this);
 			_recyclerView.SetAdapter(_adapter);
 			pd.Hide();
+		}
+
+		private void SetListeners()
+		{
+			_createPin.Click += OnCreatePin;
+		}
+
+		private void OnCreatePin(object sender, System.EventArgs e)
+		{
+			
 		}
 
 		public override void OnBackPressed()
