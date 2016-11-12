@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include
-            layout="@layout/app_bar" />
+        <include layout="@layout/app_bar" />
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -30,8 +29,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/main_start_control_panel_button"
                 android:text="Current Location"
-                android:textColor="@color/white"
-                android:background="@color/colorPrimary" />
+                android:textColor="@color/white" />
             <TextView
                 android:text="My Trips"
                 android:textAppearance="?android:attr/textAppearanceLarge"
