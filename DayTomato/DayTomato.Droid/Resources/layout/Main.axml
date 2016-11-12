@@ -39,10 +39,27 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/main_my_trips_text"
                 style="@style/Subheading" />
-            <android.support.v7.widget.RecyclerView
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/main_my_trips_recycler_view" />
+                android:id="@+id/relativeLayout1">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/main_my_trips_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:text="Search local trips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/main_my_trips_empty"
+                    android:layout_centerInParent="true"
+                    android:textStyle="bold"
+                    android:textColor="#616161"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    tools:visibility="visible" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
     <android.support.design.widget.NavigationView

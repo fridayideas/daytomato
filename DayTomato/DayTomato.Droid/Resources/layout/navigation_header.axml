@@ -8,13 +8,22 @@
     android:paddingTop="@dimen/status_bar_height"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
     <TextView
-        android:id="@+id/nav_header_username"
+        android:id="@+id/nav_header_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/spacing_large"
         android:layout_marginStart="@dimen/spacing_large"
         android:layout_marginBottom="@dimen/spacing_large"
+        android:text="email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id="@+id/nav_header_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/nav_header_email"
+        android:layout_marginLeft="@dimen/spacing_large"
+        android:layout_marginStart="@dimen/spacing_large"
         android:text="username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     <LinearLayout

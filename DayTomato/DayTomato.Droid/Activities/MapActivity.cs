@@ -628,6 +628,7 @@ namespace DayTomato.Droid
 				Likes = 0,
 				Coordinate = new Coordinate(_selectLocation.Latitude, _selectLocation.Longitude),
 				LinkedAccount = account.Username,
+				LinkedAccountId = account.Id,
 				Review = e.Review,
 				Cost = e.Cost,
 				CreateDate = e.CreateDate,

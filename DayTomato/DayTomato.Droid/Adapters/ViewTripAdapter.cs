@@ -18,23 +18,23 @@ namespace DayTomato.Droid.Adapters
 		// on each individual item.
 		public event EventHandler<int> HandleClick;
 
-		private readonly string TAG = "VIEW_TRIP_ADAPTER";
-		private List<Trip> _suggestions;
+		private readonly string Tag = "VIEW_TRIP_ADAPTER";
+		private List<Trip> _trips;
 		private List<bool> _tripLiked;
 		private List<bool> _tripDisliked;
 		private readonly Activity _context;
 		private readonly Account _account;
 
-		public ViewTripAdapter(List<Trip> suggestions, Activity context)
+		public ViewTripAdapter(List<Trip> trips, Activity context)
 		{
-			_suggestions = suggestions;
-			_tripLiked = new List<bool>(new bool[_suggestions.Count]);
-			_tripDisliked = new List<bool>(new bool[_suggestions.Count]);
+			_trips = trips;
+			_tripLiked = new List<bool>(new bool[_trips.Count]);
+			_tripDisliked = new List<bool>(new bool[_trips.Count]);
 			_context = context;
 			_account = MainActivity.GetAccount();
 		}
 
-		public override int ItemCount => _suggestions.Count;
+		public override int ItemCount => _trips.Count;
 
 	    public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
 		{
@@ -60,7 +60,7 @@ namespace DayTomato.Droid.Adapters
 		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
             var vh = (TripSuggestionViewHolder)holder;
-		    var trip = _suggestions[position];
+		    var trip = _trips[position];
 		    vh.Name.Text = trip.Name;
 			vh.Type.Text = trip.Type;
 		    vh.Pins.Text = trip.Pins
@@ -91,7 +91,37 @@ namespace DayTomato.Droid.Adapters
 			}
 			catch (Exception ex)
 			{
-				Log.Debug(TAG, ex.Message);
+				Log.Debug(Tag, ex.Message);
+			}
+
+			if (trip.LinkedAccountId == MainActivity.GetAccount().Id)
+			{
+				vh.Menu.Visibility = ViewStates.Visible;
+				vh.Menu.Click += (sender, e) =>
+			   	{
+				   	var menu = new Android.Support.V7.Widget.PopupMenu(_context, vh.Menu, (int)GravityFlags.End);
+				   	menu.Inflate(Resource.Menu.view_trip_popup_menu);
+
+				   	menu.MenuItemClick += (s1, arg1) =>
+				   	{
+					   	var command = arg1.Item.TitleFormatted.ToString();
+					   	if (command.Equals("Delete"))
+					   	{
+							try
+							{
+							   ((DeleteTripListener)_context).OnDeleteTrip(trip);
+							}
+							catch (Exception ex)
+							{
+							   Log.Debug(Tag, ex.Message);
+							}
+							Toast.MakeText(_context, "Removed " + trip.Name, ToastLength.Long).Show();
+						    NotifyItemRemoved(position);
+						    NotifyDataSetChanged();
+					    }
+				    };
+					menu.Show();
+				};
 			}
 
 			// Initializing listview
@@ -222,7 +252,7 @@ namespace DayTomato.Droid.Adapters
 	            }
 	            catch (Exception ex)
 	            {
-	                Log.Error(TAG, ex.Message);
+	                Log.Error(Tag, ex.Message);
 	                return null;
 	            }
 	        }).Where(bmp => bmp != null));
@@ -234,7 +264,7 @@ namespace DayTomato.Droid.Adapters
 			}
 			catch (Exception ex)
 			{
-				Log.Error(TAG, ex.Message);
+				Log.Error(Tag, ex.Message);
 				vh.StitchedImages.SetImageBitmap(null);
 			}
 		}
@@ -266,6 +296,7 @@ namespace DayTomato.Droid.Adapters
 		public bool HideComments { get; set; }
 		public LinearLayout CommentsListView { get; }
 		public CommentsAdapter CommentsAdapter { get; set; }
+		public ImageView Menu { get; }
 
 		public TripSuggestionViewHolder(View itemView, Action<int> listener) : base(itemView)
 		{
@@ -285,8 +316,14 @@ namespace DayTomato.Droid.Adapters
 			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.trip_suggestion_add_comment_button);
 			ShowComments = itemView.FindViewById<TextView>(Resource.Id.trip_suggestion_show_comments);
 			CommentsListView = itemView.FindViewById<LinearLayout>(Resource.Id.trip_suggestion_comment_list);
+			Menu = itemView.FindViewById<ImageView>(Resource.Id.trip_suggestion_menu);
 
 			itemView.Click += (sender, e) => listener(AdapterPosition);
 		}
+	}
+
+	public interface DeleteTripListener
+	{
+		void OnDeleteTrip(Trip trip);
 	}
 }
