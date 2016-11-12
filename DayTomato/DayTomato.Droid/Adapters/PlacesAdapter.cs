@@ -8,31 +8,30 @@ using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using DayTomato.Models;
 
 namespace DayTomato.Droid
 {
 	public class PlacesAdapter : RecyclerView.Adapter
 	{
 		private static readonly string TAG = "PLACES_ADAPTER";
-		private List<Feed> _feed;
-		private const int FEED_NOTIFICATION = 0;
-		private const int FEED_PIN = 1;
+		private List<Pin> _pins;
 		private Activity _context;
 
-		public PlacesAdapter(List<Feed> feed, Activity context)
+		public PlacesAdapter(List<Pin> pins, Activity context)
 		{
-			_feed = feed;
+			_pins = pins;
 			_context = context;
 		}
 
 		public override int ItemCount
 		{
-			get { return _feed.Count; }
+			get { return _pins.Count; }
 		}
 
 		public override int GetItemViewType(int position)
 		{
-			return _feed[position].Type;
+			return _pins[position].Type;
 		}
 
 		public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
@@ -40,79 +39,69 @@ namespace DayTomato.Droid
 			RecyclerView.ViewHolder viewHolder = null;
 			LayoutInflater inflater = LayoutInflater.From(parent.Context);
 
-			switch (viewType)
-			{
-				case FEED_NOTIFICATION:
-					View notification = inflater.
-                        	Inflate(Resource.Layout.home_feed_notification_view_holder, parent, false);
-					viewHolder = new HomeFeedNotificationViewHolder(notification);
-					break;
-				case FEED_PIN:
-					View pin = inflater.
-							Inflate(Resource.Layout.home_feed_pins_view_holder, parent, false);
-					viewHolder = new HomeFeedPinViewHolder(pin);
-					break;
-			}
+			View pin = inflater.Inflate(Resource.Layout.places_view_holder, parent, false);
+			viewHolder = new PlaceViewHolder(pin);
 
 			return viewHolder;
 		}
 
 		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
-			switch (holder.ItemViewType)
-			{
-				case FEED_NOTIFICATION:
-					var notification = holder as HomeFeedNotificationViewHolder;
-					ConfigureNotification(notification, position);
-					break;
-				case FEED_PIN:
-					var pin = holder as HomeFeedPinViewHolder;
-					ConfigurePin(pin, position);
-					break;
-			}
+			var pin = holder as PlaceViewHolder;
+			ConfigurePin(pin, position);
 		}
 
-		public void ConfigureNotification(HomeFeedNotificationViewHolder view, int position)
+		public async void ConfigurePin(PlaceViewHolder view, int position)
 		{
-			view.Notification.Text = _feed[position].Notification;
-		} 
-
-		public async void ConfigurePin(HomeFeedPinViewHolder view, int position)
-		{
-			view.Name.Text = _feed[position].Pin.Name;
+			view.Name.Text = _pins[position].Name;
 
 			// Pin imageURL 
-			try
+			var imageUrl = _pins[position].ImageURL;
+			if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
 			{
-				var imageUrl = _feed[position].Pin.ImageURL;
-				if (!imageUrl.Equals("none") && !imageUrl.Equals("") && imageUrl != null)
+				try
 				{
 					var imageBytes = await MainActivity.dayTomatoClient.GetImageBitmapFromUrlAsync(imageUrl);
 					var imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
 					view.Image.SetImageBitmap(imageBitmap);
 				}
+				catch (Exception ex)
+				{
+					Log.Error(TAG, ex.Message);
+				}
 			}
-			catch (Exception ex)
-			{
-				Log.Debug(TAG, ex.Message);
-			}
-			view.Likes.Text = _feed[position].Pin.Likes + " likes";
-			view.Cost.Text = "$" + _feed[position].Pin.Cost;
-			view.Review.Text = _feed[position].Pin.Review;
+
+			SetCost(view, _pins[position].Cost);
+			view.RatingText.Text = _pins[position].Rating.ToString();
+			view.Rating.Rating = _pins[position].Rating;
+			view.Likes.Text = _pins[position].Likes + " likes";
+			view.Review.Text = _pins[position].Review;
 
 			// Open google maps for directions to the hot place
 			view.Directions.Click += (sender, e) => 
 			{
-				string lat = Convert.ToString(_feed[position].Pin.Coordinate.latitude);
-				string lng = Convert.ToString(_feed[position].Pin.Coordinate.longitude);
-				var geoUri = Android.Net.Uri.Parse("geo:0,0?q=" + lat + "," +lng + "(" + _feed[position].Pin.Name + ")");
+				string lat = Convert.ToString(_pins[position].Coordinate.latitude);
+				string lng = Convert.ToString(_pins[position].Coordinate.longitude);
+				var geoUri = Android.Net.Uri.Parse("geo:0,0?q=" + lat + "," +lng + "(" + _pins[position].Name + ")");
 				var mapIntent = new Intent(Intent.ActionView, geoUri);
 				_context.StartActivity(mapIntent);
 			};
 		}
+
+		private void SetCost(PlaceViewHolder vh, double cost)
+		{
+			if (cost > 0)
+			{
+				vh.Cost.Text = "$" + cost;
+			}
+			else
+			{
+				vh.Cost.Text = "FREE";
+			}
+		}
 	}
 
-	public class HomeFeedPinViewHolder : RecyclerView.ViewHolder
+	public class PlaceViewHolder : RecyclerView.ViewHolder
 	{
 		private Action<int> _listener;
 
@@ -120,17 +109,21 @@ namespace DayTomato.Droid
 		public ImageView Image { get; private set; }
 		public TextView Likes { get; private set; }
 		public TextView Cost { get; private set; }
+		public TextView RatingText { get; private set; }
+		public RatingBar Rating { get; private set; }
 		public TextView Review { get; private set; }
 		public ImageView Directions { get; private set; }
 
-		public HomeFeedPinViewHolder(View itemView) : base(itemView)
+		public PlaceViewHolder(View itemView) : base(itemView)
 		{
-			Name = itemView.FindViewById<TextView>(Resource.Id.home_feed_pin_name);
-			Image = itemView.FindViewById<ImageView>(Resource.Id.home_feed_pin_image);
-			Likes = itemView.FindViewById<TextView>(Resource.Id.home_feed_pin_likes);
-			Cost = itemView.FindViewById<TextView>(Resource.Id.home_feed_pin_cost);
-			Review = itemView.FindViewById<TextView>(Resource.Id.home_feed_pin_review);
-			Directions = itemView.FindViewById<ImageView>(Resource.Id.home_feed_pin_directions);
+			Name = itemView.FindViewById<TextView>(Resource.Id.place_name);
+			Image = itemView.FindViewById<ImageView>(Resource.Id.place_image);
+			Likes = itemView.FindViewById<TextView>(Resource.Id.place_likes);
+			Cost = itemView.FindViewById<TextView>(Resource.Id.place_cost);
+			RatingText = itemView.FindViewById<TextView>(Resource.Id.place_rating_text);
+			Rating = itemView.FindViewById<RatingBar>(Resource.Id.place_rating);
+			Review = itemView.FindViewById<TextView>(Resource.Id.place_review);
+			Directions = itemView.FindViewById<ImageView>(Resource.Id.place_directions);
 		}
 
 		public void SetClickListener(Action<int> listener)
@@ -151,40 +144,7 @@ namespace DayTomato.Droid
 
 		void HandleClick(object sender, EventArgs e)
 		{
-			_listener?.Invoke(base.AdapterPosition);
-		}
-	}
-
-	public class HomeFeedNotificationViewHolder : RecyclerView.ViewHolder
-	{
-		private Action<int> _listener;
-
-		public TextView Notification { get; private set; }
-
-		public HomeFeedNotificationViewHolder(View itemView) : base(itemView)
-		{
-			Notification = itemView.FindViewById<TextView>(Resource.Id.home_feed_notification);
-		}
-
-		public void SetClickListener(Action<int> listener)
-		{
-			_listener = listener;
-			ItemView.Click += HandleClick;
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-			if (ItemView != null)
-			{
-				ItemView.Click -= HandleClick;
-			}
-			_listener = null;
-		}
-
-		void HandleClick(object sender, EventArgs e)
-		{
-			_listener?.Invoke(base.AdapterPosition);
+			_listener?.Invoke(AdapterPosition);
 		}
 	}
 }
