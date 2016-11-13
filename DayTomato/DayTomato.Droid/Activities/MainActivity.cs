@@ -218,7 +218,7 @@ namespace DayTomato.Droid
 			if (!_myTrips.Contains(trip))
 			{
 				Trip copy = trip;
-				copy.LinkedAccountId = _account.Id;
+				copy.LinkedAccount = _account.Id;
 				// TODO: server add to my trips
 				_myTrips.Add(copy);
 				_refresh = true;
