@@ -66,7 +66,7 @@ namespace DayTomato.Droid.Adapters
 		    vh.Pins.Text = trip.Pins
                 .Aggregate("", (text, pin) => text + pin.Name + "\n");
 			vh.CreateDate.Text = "created " + trip.CreateDate.ToLongDateString();
-			vh.Account.Text = trip.LinkedAccount;
+			vh.Account.Text = trip.Username;
 			vh.Likes.Text = trip.Likes.ToString();
 			vh.Description.Text = trip.Description;
 		    vh.Cost.Text = trip.Cost > 0.0 ? $"${trip.Cost}" : "FREE";
@@ -94,7 +94,7 @@ namespace DayTomato.Droid.Adapters
 				Log.Debug(Tag, ex.Message);
 			}
 
-			if (trip.LinkedAccountId == MainActivity.GetAccount().Id)
+			if (trip.LinkedAccount == MainActivity.GetAccount().Id)
 			{
 				vh.Menu.Visibility = ViewStates.Visible;
 				vh.Menu.Click += (sender, e) =>
@@ -147,7 +147,7 @@ namespace DayTomato.Droid.Adapters
 				var account = MainActivity.GetAccount();
 				if (trip.Comments.Count > 0 && trip.Comments.Last().Text == vh.AddCommentInput.Text)
 					return;
-				trip.Comments.Add(new Comment(account.Id, vh.AddCommentInput.Text, DateTime.Today));
+				trip.Comments.Add(new Comment(account.Id, account.Username, vh.AddCommentInput.Text, DateTime.Today));
 				// await MainActivity.dayTomatoClient.AddCommentToTrip(_suggestions[position], vh.AddCommentInput.Text, account.Id);
 				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 				vh.HideComments = !vh.HideComments;

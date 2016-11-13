@@ -112,7 +112,7 @@ namespace DayTomato.Droid.Adapters
 
 			vh.PinDescription.Text = pin.Description;
 			vh.PinReview.Text = pin.Review;
-			vh.PinLinkedAccount.Text = pin.LinkedAccount;
+			vh.PinLinkedAccount.Text = pin.Username;
             vh.PinRating.Rating = pin.Rating;
 		    vh.PinRatingText.Text = pin.Rating.ToString();
 
@@ -141,7 +141,7 @@ namespace DayTomato.Droid.Adapters
 
 				if (pin.Comments.Count > 0 && pin.Comments.Last().Text == vh.AddCommentInput.Text)
 					return; 
-				pin.Comments.Add(new Comment(_account.Id, vh.AddCommentInput.Text, DateTime.Today));
+				pin.Comments.Add(new Comment(_account.Id, _account.Username, vh.AddCommentInput.Text, DateTime.Today));
 				await MainActivity.dayTomatoClient.AddCommentToPin(pin, vh.AddCommentInput.Text, _account.Id);
 				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 				vh.HideComments = !vh.HideComments;

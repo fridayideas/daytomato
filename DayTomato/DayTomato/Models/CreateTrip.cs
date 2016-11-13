@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace DayTomato.Models
 {
@@ -20,8 +16,8 @@ namespace DayTomato.Models
 		public string Type { get; set; }
         [JsonProperty("linkedAccount")]
 		public string LinkedAccount { get; set; }
-		[JsonProperty("linkedAccountId")]
-		public string LinkedAccountId { get; set; }
+		[JsonProperty("username")]
+		public string Username { get; set; }
         [JsonProperty("createDate")]
 		public DateTime CreateDate { get; set; }
         [JsonProperty("likes", DefaultValueHandling = DefaultValueHandling.Populate)]

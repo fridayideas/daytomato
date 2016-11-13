@@ -17,7 +17,7 @@ namespace DayTomato.Models
 		           double lat, 
 		           double lng, 
 		           string account,
-		           string accountId,
+		           string username,
 		           string review,
 		           double cost,
 		           DateTime date,
@@ -31,7 +31,7 @@ namespace DayTomato.Models
 			Likes = likes;
 			Coordinate = new Coordinate(lat, lng);
 			LinkedAccount = account;
-			LinkedAccountId = accountId;
+			Username = username;
 			Review = review;
 			Cost = cost;
 			Comments = new List<Comment>();
@@ -57,8 +57,8 @@ namespace DayTomato.Models
 		public Coordinate Coordinate { get; set; }
 		[JsonProperty("linkedAccount")]
 		public string LinkedAccount { get; set; }
-		[JsonProperty("linkedAccountId")]
-		public string LinkedAccountId { get; set; }
+		[JsonProperty("username")]
+		public string Username { get; set; }
 		[JsonProperty("review")]
 		public string Review { get; set; }
 		[JsonProperty("cost", DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -117,14 +117,16 @@ namespace DayTomato.Models
 
 	public class Comment
 	{
-		public Comment(string account, string text, DateTime date)
+		public Comment(string account, string username, string text, DateTime date)
 		{
 			LinkedAccount = account;
+			Username = username;
 			Text = text;
 			CreateDate = date;
 		}
 
 		public string LinkedAccount { get; set; }
+		public string Username { get; set; }
 		public string Text { get; set; }
 		public DateTime CreateDate { get; set; }
 	}
