@@ -141,6 +141,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Auth0Client-0.5.0\lib\android\Xamarin.Auth.Android.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Auth, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.GooglePlayServices.Auth.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Auth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.GooglePlayServices.Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.GooglePlayServices.Base.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Base.dll</HintPath>
       <Private>True</Private>
@@ -153,6 +157,10 @@
       <HintPath>..\..\packages\Xamarin.GooglePlayServices.Maps.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Maps.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Plus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.GooglePlayServices.Plus.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Plus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DayTomato\DayTomato.csproj">
@@ -162,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\NativeLoginActivity.cs" />
     <Compile Include="Fragments\AddPinsFragment.cs" />
     <Compile Include="Fragments\EditPinDialogFragment.cs" />
     <Compile Include="Fragments\CreateTripDetailsFragment.cs" />

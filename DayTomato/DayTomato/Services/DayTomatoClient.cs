@@ -26,9 +26,8 @@ namespace DayTomato.Services
 
 		public DayTomatoClient(string idToken)
 		{
-			httpClient = new HttpClient();
-			httpClient.MaxResponseContentBufferSize = 256000;
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", idToken);
+		    httpClient = new HttpClient {MaxResponseContentBufferSize = 256000};
+		    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", idToken);
 		}
 
 		// Get All Trips
