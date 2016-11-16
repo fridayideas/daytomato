@@ -54,32 +54,22 @@ namespace DayTomato.Services
 			return response.IsSuccessStatusCode;
 		}
 
-		// Like Trip
-		public async Task<bool> LikeTrip(string tripId, Account account)
-		{
-			var content = new StringContent(JsonConvert.SerializeObject(new { dir = 1 }),
+        private async Task<bool> CastVoteOn(string thing, string thingId, Account account, int dir)
+        {
+			var content = new StringContent(JsonConvert.SerializeObject(new { dir }),
                 Encoding.UTF8, "application/json");
-			var response = await _httpClient.PutAsync($"trips/{tripId}/votes/{account.Id}", content);
+			var response = await _httpClient.PutAsync($"{thing}/{thingId}/votes/{account.Id}", content);
 			return response.IsSuccessStatusCode;
-		}
+        }
+
+		// Like Trip
+        public Task<bool> LikeTrip(string tripId, Account account) => CastVoteOn("trips", tripId, account, 1);
 
 		// Dislike Trip
-		public async Task<bool> DislikeTrip(string tripId, Account account)
-		{
-			string dir = "{\"dir\": -1}";
-			var content = new StringContent(dir, Encoding.UTF8, "application/json");
-			var response = await _httpClient.PutAsync($"trips/{tripId}/votes/{account.Id}", content);
-			return response.IsSuccessStatusCode;
-		}
+        public Task<bool> DislikeTrip(string tripId, Account account) => CastVoteOn("trips", tripId, account, -1);
 
-		// Remove Votes Trip
-		public async Task<bool> RemoveVoteTrip(string tripId, Account account)
-		{
-			string dir = "{\"dir\": 0}";
-			var content = new StringContent(dir, Encoding.UTF8, "application/json");
-			var response = await _httpClient.PutAsync($"trips/{tripId}/votes/{account.Id}", content);
-			return response.IsSuccessStatusCode;
-		}
+		// Remove Vote from Trip
+        public Task<bool> RemoveVoteTrip(string tripId, Account account) => CastVoteOn("trips", tripId, account, 0);
 
         // Get Pins
         public async Task<List<Pin>> GetPins()
@@ -129,7 +119,6 @@ namespace DayTomato.Services
         // Create Pins
         public async Task<string> CreatePin(Pin pin)
 		{
-			_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			var content = new StringContent(JsonConvert.SerializeObject(pin), Encoding.UTF8, "application/json");
 			var response = await _httpClient.PostAsync("pins", content);
 		    response.EnsureSuccessStatusCode();
@@ -154,40 +143,20 @@ namespace DayTomato.Services
 		}
 
 		// Like Pin
-		public async Task<bool> LikePin(string pinId, Account account)
-		{
-			string dir = "{\"dir\": 1}";
-			var content = new StringContent(dir, Encoding.UTF8, "application/json");
-			var response = await _httpClient.PutAsync($"pins/{pinId}/votes/{account.Id}", content);
-			return response.IsSuccessStatusCode;
-		}
+        public Task<bool> LikePin(string pinId, Account account) => CastVoteOn("pins", pinId, account, 1);
 
 		// Dislike Pin
-		public async Task<bool> DislikePin(string pinId, Account account)
-		{
-			string dir = "{\"dir\": -1}";
-			var content = new StringContent(dir, Encoding.UTF8, "application/json");
-			var response = await _httpClient.PutAsync($"pins/{pinId}/votes/{account.Id}", content);
-			return response.IsSuccessStatusCode;
-		}
+        public Task<bool> DislikePin(string pinId, Account account) => CastVoteOn("pins", pinId, account, -1);
 
 		// Remove Votes Pin
-		public async Task<bool> RemoveVotePin(string pinId, Account account)
-		{
-			string dir = "{\"dir\": 0}";
-			var content = new StringContent(dir, Encoding.UTF8, "application/json");
-			var response = await _httpClient.PutAsync($"pins/{pinId}/votes/{account.Id}", content);
-			return response.IsSuccessStatusCode;
-		}
+		public Task<bool> RemoveVotePin(string pinId, Account account) => CastVoteOn("pins", pinId, account, 0);
 
 		// Add a comment 
 		// Need to pass {text:<string>, linkedAccount:<string>}
 		public async Task<bool> AddCommentToPin(Pin pin, string text, string linkedAccount)
 		{
-			JObject comment = new JObject();
-			comment.Add("text", text);
-			comment.Add("linkedAccount", linkedAccount);
-			var content = new StringContent(JsonConvert.SerializeObject(comment), Encoding.UTF8, "application/json");
+			var content = new StringContent(JsonConvert.SerializeObject(new { text, linkedAccount }),
+                Encoding.UTF8, "application/json");
 			var response = await _httpClient.PostAsync($"pins/{pin.Id}/comments", content);
 			return response.IsSuccessStatusCode;
 		}
