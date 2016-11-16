@@ -386,9 +386,11 @@ namespace DayTomato.Droid
 				await dayTomatoClient.UpdateAccountPins(accountId, pins);
 			}
 		}
-	}
 
-	public static class Picture
+        public override void OnBackPressed() { }//Do nothing when back button pressed
+    }
+
+    public static class Picture
 	{
 		public static File File { get; set; }
 		public static File Dir { get; set; }
