@@ -11,55 +11,71 @@
         android:layout_height="match_parent"
         android:padding="16dp">
         <TextView
-            android:text="Name"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_name"
-            android:hint="Name this trip"
+            android:text="Create a trip"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/black"
-            android:inputType="textCapWords" />
-        <TextView
-            android:text="Type"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView1" />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_type"
-            android:hint="Foodie? Relaxing? Walkable?"
-            android:textColor="@color/black"
-            android:inputType="textCapWords" />
-        <TextView
-            android:text="Description"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <EditText
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_create_trip_dialog_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_text_description"
-            android:hint="Give a short description"
-            android:textColor="@color/black"
-            android:inputType="textCapSentences" />
+            android:paddingTop="15dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_trip_dialog_name"
+                android:hint="Name this trip *"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:inputType="textCapWords" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_create_trip_dialog_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="25dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_trip_dialog_type"
+                android:hint="Type *"
+                android:textColor="@color/black"
+                android:inputType="textCapWords" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_create_trip_dialog_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="25dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_trip_dialog_text_description"
+                android:hint="Foodie? Relaxing? Walkable?"
+                android:textColor="@color/black"
+                android:inputType="textCapSentences" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_create_trip_dialog_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="25dp">
+            <EditText
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/create_trip_dialog_cost"
+                android:hint="How much did you spend? *"
+                android:textColor="@color/black" />
+        </android.support.design.widget.TextInputLayout>
         <TextView
-            android:text="Cost"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:inputType="numberDecimal"
+            android:text="* Indicates Required Field"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/create_trip_dialog_cost"
-            android:hint="How much did you spend?"
-            android:textColor="@color/black" />
+            android:paddingTop="20dp" />
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_weight="1"
