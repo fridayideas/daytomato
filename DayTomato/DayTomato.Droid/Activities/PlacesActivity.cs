@@ -1,30 +1,26 @@
 ﻿
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
 using Android.Content;
-using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
+using Android.Support.Design.Widget;
+using DayTomato.Droid.Adapters;
 
 namespace DayTomato.Droid
 {
 	[Activity(Label = "PlacesActivity")]
 	public class PlacesActivity : AppCompatActivity
 	{
-		private List<Feed> _feed;
-
-		private RecyclerView _recyclerView;
+		private List<Pin> _pins;
+        private FloatingActionButton _createPin;
+        private RecyclerView _recyclerView;
 		private RecyclerView.LayoutManager _layoutManager;
-		private PlacesAdapter _adapter;
+		private ViewPinAdapter _adapter;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -41,16 +37,31 @@ namespace DayTomato.Droid
 
 			InitInstances();
 
+			_createPin = FindViewById<FloatingActionButton>(Resource.Id.place_create_pin);
 			_recyclerView = FindViewById<RecyclerView>(Resource.Id.places_recycler_view);
 			_layoutManager = new LinearLayoutManager(this);
 			_recyclerView.SetLayoutManager(_layoutManager);
-			_adapter = new PlacesAdapter(_feed, this);
-			_recyclerView.SetAdapter(_adapter);
+
+			SetListeners();
 		}
 
 		protected override void OnResume()
 		{
 			base.OnResume();
+		}
+
+		private async void RefreshPlaces()
+		{
+			_pins = await MainActivity.dayTomatoClient.GetHotPins();
+			_adapter.NotifyDataSetChanged();
+		}
+
+		private async void AddPlace(string pinId)
+		{
+			Pin pin = await MainActivity.dayTomatoClient.GetPin(pinId);
+			_pins.Add(pin);
+			_adapter.NotifyItemInserted(_pins.Count);
+			_recyclerView.SmoothScrollToPosition(_adapter.ItemCount);
 		}
 
 		private async void InitInstances()
@@ -60,19 +71,37 @@ namespace DayTomato.Droid
 			pd.SetMessage("Loading...");
 
 			// Get feed from server
-			_feed = new List<Feed>();
+			_pins = await MainActivity.dayTomatoClient.GetHotPins();
+			_adapter = new ViewPinAdapter(_pins, this);
+			_recyclerView.SetAdapter(_adapter);
 
-			var pins = await MainActivity.dayTomatoClient.GetHotPins();
-			foreach (var p in pins)
-			{
-				_feed.Add(new Feed
-				{
-					Pin = p,
-					Type = Feed.FEED_PIN
-				});
-			}
-			_adapter.NotifyDataSetChanged();
 			pd.Hide();
+		}
+
+		private void SetListeners()
+		{
+			_createPin.Click += OnCreatePin;
+		}
+
+		private void OnCreatePin(object sender, System.EventArgs e)
+		{
+			Intent intent = new Intent(this, typeof(MapActivity));
+			intent.PutExtra("CREATE_PLACE_REQUEST", true);
+			StartActivityForResult(intent, Constants.CREATE_PLACE_REQUEST);
+		}
+
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (requestCode == Constants.CREATE_PLACE_REQUEST)
+			{
+				if (resultCode == Result.Ok)
+				{
+					Toast.MakeText(this, "Your place was created", ToastLength.Long).Show();
+					string pinId = data.GetStringExtra("CREATE_PLACE_RESULT");
+					AddPlace(pinId);
+				}
+			}
 		}
 
 		public override void OnBackPressed()

@@ -179,7 +179,6 @@
     <Compile Include="Fragments\CreatePinDialogFragment.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Adapters\ViewPinAdapter.cs" />
-    <Compile Include="Adapters\PlacesAdapter.cs" />
     <Compile Include="Adapters\ViewTripAdapter.cs" />
     <Compile Include="Util\ClusterRenderer.cs" />
     <Compile Include="Util\PolyUtil.cs" />
@@ -227,14 +226,10 @@
     <AndroidResource Include="Resources\drawable\up_arrow_filled.xml" />
     <AndroidResource Include="Resources\drawable\up_arrow_unfilled.xml" />
     <AndroidResource Include="Resources\drawable\ic_directions_walk_white_24px.xml" />
-    <AndroidResource Include="Resources\layout\home_feed_notification_view_holder.axml" />
     <AndroidResource Include="Resources\layout\trip_view_holder.axml" />
     <None Include="DLL\GoogleMapsUtilityBinding.dll" />
     <AndroidResource Include="Resources\layout\comment_view_holder.axml" />
-    <AndroidResource Include="Resources\drawable\three_dots.png" />
-    <AndroidResource Include="Resources\drawable\dots.png" />
     <AndroidResource Include="Resources\menu\view_pin_popup_menu.xml" />
-    <AndroidResource Include="Resources\layout\home_feed_pins_view_holder.axml" />
     <AndroidResource Include="Resources\drawable\ic_directions_black_48px.xml" />
     <AndroidResource Include="Resources\layout\view_trip_dialog_fragment.axml" />
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
@@ -262,6 +257,14 @@
     <AndroidResource Include="Resources\drawable\tripbutton.xml" />
     <AndroidResource Include="Resources\drawable\viewmapbutton.xml" />
     <AndroidResource Include="Resources\drawable\viewplacesbutton.xml" />
+    <AndroidResource Include="Resources\layout\navigation_header.axml" />
+    <AndroidResource Include="Resources\drawable\ic_edit_location_black_24px.xml" />
+    <AndroidResource Include="Resources\drawable\ic_exit_to_app_black_24px.xml" />
+    <AndroidResource Include="Resources\drawable\ic_explore_black_24px.xml" />
+    <AndroidResource Include="Resources\drawable\ic_map_black_24px.xml" />
+    <AndroidResource Include="Resources\drawable\ic_photo_camera_black_24px.xml" />
+    <AndroidResource Include="Resources\drawable\ic_more_vert_black_24px.xml" />
+    <AndroidResource Include="Resources\menu\view_trip_popup_menu.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

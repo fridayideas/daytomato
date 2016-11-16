@@ -2,43 +2,63 @@
   <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
-    <item name="android:textColorPrimary">@color/white</item>
+    <!--<item name="android:textColorPrimary">@color/white</item>-->
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
-	<item name="textAppearanceLargePopupMenu">@style/PopupMenuText</item>
-	<item name="android:textAppearanceLargePopupMenu">@style/PopupMenuText</item>
-	<item name="textAppearanceSmallPopupMenu">@style/PopupMenuText</item>
-	<item name="android:textAppearanceSmallPopupMenu">@style/PopupMenuText</item>	
+    <item name="textAppearanceLargePopupMenu">@style/PopupMenuText</item>
+    <item name="android:textAppearanceLargePopupMenu">@style/PopupMenuText</item>
+    <item name="textAppearanceSmallPopupMenu">@style/PopupMenuText</item>
+    <item name="android:textAppearanceSmallPopupMenu">@style/PopupMenuText</item>
   </style>
-	
+
   <style name="AppTheme" parent="AppTheme.Base">
+    <item name="colorButtonNormal">@color/colorPrimary</item>
+    <item name="colorControlHighlight">@color/colorAccent</item>
   </style>
-	
+
+  <!-- Flat buttons -->
+  <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+    <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless</item>
+    <item name="colorButtonNormal">@color/colorPrimary</item>
+    <item name="colorControlHighlight">@color/colorAccent</item>
+  </style>
+
   <style name="MyTheme.Splash" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="android:windowBackground">@drawable/splash_screen</item>
- 	<item name="windowNoTitle">true</item>
+    <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
-  </style>	
+  </style>
 
   <style name="AppTabLayout" parent="Widget.Design.TabLayout">
     <item name="tabIndicatorColor">@color/white</item>
   </style>
-	
+
   <style name="PopupMenuText">
     <item name="android:textColor">@color/black</item>
-	<item name="android:textSize">15sp</item>
-  </style>	
+    <item name="android:textSize">15sp</item>
+  </style>
 
   <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
-	<item name="android:popupBackground">@color/white</item>
-	<item name="android:textColor">@color/black</item>
-	<item name="android:textSize">15sp</item>
+    <item name="android:popupBackground">@color/white</item>
+    <item name="android:textColor">@color/black</item>
+    <item name="android:textSize">15sp</item>
   </style>
 
   <style name="AutoCompleteTextViewStyle">
     <item name="colorControlNormal">@color/black</item>
     <item name="colorControlActivated">@color/black</item>
   </style>
-	
+
+  <style name="RatingBar" parent="@android:style/Widget.RatingBar">
+    <item name="colorControlActivated">#FFAB00</item>
+  </style>
+
+  <style name="Subheading">
+    <item name="android:textColor">@color/secondary_text</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:paddingLeft">16dp</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingBottom">8dp</item>
+  </style>
 </resources>

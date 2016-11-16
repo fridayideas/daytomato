@@ -8,6 +8,41 @@ namespace DayTomato.Droid
 {
 	public static class PictureUtil
 	{
+		public static Bitmap CircleBitmap(Bitmap bmp, int radius)
+		{
+			Bitmap sbmp;
+
+			if (bmp.Width != radius || bmp.Height != radius)
+			{
+				float smallest = Math.Min(bmp.Width, bmp.Height);
+				float factor = smallest / radius;
+				sbmp = Bitmap.CreateScaledBitmap(bmp, (int)(bmp.Width / factor), (int)(bmp.Height / factor), false);
+			}
+			else {
+				sbmp = bmp;
+			}
+
+			Bitmap output = Bitmap.CreateBitmap(radius, radius, Bitmap.Config.Argb8888);
+			Canvas canvas = new Canvas(output);
+
+			const uint color = 0xffa19774;
+			Paint paint = new Paint();
+			Rect rect = new Rect(0, 0, radius, radius);
+
+			paint.AntiAlias = true;
+			paint.FilterBitmap = true;
+			paint.Dither = true;
+			canvas.DrawARGB(0, 0, 0, 0);
+			paint.Color = Color.ParseColor("#BAB399");
+			canvas.DrawCircle(radius / 2 + 0.7f,
+							  radius / 2 + 0.7f, 
+			                  radius / 2 + 0.1f, paint);
+			paint.SetXfermode(new PorterDuffXfermode(PorterDuff.Mode.SrcIn));
+			canvas.DrawBitmap(sbmp, rect, rect, paint);
+
+			return output;
+		}
+
 		public static async Task<Bitmap> DecodeByteArrayAsync(string fileName, int requiredWidth, int requiredHeight)
 		{
 			byte[] imageBytes = File.ReadAllBytes(fileName);
@@ -59,6 +94,31 @@ namespace DayTomato.Droid
 			}
 
 			return (int)inSampleSize;
+		}
+
+		public static Bitmap StitchImages(Bitmap[] bitmaps)
+		{
+			const int offset = 20;
+			Bitmap final = null;
+			int width = 0;
+			int height = 0;
+			for (int i = 0; i < bitmaps.Length; ++i)
+			{
+				width += bitmaps[i].Width;
+				height = bitmaps[i].Height;
+			}
+			final = Bitmap.CreateBitmap((width + bitmaps.Length * offset) * 2, 
+			                            height * 2, 
+			                            Bitmap.Config.Argb8888);
+
+			Canvas stitched = new Canvas(final);
+			for (int i = 0; i < bitmaps.Length; ++i)
+			{
+				Bitmap copy = Bitmap.CreateScaledBitmap(bitmaps[i], bitmaps[i].Width * 2, bitmaps[i].Height * 2, true);
+				stitched.DrawBitmap(copy, (copy.Width * i) + (i * offset), 0, null);
+			}
+
+			return final;
 		}
 	}
 }

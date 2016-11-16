@@ -9,6 +9,7 @@ using DayTomato.Models;
 using Newtonsoft.Json;
 using System;
 using Android.App;
+using DayTomato.Droid.Adapters;
 
 namespace DayTomato.Droid
 {
@@ -147,16 +148,17 @@ namespace DayTomato.Droid
         private async void OnEditPinDialogClosed(object sender, EditPinDialogEventArgs e)
         {
             var account = MainActivity.GetAccount();
-            var pin = new Pin
-            {
-                Id = e.Id,
-                Type = e.Type,
-                Name = e.Name,
-                Rating = e.Rating,
-                Description = e.Description,
-                Likes = e.Likes,
+			var pin = new Pin
+			{
+				Id = e.Id,
+				Type = e.Type,
+				Name = e.Name,
+				Rating = e.Rating,
+				Description = e.Description,
+				Likes = e.Likes,
 				Coordinate = new Coordinate(e.Latitude, e.Longitude),
-                LinkedAccount = account.Id,
+				LinkedAccount = account.Id,
+				Username = account.Username,
                 Review = e.Review,
                 Cost = e.Cost,
                 CreateDate = e.CreateDate,

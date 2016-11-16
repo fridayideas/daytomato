@@ -37,7 +37,7 @@ namespace DayTomato.Droid
 			
 			comment.Text = _comments[position].Text;
 			comment.Text += " - ";
-			comment.Text += _comments[position].LinkedAccount;
+			comment.Text += _comments[position].Username;
 			comment.Text += " ";
 			comment.Text += _comments[position].CreateDate.ToShortDateString();
 

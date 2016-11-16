@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/trip_control_text"
-                android:textColor="#616161" />
+                style="@style/Subheading"/>
             <GridLayout
                 android:id="@+id/gridLayout1"
                 android:rowCount="2"

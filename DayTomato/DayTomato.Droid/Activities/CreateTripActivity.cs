@@ -16,7 +16,6 @@ namespace DayTomato.Droid
 	{
 
 		private Button _nextButton;                                   // Move on to adding pins to the trip button
-		private Button _cancelButton;                                    // Cancel create trip button
 		private FrameLayout _frame;
 
 		private CreateTripDetailsFragment _detailsFragment;
@@ -43,8 +42,7 @@ namespace DayTomato.Droid
 			SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(true);
 
 			_nextButton = (Button)FindViewById(Resource.Id.create_trip_next_button);
-			_cancelButton = (Button)FindViewById(Resource.Id.create_trip_cancel_button);
-			_frame = (FrameLayout)FindViewById(Resource.Id.create_trip_frame);
+            _frame = (FrameLayout)FindViewById(Resource.Id.create_trip_frame);
 
 			_detailsFragment = CreateTripDetailsFragment.NewInstance();
 			_pinsFragment = AddPinsFragment.NewInstance();
@@ -70,12 +68,7 @@ namespace DayTomato.Droid
 					SetTripPins();
 				}
 			};
-
-			_cancelButton.Click += (sender, e) =>
-			{
-				Finish();
-			};
-		}
+        }
 
 		private void SetTripDetails()
 		{
@@ -91,12 +84,16 @@ namespace DayTomato.Droid
 				// Trip filled with details
 				_trip = trip;
 			}
+			else
+			{
+				Toast.MakeText(this, "Please enter the trip details", ToastLength.Long).Show();
+			}
 		}
 
 		private void SetTripPins()
 		{
 			_pins = _pinsFragment.FinalizePins();
-			if (_pins != null)
+			if (_pins != null && _pins.Count > 0)
 			{
 				FragmentManager
 				   .BeginTransaction()
@@ -108,6 +105,10 @@ namespace DayTomato.Droid
 
 				// Now trip can be created
 				CreateTrip();
+			}
+			else
+			{
+				Toast.MakeText(this, "Please enter at least one place", ToastLength.Long).Show();
 			}
 		}
 
@@ -133,9 +134,18 @@ namespace DayTomato.Droid
 			Finish();
 		}
 
-		public override void OnBackPressed()
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
 		{
-			base.OnBackPressed();
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (requestCode == Constants.CREATE_PLACE_REQUEST)
+			{
+				if (resultCode == Result.Ok)
+				{
+					Toast.MakeText(this, "Your place was created", ToastLength.Long).Show();
+					string pinId = data.GetStringExtra("CREATE_PLACE_RESULT");
+					_pinsFragment.AddPin(pinId);
+				}
+			}
 		}
 
 		public override bool OnOptionsItemSelected(IMenuItem item)

@@ -64,6 +64,8 @@ namespace DayTomato.Droid
         private ClusterRenderer _clusterRenderer;
 		private const double PolyRadius = 0.0001;
 
+		private bool _createPlaceRequest = false;
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -99,7 +101,6 @@ namespace DayTomato.Droid
 				var pos = args.Position;
 				_currentLocation = new LatLng(pos.Latitude, pos.Longitude);
 			};
-
 
 			SetFilterOptions();
 			SetListeners();
@@ -274,6 +275,12 @@ namespace DayTomato.Droid
 					_clusterManager.Cluster();
 				});
 			});
+
+			_createPlaceRequest = Intent.GetBooleanExtra("CREATE_PLACE_REQUEST", false);
+			if (_createPlaceRequest)
+			{
+				CreatePin();
+			}
 		}
 
 		private void OnLocationChanged(object sender, PositionEventArgs args)
@@ -298,27 +305,32 @@ namespace DayTomato.Droid
 			_filteredPins.ForEach(CreatePin);
 		}
 
+		private async void CreatePin()
+		{
+			// Switch button states
+			_selectLocationButton.Visibility = ViewStates.Visible;
+			_selectLocationButton.Enabled = true;
+			_cancelLocationButton.Visibility = ViewStates.Visible;
+			_cancelLocationButton.Enabled = true;
+			_createPin.Visibility = ViewStates.Invisible;
+			_createPin.Enabled = false;
+			_selectLocationPin.Visibility = ViewStates.Visible;
+			_estimateAddress.Visibility = ViewStates.Visible;
+
+			// Get currently centered location
+			if (_selectLocation == null)
+			{
+				_selectLocation = _map.CameraPosition.Target;
+				_estimateAddress.Text = await ReverseGeocode(_selectLocation);
+			}
+		}
+
 		private void SetListeners()
 		{
 			// Allows the user to select a location on the map
-			_createPin.Click += async (sender, args) =>
+			_createPin.Click += (sender, e) => 
 			{
-				// Switch button states
-				_selectLocationButton.Visibility = ViewStates.Visible;
-				_selectLocationButton.Enabled = true;
-				_cancelLocationButton.Visibility = ViewStates.Visible;
-				_cancelLocationButton.Enabled = true;
-				_createPin.Visibility = ViewStates.Invisible;
-				_createPin.Enabled = false;
-				_selectLocationPin.Visibility = ViewStates.Visible;
-				_estimateAddress.Visibility = ViewStates.Visible;
-
-				// Get currently centered location
-				if (_selectLocation == null)
-				{
-					_selectLocation = _map.CameraPosition.Target;
-					_estimateAddress.Text = await ReverseGeocode(_selectLocation);
-				}
+				CreatePin();
 			};
 
 			_cancelLocationButton.Click += (sender, e) =>
@@ -615,7 +627,8 @@ namespace DayTomato.Droid
 				Description = e.Description,
 				Likes = 0,
 				Coordinate = new Coordinate(_selectLocation.Latitude, _selectLocation.Longitude),
-				LinkedAccount = account.Username,
+				LinkedAccount = account.Id,
+				Username = account.Username,
 				Review = e.Review,
 				Cost = e.Cost,
 				CreateDate = e.CreateDate,
@@ -631,6 +644,14 @@ namespace DayTomato.Droid
 			CreatePin(pin);
 
 			_clusterManager.Cluster();
+
+			if (_createPlaceRequest)
+			{
+				Intent returnIntent = new Intent();
+				returnIntent.PutExtra("CREATE_PLACE_RESULT", pin.Id);
+				SetResult(Result.Ok, returnIntent);
+				Finish();
+			}
 		}
 
 		private bool IsInFilter(Pin p)

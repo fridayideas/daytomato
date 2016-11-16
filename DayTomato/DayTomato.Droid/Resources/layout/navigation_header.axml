@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/status_bar_height"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <TextView
+        android:id="@+id/nav_header_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/spacing_large"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:text="email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id="@+id/nav_header_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/nav_header_email"
+        android:layout_marginLeft="@dimen/spacing_large"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:text="username"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="wrap_content"
+        android:id="@+id/linearLayout1"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/nav_header_username"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_xlarge">
+        <ImageView
+            android:id="@+id/nav_header_profile_picture"
+            android:elevation="4dp"
+            android:src="@drawable/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout2"
+            android:layout_marginStart="@dimen/spacing_medium">
+            <TextView
+                android:text="Places"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_weight="0.5"
+                android:gravity="center|bottom" />
+            <TextView
+                android:text="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nav_header_places"
+                android:gravity="center|top"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="bold"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/spacing_medium">
+            <TextView
+                android:text="Seeds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_weight="0.5"
+                android:gravity="center|bottom" />
+            <TextView
+                android:text="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nav_header_seeds"
+                android:gravity="center|top"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="bold"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -11,13 +11,15 @@ using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using DayTomato.Droid.Adapters;
 using DayTomato.Models;
+using DayTomato.Services;
 using Newtonsoft.Json;
 
 namespace DayTomato.Droid
 {
 	[Activity(Label = "TripsActivity")]
-	public class TripsActivity : AppCompatActivity
+	public class TripsActivity : AppCompatActivity, DeleteTripListener
 	{
 		
 		private const string TAG = "TRIP_ACTIVITY";
@@ -32,6 +34,8 @@ namespace DayTomato.Droid
 		private RecyclerView.LayoutManager _layoutManager;
 		private ViewTripAdapter _adapter;
 
+		public static DayTomatoClient dayTomatoClient;
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -44,6 +48,8 @@ namespace DayTomato.Droid
 			SupportActionBar.SetHomeButtonEnabled(true);
 			SupportActionBar.SetDisplayShowHomeEnabled(true);
 			SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(true);
+
+			dayTomatoClient = MainActivity.dayTomatoClient;
 
 			_createTripButton = (FloatingActionButton)FindViewById(Resource.Id.trip_create_fab);
 			_userLocation = (TextView)FindViewById(Resource.Id.trip_current_location);
@@ -91,6 +97,12 @@ namespace DayTomato.Droid
 			_adapter = new ViewTripAdapter(_trips, this);
 			_adapter.HandleClick += OnHandleClick;
 			_recyclerView.SetAdapter(_adapter);
+		}
+
+		public async void OnDeleteTrip(Trip trip)
+		{
+			_trips.Remove(trip);
+			await dayTomatoClient.DeleteTrip(trip.Id);
 		}
 
 		private void OnHandleClick(object sender, int position)
