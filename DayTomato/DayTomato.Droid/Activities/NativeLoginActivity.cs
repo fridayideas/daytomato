@@ -84,20 +84,15 @@ namespace DayTomato.Droid.Activities
             if (result.IsSuccess)
             {
                 var userAccount = result.SignInAccount;
-                //Toast.MakeText(this, "Signed in as: " + account.DisplayName + "ID Token: " + account.IdToken, ToastLength.Short).Show();
 
                 //Start MainActivity here
                 //Pass account info to MainActivity and start MainActivity
                 var mainActivityIntent = new Intent(this, typeof(MainActivity));
 
-                //TODO: Remove some of the below if not needed in the future
-                //mainActivityIntent.PutExtra("AuthUserJSON", auth0User.Profile.ToString());
-                //mainActivityIntent.PutExtra("AuthAccessToken", auth0User.Auth0AccessToken);
                 mainActivityIntent.PutExtra("IdToken", userAccount.IdToken);
                 mainActivityIntent.PutExtra("DisplayName", userAccount.DisplayName);
                 mainActivityIntent.PutExtra("PhotoUrl", userAccount.PhotoUrl.ToString());
                 mainActivityIntent.PutExtra("Email", userAccount.Email);
-                //mainActivityIntent.PutExtra("RefreshToken", auth0User.RefreshToken);
 
                 StartActivity(mainActivityIntent);
 
