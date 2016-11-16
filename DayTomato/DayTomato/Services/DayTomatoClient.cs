@@ -72,14 +72,17 @@ namespace DayTomato.Services
         public Task<bool> RemoveVoteTrip(string tripId, Account account) => CastVoteOn("trips", tripId, account, 0);
 
         // Get Pins
-        public async Task<List<Pin>> GetPins()
-        {
-            var response = await _httpClient.GetAsync("pins");
-            response.EnsureSuccessStatusCode();
+        public async Task<List<Pin>> GetPins(string sort = "createDate", int limit = 0)
+		{
+		    var response = await _httpClient.GetAsync($"pins?sort={sort}&limit={limit}");
+		    response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<Pin>>(content);
         }
+
+        // Get hot pins
+        public Task<List<Pin>> GetHotPins() => GetPins("likes", 10);
 
         // Get a Pin
         public async Task<Pin> GetPin(string id)
@@ -92,7 +95,7 @@ namespace DayTomato.Services
         }
 
         // Get Pins In Area
-        public async Task<List<Pin>> GetPins(double latTopLeft, double lngTopLeft, double latBotRight, double lngBotRight)
+        public async Task<List<Pin>> __GetPins(double latTopLeft, double lngTopLeft, double latBotRight, double lngBotRight)
 		{
 			List<Pin> pins = new List<Pin>();
 			var uri = new Uri(BaseUrl + "pins?searcharea=" + Convert.ToString(latTopLeft) + ","
@@ -103,16 +106,6 @@ namespace DayTomato.Services
 		    response.EnsureSuccessStatusCode();
 
             string content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<Pin>>(content);
-        }
-
-        // Get hot pins
-        public async Task<List<Pin>> GetHotPins()
-		{
-			var response = await _httpClient.GetAsync("pins?sort=likes&limit=10");
-		    response.EnsureSuccessStatusCode();
-
-            var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<Pin>>(content);
         }
 
@@ -225,7 +218,6 @@ namespace DayTomato.Services
 			var response = await _httpClient.PutAsync(uri, null);
 			return response.IsSuccessStatusCode;
 		}
-
 
 		// Getting an image from a url
 		public async Task<byte[]> GetImageBitmapFromUrlAsync(string url)
