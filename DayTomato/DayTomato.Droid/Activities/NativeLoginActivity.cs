@@ -49,6 +49,7 @@ namespace DayTomato.Droid.Activities
             base.OnCreate(savedInstanceState);
 
             var gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DefaultSignIn)
+                .RequestProfile()
                 .RequestEmail()
                 .RequestIdToken(_clientId)//Allows for acquiring the ID Token
                 .Build();
@@ -94,7 +95,7 @@ namespace DayTomato.Droid.Activities
                 //mainActivityIntent.PutExtra("AuthAccessToken", auth0User.Auth0AccessToken);
                 mainActivityIntent.PutExtra("IdToken", userAccount.IdToken);
                 mainActivityIntent.PutExtra("DisplayName", userAccount.DisplayName);
-                mainActivityIntent.PutExtra("PhotoUrl", userAccount.PhotoUrl);
+                mainActivityIntent.PutExtra("PhotoUrl", userAccount.PhotoUrl.ToString());
                 //mainActivityIntent.PutExtra("RefreshToken", auth0User.RefreshToken);
 
                 StartActivity(mainActivityIntent);
