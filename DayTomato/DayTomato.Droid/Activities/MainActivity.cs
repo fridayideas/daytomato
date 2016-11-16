@@ -335,7 +335,7 @@ namespace DayTomato.Droid
 		    _account.Username = Intent.GetStringExtra("DisplayName");
 		    string imageurl = Intent.GetStringExtra("PhotoUrl");
             _account.ProfilePicture = await dayTomatoClient.GetImageBitmapFromUrlAsync(imageurl);
-			_account.Email = (string)googleAccInfoObj["email"];
+			_account.Email = Intent.GetStringExtra("Email");
 
             return _account;
 		}
