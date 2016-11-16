@@ -95,7 +95,7 @@ namespace DayTomato.Droid
 			drawerToggle.SyncState();
 
             //Set ID token provided by LoginActivity
-            _idToken = Intent.GetStringExtra("AuthIdToken");
+            _idToken = Intent.GetStringExtra("IdToken");
 
             // REST API Client
             dayTomatoClient = new DayTomatoClient(_idToken);
@@ -116,7 +116,7 @@ namespace DayTomato.Droid
 			_account = await GetUserAccount();
 
 			SetListeners();
-			SetInstances();
+			SetInstances(); 
         }
 
 		protected override void OnResume()
@@ -331,15 +331,11 @@ namespace DayTomato.Droid
 		public async Task<Account> GetUserAccount()
 		{
             _account = await dayTomatoClient.GetAccount();
-            
-            //Set name in Home tab to first name
-		    string googleAccInfoJSON = Intent.GetStringExtra("AuthUserJSON");
-            JToken googleAccInfoObj = JObject.Parse(googleAccInfoJSON);
 
-            _account.Username = (string)googleAccInfoObj["given_name"];
-		    string imageurl = (string)googleAccInfoObj["picture"];
+		    _account.Username = Intent.GetStringExtra("DisplayName");
+		    string imageurl = Intent.GetStringExtra("PhotoUrl");
             _account.ProfilePicture = await dayTomatoClient.GetImageBitmapFromUrlAsync(imageurl);
-			_account.Email = (string)googleAccInfoObj["email"];
+			_account.Email = Intent.GetStringExtra("Email");
 
             return _account;
 		}

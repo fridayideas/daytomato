@@ -32,7 +32,7 @@ namespace DayTomato.Droid
 			startupWork.ContinueWith(t =>
 			{
 				// Should get users location here and other long loading things
-				StartActivity(new Intent(Application.Context, typeof(LoginActivity)));
+				StartActivity(new Intent(Application.Context, typeof(NativeLoginActivity)));
 			}, 
             TaskScheduler.FromCurrentSynchronizationContext());
 			startupWork.Start();
