@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/main_start_control_panel_button"
                 android:text="Current Location"
+                android:drawable="@drawable/ripple_effect"
                 style="@style/Widget.AppCompat.Button.Colored" />
             <TextView
                 android:text="My Trips"
@@ -49,7 +50,7 @@
                     android:id="@+id/main_my_trips_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-                <TextView
+                <TextView xmlns:tools="http://schemas.android.com/tools"
                     android:text="Search local trips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,7 +58,6 @@
                     android:layout_centerInParent="true"
                     android:textStyle="bold"
                     android:textColor="#616161"
-                    xmlns:tools="http://schemas.android.com/tools"
                     tools:visibility="visible" />
             </RelativeLayout>
         </LinearLayout>
