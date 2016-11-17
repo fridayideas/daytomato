@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 
 namespace DayTomato.Droid
 {
-	[Activity(Label = "TripsActivity")]
+	[Activity(Label = "TripsActivity", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class TripsActivity : AppCompatActivity, DeleteTripListener
 	{
 		

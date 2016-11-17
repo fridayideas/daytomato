@@ -11,7 +11,7 @@ using DayTomato.Models;
 
 namespace DayTomato.Droid
 {
-	[Activity(Label = "CreateTripActivity")]
+	[Activity(Label = "CreateTripActivity", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class CreateTripActivity : AppCompatActivity
 	{
 

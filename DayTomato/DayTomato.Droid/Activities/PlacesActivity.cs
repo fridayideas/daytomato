@@ -13,7 +13,7 @@ using DayTomato.Droid.Adapters;
 
 namespace DayTomato.Droid
 {
-	[Activity(Label = "PlacesActivity")]
+	[Activity(Label = "PlacesActivity", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class PlacesActivity : AppCompatActivity
 	{
 		private List<Pin> _pins;

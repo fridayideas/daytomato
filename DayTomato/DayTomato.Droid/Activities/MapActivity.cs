@@ -26,7 +26,7 @@ using Android.Content.Res;
 
 namespace DayTomato.Droid
 {
-	[Activity(Label = "MapActivity")]
+	[Activity(Label = "MapActivity", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class MapActivity : AppCompatActivity, IOnMapReadyCallback, GoogleMap.IOnCameraChangeListener,
 						ClusterManager.IOnClusterItemClickListener
 	{

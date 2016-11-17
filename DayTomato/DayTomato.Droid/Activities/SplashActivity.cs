@@ -12,7 +12,8 @@ namespace DayTomato.Droid
     [Activity(
         Theme = "@style/MyTheme.Splash",
         MainLauncher = true,
-        NoHistory = true)]
+        NoHistory = true,
+        ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class SplashActivity : AppCompatActivity
 	{
 		public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)

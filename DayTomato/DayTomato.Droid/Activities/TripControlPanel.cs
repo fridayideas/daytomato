@@ -8,7 +8,7 @@ using Android.Widget;
 
 namespace DayTomato.Droid
 {
-	[Activity(Label = "TripControlPanel")]
+	[Activity(Label = "TripControlPanel", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class TripControlPanel : AppCompatActivity
 	{
 

@@ -30,7 +30,7 @@ namespace DayTomato.Droid.Activities
     /// https://www.youtube.com/watch?v=3wH-g59JfFY
     /// https://developers.google.com/identity/sign-in/android/start-integrating
     /// </summary>
-    [Activity(Label = "DayTomato")]
+    [Activity(Label = "DayTomato", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class NativeLoginActivity : FragmentActivity, GoogleApiClient.IOnConnectionFailedListener
     {
 
