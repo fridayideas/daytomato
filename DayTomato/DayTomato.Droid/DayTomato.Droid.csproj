@@ -50,6 +50,9 @@
     <DebugSymbols>False</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Analytics">
+      <HintPath>..\..\..\..\Analytics\Analytics.Xamarin\Analytics\bin\Release\Analytics.dll</HintPath>
+    </Reference>
     <Reference Include="Auth0Client.Android, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="Mono.Android.Export" />

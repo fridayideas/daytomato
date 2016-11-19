@@ -23,6 +23,8 @@ using Newtonsoft.Json;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Android.Content.Res;
+using Segment;
+using Segment.Model;
 
 namespace DayTomato.Droid
 {
@@ -639,8 +641,11 @@ namespace DayTomato.Droid
 			};
 
 			pin.Id = await MainActivity.dayTomatoClient.CreatePin(pin);
+            Analytics.Client.Track(account.Id, "Pin created", new Properties() {
+                    { "Pin name", pin.Name }
+                }, new Options().SetIntegration("all", true));
 
-			_pins.Add(pin);
+            _pins.Add(pin);
 			CreatePin(pin);
 
 			_clusterManager.Cluster();
