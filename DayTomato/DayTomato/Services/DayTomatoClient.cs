@@ -17,7 +17,7 @@ namespace DayTomato.Services
 
         private const string BaseUrl = "http://fridayideas.herokuapp.com/api/";
 
-		public DayTomatoClient(string idToken)
+        public DayTomatoClient(string idToken)
 		{
             _httpClient = new HttpClient
             {
@@ -72,9 +72,9 @@ namespace DayTomato.Services
         public Task<bool> RemoveVoteTrip(string tripId, Account account) => CastVoteOn("trips", tripId, account, 0);
 
         // Get Pins
-        public async Task<List<Pin>> GetPins(string sort = "createDate", int limit = 0)
+        public async Task<List<Pin>> GetPins(string sortBy = "createDate", int sortDir = 1, int limit = 0)
 		{
-		    var response = await _httpClient.GetAsync($"pins?sort={sort}&limit={limit}");
+		    var response = await _httpClient.GetAsync($"pins?sort={sortBy}&sortdir={sortDir}&limit={limit}");
 		    response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
@@ -82,7 +82,7 @@ namespace DayTomato.Services
         }
 
         // Get hot pins
-        public Task<List<Pin>> GetHotPins() => GetPins("likes", 10);
+        public Task<List<Pin>> GetHotPins() => GetPins("likes", -1, 10);
 
         // Get a Pin
         public async Task<Pin> GetPin(string id)
