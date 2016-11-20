@@ -5,6 +5,8 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using DayTomato.Models;
+using Segment;
 
 namespace DayTomato.Droid
 {
@@ -16,6 +18,8 @@ namespace DayTomato.Droid
 		private Button _createTrip;
 		private Button _viewPlaces;
 		private Button _viewMap;
+
+        private Account _account;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -37,6 +41,8 @@ namespace DayTomato.Droid
 			_viewPlaces = FindViewById<Button>(Resource.Id.trip_control_panel_view_local_places);
 			_viewMap = FindViewById<Button>(Resource.Id.trip_control_panel_view_map);
 
+            _account = MainActivity.GetAccount();
+
 			SetListeners();
 		}
 
@@ -50,25 +56,29 @@ namespace DayTomato.Droid
 
 		private void SetViewTripsOnClick(object sender, System.EventArgs e)
 		{
-			Intent intent = new Intent(this, typeof(TripsActivity));
+            Analytics.Client.Screen(_account.Id, "Local trips view", "Trips");
+            Intent intent = new Intent(this, typeof(TripsActivity));
 			StartActivityForResult(intent, Constants.ADD_TRIP_REQUEST);
 		}
 
 		private void SetCreateTripOnClick(object sender, System.EventArgs e)
 		{
-			Intent intent = new Intent(this, typeof(CreateTripActivity));
+            Analytics.Client.Screen(_account.Id, "Create trip view", "Trips");
+            Intent intent = new Intent(this, typeof(CreateTripActivity));
 			StartActivityForResult(intent, Constants.CREATE_TRIP_REQUEST);
 		}
 
 		private void SetViewPlacesOnClick(object sender, System.EventArgs e)
 		{
+            Analytics.Client.Screen(_account.Id, "Local places view", "Pins");
 			Intent intent = new Intent(this, typeof(PlacesActivity));
 			StartActivity(intent);
 		}
 
 		private void SetViewMapOnClick(object sender, System.EventArgs e)
 		{
-			Intent intent = new Intent(this, typeof(MapActivity));
+            Analytics.Client.Screen(_account.Id, "Map view", "Pins");
+            Intent intent = new Intent(this, typeof(MapActivity));
 			StartActivity(intent);
 		}
 
