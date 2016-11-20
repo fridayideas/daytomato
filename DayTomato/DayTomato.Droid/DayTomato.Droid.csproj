@@ -50,9 +50,6 @@
     <DebugSymbols>False</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Analytics">
-      <HintPath>..\..\..\..\Analytics\Analytics.Xamarin\Analytics\bin\Release\Analytics.dll</HintPath>
-    </Reference>
     <Reference Include="Auth0Client.Android, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="Mono.Android.Export" />
@@ -68,12 +65,12 @@
       <HintPath>..\..\packages\Xam.Plugin.Geolocator.3.0.4\lib\MonoAndroid10\Plugin.Geolocator.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Plugin.Media, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugin.Media.2.6.0\lib\MonoAndroid10\Plugin.Media.dll</HintPath>
+    <Reference Include="Plugin.Media, Version=2.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Media.2.6.1\lib\MonoAndroid10\Plugin.Media.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Plugin.Media.Abstractions, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugin.Media.2.6.0\lib\MonoAndroid10\Plugin.Media.Abstractions.dll</HintPath>
+    <Reference Include="Plugin.Media.Abstractions, Version=2.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Media.2.6.1\lib\MonoAndroid10\Plugin.Media.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Plugin.Permissions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -166,6 +163,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Analytics.Xamarin\Analytics\Analytics.csproj">
+      <Project>{94a1e56c-5f8d-48de-8473-db47c6d2d5cf}</Project>
+      <Name>Analytics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DayTomato\DayTomato.csproj">
       <Name>DayTomato</Name>
       <Project>{0E25C9AF-3FC4-4AAA-8C00-A517BFBD987E}</Project>
