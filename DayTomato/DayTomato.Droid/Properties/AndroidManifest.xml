@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.fridayideas.daytomato" android:versionCode="1" android:versionName="1.0" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.fridayideas.daytomato" android:versionName="0.2.3" android:installLocation="auto" android:versionCode="1">
 	<uses-sdk android:minSdkVersion="21" />
 	<application android:label="@string/application_name" android:theme="@style/AppTheme" android:icon="@drawable/icon">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDU2aOZLIaBsZ4s62PQ1T88e9UL0QvLsoA" />
