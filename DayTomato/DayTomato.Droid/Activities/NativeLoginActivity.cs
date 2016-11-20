@@ -9,6 +9,8 @@ using Android.Gms.Common.Apis;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Widget;
+using Segment;
+using Segment.Model;
 
 namespace DayTomato.Droid.Activities
 {
@@ -34,6 +36,8 @@ namespace DayTomato.Droid.Activities
     public class NativeLoginActivity : FragmentActivity, GoogleApiClient.IOnConnectionFailedListener
     {
 
+        
+
         //private SignInButton _signInButton;
         private GoogleApiClient _googleApiClient;
         private readonly string _clientId = "511074657498-04u2ih6kg97s8gh1cl0kmcc7k52v5hrl.apps.googleusercontent.com";
@@ -46,6 +50,9 @@ namespace DayTomato.Droid.Activities
         /// <param name="savedInstanceState"></param>
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            //initialize analytics with segment source write key
+            Analytics.Initialize("eMGTcQMKgRzXWvjkw1YxaOEfiPz7KPo1");
+
             base.OnCreate(savedInstanceState);
 
             var gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DefaultSignIn)
@@ -84,6 +91,11 @@ namespace DayTomato.Droid.Activities
             if (result.IsSuccess)
             {
                 var userAccount = result.SignInAccount;
+
+                Analytics.Client.Identify(userAccount.Id, new Traits() {
+                    { "name", userAccount.DisplayName },
+                    { "email", userAccount.Email }
+                });
 
                 //Start MainActivity here
                 //Pass account info to MainActivity and start MainActivity

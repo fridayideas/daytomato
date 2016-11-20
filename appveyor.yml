@@ -16,6 +16,7 @@ xamarin:
   ios: true
   
 install:
+ - git submodule update --init --recursive
  - ps: $zipPath = "$($env:APPVEYOR_BUILD_FOLDER)\xpkg.zip"
  - ps: (New-Object Net.WebClient).DownloadFile('https://components.xamarin.com/submit/xpkg', $zipPath)
  - ps: 7z x $zipPath | Out-Null
@@ -27,6 +28,7 @@ before_build:
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-24
  - nuget restore
+ - nuget restore Analytics.Xamarin\Analytics.Xamarin.sln
  - xamarin-component restore DayTomato.sln
 
 build:

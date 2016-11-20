@@ -5,6 +5,9 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using DayTomato.Models;
+using Segment;
+using Segment.Model;
 
 namespace DayTomato.Droid
 {
@@ -16,6 +19,8 @@ namespace DayTomato.Droid
 		private Button _createTrip;
 		private Button _viewPlaces;
 		private Button _viewMap;
+
+        private Account _account;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -37,6 +42,8 @@ namespace DayTomato.Droid
 			_viewPlaces = FindViewById<Button>(Resource.Id.trip_control_panel_view_local_places);
 			_viewMap = FindViewById<Button>(Resource.Id.trip_control_panel_view_map);
 
+            _account = MainActivity.GetAccount();
+
 			SetListeners();
 		}
 
@@ -50,25 +57,41 @@ namespace DayTomato.Droid
 
 		private void SetViewTripsOnClick(object sender, System.EventArgs e)
 		{
-			Intent intent = new Intent(this, typeof(TripsActivity));
+            Analytics.Client.Screen(_account.Id, "Local trips view", new Properties()
+            {
+                { "View", "Trips" }
+            });
+            Intent intent = new Intent(this, typeof(TripsActivity));
 			StartActivityForResult(intent, Constants.ADD_TRIP_REQUEST);
 		}
 
 		private void SetCreateTripOnClick(object sender, System.EventArgs e)
 		{
-			Intent intent = new Intent(this, typeof(CreateTripActivity));
+            Analytics.Client.Screen(_account.Id, "Create trip view", new Properties()
+            {
+                { "View", "Create Trip" }
+            }); ;
+            Intent intent = new Intent(this, typeof(CreateTripActivity));
 			StartActivityForResult(intent, Constants.CREATE_TRIP_REQUEST);
 		}
 
 		private void SetViewPlacesOnClick(object sender, System.EventArgs e)
 		{
+            Analytics.Client.Screen(_account.Id, "Local places view", new Properties()
+            {
+                { "View", "Pins" }
+            }); ;
 			Intent intent = new Intent(this, typeof(PlacesActivity));
 			StartActivity(intent);
 		}
 
 		private void SetViewMapOnClick(object sender, System.EventArgs e)
 		{
-			Intent intent = new Intent(this, typeof(MapActivity));
+            Analytics.Client.Screen(_account.Id, "Map view", new Properties()
+            {
+                { "View", "Map" }
+            }); ;
+            Intent intent = new Intent(this, typeof(MapActivity));
 			StartActivity(intent);
 		}
 

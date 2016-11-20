@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayTomato.iOS", "DayTomato\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayTomato", "DayTomato\DayTomato\DayTomato.csproj", "{0E25C9AF-3FC4-4AAA-8C00-A517BFBD987E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics", "Analytics.Xamarin\Analytics\Analytics.csproj", "{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,18 @@ Global
 		{0E25C9AF-3FC4-4AAA-8C00-A517BFBD987E}.Release|iPhone.Build.0 = Release|Any CPU
 		{0E25C9AF-3FC4-4AAA-8C00-A517BFBD987E}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{0E25C9AF-3FC4-4AAA-8C00-A517BFBD987E}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Release|iPhone.Build.0 = Release|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

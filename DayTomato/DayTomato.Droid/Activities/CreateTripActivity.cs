@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -8,6 +9,8 @@ using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
+using Segment;
+using Segment.Model;
 
 namespace DayTomato.Droid
 {
@@ -27,7 +30,9 @@ namespace DayTomato.Droid
 		private Step _step = Step.DETAILS;
 		private bool _tripCreated;
 
-		protected override void OnCreate(Bundle savedInstanceState)
+        private Account _account;
+
+		protected override async void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
 
@@ -44,7 +49,10 @@ namespace DayTomato.Droid
 			_nextButton = (Button)FindViewById(Resource.Id.create_trip_next_button);
             _frame = (FrameLayout)FindViewById(Resource.Id.create_trip_frame);
 
-			_detailsFragment = CreateTripDetailsFragment.NewInstance();
+            // Get user account
+            _account = MainActivity.GetAccount();
+
+            _detailsFragment = CreateTripDetailsFragment.NewInstance();
 			_pinsFragment = AddPinsFragment.NewInstance();
 
 			FragmentManager
@@ -105,7 +113,10 @@ namespace DayTomato.Droid
 
 				// Now trip can be created
 				CreateTrip();
-			}
+                Analytics.Client.Track(_account.Id, "Trip created", new Properties() {
+                    { "trip name", _trip.Name }
+                }, new Options().SetIntegration("all", true));
+            }
 			else
 			{
 				Toast.MakeText(this, "Please enter at least one place", ToastLength.Long).Show();

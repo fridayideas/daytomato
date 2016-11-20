@@ -22,6 +22,8 @@ using Android.Support.V7.App;
 using System.Collections.Generic;
 using DayTomato.Droid.Adapters;
 using Newtonsoft.Json;
+using Segment;
+using Segment.Model;
 
 namespace DayTomato.Droid
 {
@@ -282,7 +284,11 @@ namespace DayTomato.Droid
 
 		private void SearchLocalTripsClick(object sender, System.EventArgs e)
 		{
-			Intent trips = new Intent(this, typeof(TripsActivity));
+            Analytics.Client.Screen(_account.Id, "Local trips view", new Properties()
+            {
+                { "View", "Trips" }
+            });
+            Intent trips = new Intent(this, typeof(TripsActivity));
 			StartActivity(trips);
 		}
 
@@ -300,7 +306,8 @@ namespace DayTomato.Droid
 
 		private void SetNavigationOnClick(object sender, NavigationView.NavigationItemSelectedEventArgs e)
 		{
-			switch (e.MenuItem.ItemId)
+            Analytics.Client.Screen(_account.Id, "Navigation panel", "Account info");
+            switch (e.MenuItem.ItemId)
 			{
 				case (Resource.Id.nav_view_trips):
 					Intent trips = new Intent(this, typeof(TripsActivity));
