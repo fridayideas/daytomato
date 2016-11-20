@@ -99,8 +99,16 @@ namespace DayTomato.Droid
 		private void AddToMyTrips(object sender, EventArgs e)
 		{
 			//TODO: Send request to server to add to my trips
-			MainActivity.AddToMyTrips(_trip);
-			Toast.MakeText(Activity, "Added " + _trip.Name + " to your trips", ToastLength.Long).Show();
+			 var added = MainActivity.AddToMyTrips(_trip);
+            // Add return statement handling
+            if (added == 1)
+            {
+                Toast.MakeText(Activity, "Added " + _trip.Name + " to your trips", ToastLength.Long).Show();
+            } else if (added == -1)
+            {
+                Toast.MakeText(Activity, _trip.Name + " is already in your trips list", ToastLength.Long).Show();
+            }
+			
 		}
 	}
 }

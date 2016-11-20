@@ -213,16 +213,18 @@ namespace DayTomato.Droid
 			_recyclerView.SetAdapter(_adapter);
 		}
 
-		public static void AddToMyTrips(Trip trip)
+		public static int AddToMyTrips(Trip trip)
 		{
-			if (!_myTrips.Contains(trip))
+			if (_myTrips.FindIndex(newtrip => newtrip.Id == trip.Id) < 0)
 			{
 				Trip copy = trip;
 				copy.LinkedAccount = _account.Id;
 				// TODO: server add to my trips
 				_myTrips.Add(copy);
 				_refresh = true;
+                return 1;
 			}
+            return -1;
 		}
 
 		public void OnDeleteTrip(Trip trip)
