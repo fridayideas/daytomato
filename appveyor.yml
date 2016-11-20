@@ -28,6 +28,7 @@ before_build:
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools
  - cmd: echo y | "%ANDROID_HOME%\tools\android.bat" update sdk --no-ui --all --filter platform-tools,tools,android-24
  - nuget restore
+ - cd Analytics.Xamarin && nuget restore
  - xamarin-component restore DayTomato.sln
 
 build:
