@@ -16,6 +16,7 @@ xamarin:
   ios: true
   
 install:
+ - git submodule update --init --recursive
  - ps: $zipPath = "$($env:APPVEYOR_BUILD_FOLDER)\xpkg.zip"
  - ps: (New-Object Net.WebClient).DownloadFile('https://components.xamarin.com/submit/xpkg', $zipPath)
  - ps: 7z x $zipPath | Out-Null
