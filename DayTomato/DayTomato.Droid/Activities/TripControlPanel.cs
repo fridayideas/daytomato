@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using DayTomato.Models;
 using Segment;
+using Segment.Model;
 
 namespace DayTomato.Droid
 {
@@ -56,28 +57,40 @@ namespace DayTomato.Droid
 
 		private void SetViewTripsOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Local trips view", "Trips");
+            Analytics.Client.Screen(_account.Id, "Local trips view", new Properties()
+            {
+                { "View", "Trips" }
+            });
             Intent intent = new Intent(this, typeof(TripsActivity));
 			StartActivityForResult(intent, Constants.ADD_TRIP_REQUEST);
 		}
 
 		private void SetCreateTripOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Create trip view", "Trips");
+            Analytics.Client.Screen(_account.Id, "Create trip view", new Properties()
+            {
+                { "View", "Create Trip" }
+            }); ;
             Intent intent = new Intent(this, typeof(CreateTripActivity));
 			StartActivityForResult(intent, Constants.CREATE_TRIP_REQUEST);
 		}
 
 		private void SetViewPlacesOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Local places view", "Pins");
+            Analytics.Client.Screen(_account.Id, "Local places view", new Properties()
+            {
+                { "View", "Pins" }
+            }); ;
 			Intent intent = new Intent(this, typeof(PlacesActivity));
 			StartActivity(intent);
 		}
 
 		private void SetViewMapOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Map view", "Pins");
+            Analytics.Client.Screen(_account.Id, "Map view", new Properties()
+            {
+                { "View", "Map" }
+            }); ;
             Intent intent = new Intent(this, typeof(MapActivity));
 			StartActivity(intent);
 		}

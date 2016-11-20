@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using DayTomato.Droid.Adapters;
 using Newtonsoft.Json;
 using Segment;
+using Segment.Model;
 
 namespace DayTomato.Droid
 {
@@ -283,7 +284,10 @@ namespace DayTomato.Droid
 
 		private void SearchLocalTripsClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Local trips view", "Trips");
+            Analytics.Client.Screen(_account.Id, "Local trips view", new Properties()
+            {
+                { "View", "Trips" }
+            });
             Intent trips = new Intent(this, typeof(TripsActivity));
 			StartActivity(trips);
 		}
