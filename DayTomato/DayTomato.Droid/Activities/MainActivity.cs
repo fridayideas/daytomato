@@ -286,7 +286,7 @@ namespace DayTomato.Droid
 		{
             Analytics.Client.Screen(_account.Id, "Local trips view", new Properties()
             {
-                { "View", "Trips" }
+                { "Trips", "View" }
             });
             Intent trips = new Intent(this, typeof(TripsActivity));
 			StartActivity(trips);
