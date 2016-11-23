@@ -11,7 +11,7 @@ namespace DayTomato.Droid
 
     [Activity(
         Theme = "@style/MyTheme.Splash",
-        MainLauncher = true,
+       // MainLauncher = true,
         NoHistory = true,
         ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class SplashActivity : AppCompatActivity
