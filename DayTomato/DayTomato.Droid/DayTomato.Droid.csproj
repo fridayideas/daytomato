@@ -154,6 +154,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\IntroSliderActivity.cs" />
+    <Compile Include="Util\LayoutManager.cs" />
     <Compile Include="Activities\NativeLoginActivity.cs" />
     <Compile Include="Fragments\AddPinsFragment.cs" />
     <Compile Include="Fragments\EditPinDialogFragment.cs" />
@@ -251,6 +253,21 @@
     <AndroidResource Include="Resources\drawable\ic_photo_camera_black_24px.xml" />
     <AndroidResource Include="Resources\drawable\ic_more_vert_black_24px.xml" />
     <AndroidResource Include="Resources\menu\view_trip_popup_menu.xml" />
+    <AndroidResource Include="Resources\layout\LayoutSlide1.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\LayoutSlide2.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\LayoutSlide3.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\LayoutSlide4.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\IntroSlider.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
