@@ -103,7 +103,7 @@ namespace DayTomato.Droid.Activities
 
                 mainActivityIntent.PutExtra("IdToken", userAccount.IdToken);
                 mainActivityIntent.PutExtra("DisplayName", userAccount.DisplayName);
-                mainActivityIntent.PutExtra("PhotoUrl", userAccount.PhotoUrl.ToString());
+                mainActivityIntent.PutExtra("PhotoUrl", userAccount.PhotoUrl.ToString() + "?sz=275");
                 mainActivityIntent.PutExtra("Email", userAccount.Email);
 
                 StartActivity(mainActivityIntent);
