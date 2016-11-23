@@ -20,4 +20,24 @@
   <!-- Add Pin Page -->
   <string name="add_pin_title">Add a pin</string>
   
+  <!--App intro sliders strings-->
+  <string name="hello">Hello World, Click Me!</string>
+  <string name="app_name">SliderForTheFirstLaunch</string>
+
+  <string name="next">NEXT</string>
+  <string name="skip">SKIP</string>
+  <string name="start">GOT IT</string>
+
+  <string name="slide_1_title">Save Money</string>
+  <string name="slide_1_desc">How to Integrate Intro-Sliders into your Android Application</string>
+
+  <string name="slide_2_title">Trust Network</string>
+  <string name="slide_2_desc">How to Integrate Intro-Sliders into your Android Application</string>
+
+  <string name="slide_3_title">Notification</string>
+  <string name="slide_3_desc">How to Integrate Intro-Sliders into your Android Application</string>
+
+  <string name="slide_4_title">World Travel</string>
+  <string name="slide_4_desc">How to Integrate Intro-Sliders into your Android Application</string>
+  
 </resources>
