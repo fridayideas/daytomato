@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayTomato.iOS", "DayTomato\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayTomato", "DayTomato\DayTomato\DayTomato.csproj", "{0E25C9AF-3FC4-4AAA-8C00-A517BFBD987E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics", "Analytics.Xamarin\Analytics\Analytics.csproj", "{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics", "DayTomato\Analytics\Analytics.csproj", "{94A1E56C-5F8D-48DE-8473-DB47C6D2D5CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -54,8 +54,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\GoogleMapsUtility.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Android.Export" />
-    <Reference Include="Mono.Android.Export" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -128,12 +126,6 @@
     <Reference Include="Xamarin.Android.Support.Design">
       <HintPath>..\..\packages\Xamarin.Android.Support.Design.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.Design.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Geolocator.Abstractions">
-      <HintPath>..\..\packages\Xam.Plugin.Geolocator.4.0.0-beta12\lib\MonoAndroid10\Plugin.Geolocator.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.Geolocator">
-      <HintPath>..\..\packages\Xam.Plugin.Geolocator.4.0.0-beta12\lib\MonoAndroid10\Plugin.Geolocator.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.GooglePlayServices.Auth, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.GooglePlayServices.Auth.29.0.0.2\lib\MonoAndroid41\Xamarin.GooglePlayServices.Auth.dll</HintPath>
       <Private>True</Private>
@@ -152,7 +144,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Analytics.Xamarin\Analytics\Analytics.csproj">
+    <ProjectReference Include="..\Analytics\Analytics.csproj">
       <Project>{94a1e56c-5f8d-48de-8473-db47c6d2d5cf}</Project>
       <Name>Analytics</Name>
     </ProjectReference>
