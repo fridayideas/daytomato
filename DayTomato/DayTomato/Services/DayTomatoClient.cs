@@ -48,6 +48,29 @@ namespace DayTomato.Services
             return (string)res["_id"];
         }
 
+        public async Task<List<Trip>> GetMyTrips(Account account)
+        {
+            var response = await _httpClient.GetAsync($"accounts/{account.Id}/trips");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync(); 
+            return JsonConvert.DeserializeObject<List<Trip>>(content);
+        }
+        public async Task<bool> AddToMyTrips(string tripId, Account account)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(new 
+            {
+                myTrips = tripId
+            }), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"accounts/{account.Id}/trips", content);
+
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<bool> RemoveFromMyTrips(string tripId, Account account)
+        {
+            var response = await _httpClient.DeleteAsync($"accounts/{account.Id}/trips/{tripId}");
+            return response.IsSuccessStatusCode;
+        }
+
 		public async Task<bool> DeleteTrip(string tripId)
 		{
 			var response = await _httpClient.DeleteAsync("trips/" + tripId);

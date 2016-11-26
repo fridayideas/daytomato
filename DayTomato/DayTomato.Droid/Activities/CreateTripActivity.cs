@@ -134,7 +134,7 @@ namespace DayTomato.Droid
 			if (_tripCreated)
 			{
 				//TODO: Send request to server to add to my trips
-				MainActivity.AddToMyTrips(new Trip(_trip, _pins));
+				await MainActivity.AddToMyTrips(new Trip(_trip, _pins));
 				SetResult(Result.Ok, returnIntent);
 			}
 			else

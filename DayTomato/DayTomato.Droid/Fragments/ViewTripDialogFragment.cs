@@ -96,10 +96,10 @@ namespace DayTomato.Droid
 			StartActivity(mapIntent);
 		}
 
-		private void AddToMyTrips(object sender, EventArgs e)
+		private async void AddToMyTrips(object sender, EventArgs e)
 		{
-			//TODO: Send request to server to add to my trips
-			 var added = MainActivity.AddToMyTrips(_trip);
+            //TODO: Send request to server to add to my trips
+            var added = await MainActivity.AddToMyTrips(_trip);
             // Add return statement handling
             if (added == 1)
             {

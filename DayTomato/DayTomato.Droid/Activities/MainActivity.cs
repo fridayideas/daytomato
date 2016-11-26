@@ -118,7 +118,7 @@ namespace DayTomato.Droid
 			_account = await GetUserAccount();
 
 			SetListeners();
-			SetInstances(); 
+			await SetInstances(); 
         }
 
 		protected override void OnResume()
@@ -163,10 +163,10 @@ namespace DayTomato.Droid
             //};
         }
 
-		private void SetInstances()
+		private async Task SetInstances()
 		{
 			SetButtonLocation();
-			GetMyTrips();
+			await GetMyTrips();
 			SetNavigationMenu();
 		}
 
@@ -203,26 +203,24 @@ namespace DayTomato.Droid
 			_cityControlPanelButton.Text = "Explore " + _locality;
 		}
 
-		private void GetMyTrips()
+		private async Task GetMyTrips()
 		{
-			//TODO: Get my trips from server
-			_myTrips = new List<Trip>();
+            _myTrips = await dayTomatoClient.GetMyTrips(_account);
 
-			_layoutManager = new LinearLayoutManager(this);
+            _layoutManager = new LinearLayoutManager(this);
 			_recyclerView.SetLayoutManager(_layoutManager);
 			_adapter = new ViewTripAdapter(_myTrips, this);
 			_adapter.HandleClick += OnHandleClick;
 			_recyclerView.SetAdapter(_adapter);
+            _adapter.NotifyDataSetChanged();
 		}
 
-		public static int AddToMyTrips(Trip trip)
+		public static async Task<int> AddToMyTrips(Trip trip)
 		{
 			if (_myTrips.FindIndex(newtrip => newtrip.Id == trip.Id) < 0)
 			{
-				Trip copy = trip;
-				copy.LinkedAccount = _account.Id;
-				// TODO: server add to my trips
-				_myTrips.Add(copy);
+			    await dayTomatoClient.AddToMyTrips(trip.Id, _account);
+				_myTrips.Add(trip);
 				_refresh = true;
                 return 1;
 			}
@@ -231,8 +229,8 @@ namespace DayTomato.Droid
 
 		public void OnDeleteTrip(Trip trip)
 		{
-			// TODO: server remove from my trips
-			_myTrips.Remove(trip);
+		    Task.Run(() => dayTomatoClient.RemoveFromMyTrips(trip.Id, _account));
+            _myTrips.Remove(trip);
 			_refresh = true;
 		}
 
