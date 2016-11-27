@@ -32,12 +32,12 @@
   <string name="slide_1_desc">View our collection of local eateries, activities, and interesting spots near you.</string>
 
   <string name="slide_2_title">Go On A Trip</string>
-  <string name="slide_2_desc">Trips are a collection of places to visit. View others\' favorite trips or create your own!</string>
+  <string name="slide_2_desc">Trips are a collection of places to visit. View your area\'s best routes!</string>
 
-  <string name="slide_3_title">Save Your Favourite Adventures</string>
-  <string name="slide_3_desc">Keep your favourite trips under "My Trips" for later use.</string>
+  <string name="slide_3_title">Create Your Own Trip</string>
+  <string name="slide_3_desc">Know a good route? Create and share your own trip!</string>
 
-  <string name="slide_4_title">Happy Exploring!</string>
-  <string name="slide_4_desc">Press "Explore Your City" to get started!</string>
+  <string name="slide_4_title">Save Your Favourite Adventures</string>
+  <string name="slide_4_desc">Keep your favourite trips under "My Trips" for later use.</string>
   
 </resources>
