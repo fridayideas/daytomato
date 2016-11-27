@@ -28,16 +28,16 @@
   <string name="skip">SKIP</string>
   <string name="start">GOT IT</string>
 
-  <string name="slide_1_title">Save Money</string>
-  <string name="slide_1_desc">How to Integrate Intro-Sliders into your Android Application</string>
+  <string name="slide_1_title">Browse Local Favourites</string>
+  <string name="slide_1_desc">View our collection of local eateries, activities, and interesting spots near you.</string>
 
-  <string name="slide_2_title">Trust Network</string>
-  <string name="slide_2_desc">How to Integrate Intro-Sliders into your Android Application</string>
+  <string name="slide_2_title">Go On A Trip</string>
+  <string name="slide_2_desc">Trips are a collection of places to visit. View others\' favorite trips or create your own!</string>
 
-  <string name="slide_3_title">Notification</string>
-  <string name="slide_3_desc">How to Integrate Intro-Sliders into your Android Application</string>
+  <string name="slide_3_title">Save Your Favourite Adventures</string>
+  <string name="slide_3_desc">Keep your favourite trips under "My Trips" for later use.</string>
 
-  <string name="slide_4_title">World Travel</string>
-  <string name="slide_4_desc">How to Integrate Intro-Sliders into your Android Application</string>
+  <string name="slide_4_title">Happy Exploring!</string>
+  <string name="slide_4_desc">Press "Explore Your City" to get started!</string>
   
 </resources>
