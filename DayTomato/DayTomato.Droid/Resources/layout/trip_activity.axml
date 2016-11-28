@@ -24,14 +24,7 @@
                 android:id="@+id/textView1"
                 android:textColor="@color/black" />
             <TextView
-                android:text="Your location"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView2"
-                android:layout_marginTop="8dp" />
-            <TextView
-                android:text="Location"
+                android:text="Getting location..."
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
