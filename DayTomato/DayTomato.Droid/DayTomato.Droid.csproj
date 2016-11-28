@@ -411,16 +411,16 @@
     <None Include="DLL\GoogleMapsUtility.dll" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\slide_1.png" />
+    <AndroidResource Include="Resources\drawable\slide_1_img.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\slide_2.png" />
+    <AndroidResource Include="Resources\drawable\slide_2_img.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\slide_3.png" />
+    <AndroidResource Include="Resources\drawable\slide_3_img.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\slide_4.png" />
+    <AndroidResource Include="Resources\drawable\slide_4_img.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.24.2.1\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.24.2.1\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
