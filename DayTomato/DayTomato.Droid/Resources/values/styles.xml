@@ -61,4 +61,10 @@
     <item name="android:paddingTop">8dp</item>
     <item name="android:paddingBottom">8dp</item>
   </style>
+  
+  <!--App  intro sliders theme-->
+  <color name="bgscreen1">#f64c73</color>
+  <color name="bgscreen2">#20d2bb</color>
+  <color name="bgscreen3">#3395ff</color>
+  <color name="bgscreen4">#c873f4</color>
 </resources>
