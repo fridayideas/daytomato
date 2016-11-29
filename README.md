@@ -1,14 +1,8 @@
-# DayTomato
-## Power to the locals!
+# [DayTomato](https://fridayideas.github.io/)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/2gtjg5xstixqu8c3?svg=true)](https://ci.appveyor.com/project/james-woo/daytomato)
 
-DayTomato is a mobile application designed for locals. DayTomato provides the opportunity for locals to share their opinion on businesses, activities, restaurants, anything! Automate your day with the trip builder, provided to you by locals.
-
-When you open the application and sign in, you are taken to the home page. Here you are able to ask the application to suggest a trip for you based on other's reviews and thoughts. Additionally, you are able to see how many pins and seeds your account has. Pins are central to DayTomato, users can drop these pins on activities and provide their review, others can rate the pin based on the user's review, and the pin with the highest rating is shown on the map page. Seeds are the reward system for your hard work. The more pins you place, the more seeds you receive. The more seeds you have, the more powers your account can have.
-
-On the Map tab, you can see all the pins that users have placed. Tap any to view them, give it a like or dislike, create your trip directly from the Map tab, or create your own pin!
-
+DayTomato is a mobile application designed for locals and explorers. It lets locals share their opinions on businesses, activities, restaurants, and other locations around town. They can curate trips composed of these spots. Explorers can follow these trips that the locals enjoy so much.
 
 ---
 
