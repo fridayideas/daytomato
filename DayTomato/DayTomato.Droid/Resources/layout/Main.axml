@@ -19,15 +19,6 @@
             android:layout_height="match_parent"
             android:id="@+id/linearLayout1"
             android:layout_margin="8dp">
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/main_city_autocomplete"
-                android:textColor="@color/primary_text"
-                android:textColorHint="@color/hint_text"
-                android:singleLine="true"
-                android:hint="Which city are you interested in?"
-                android:visibility="gone"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,6 +26,14 @@
                 android:text="Explore Current Location"
                 android:drawable="@drawable/ripple_effect"
                 style="@style/Widget.AppCompat.Button.Colored" />
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_city_autocomplete"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/hint_text"
+                android:singleLine="true"
+                android:hint="Interested in another city?" />
             <TextView
                 android:text="My Trips"
                 android:textAppearance="?android:attr/textAppearanceLarge"

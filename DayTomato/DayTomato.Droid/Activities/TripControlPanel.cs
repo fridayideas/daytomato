@@ -57,7 +57,7 @@ namespace DayTomato.Droid
 
 		private void SetViewTripsOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Local trips view", new Properties()
+            Analytics.Client.Screen(_account.AnalyticsId, "Local trips view", new Properties()
             {
                 { "Trips", "View" }
             });
@@ -67,7 +67,7 @@ namespace DayTomato.Droid
 
 		private void SetCreateTripOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Create trip view", new Properties()
+            Analytics.Client.Screen(_account.AnalyticsId, "Create trip view", new Properties()
             {
                 { "Create Trip", "View" }
             }); ;
@@ -77,7 +77,7 @@ namespace DayTomato.Droid
 
 		private void SetViewPlacesOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Local places view", new Properties()
+            Analytics.Client.Screen(_account.AnalyticsId, "Local places view", new Properties()
             {
                 { "Pins", "View" }
             }); ;
@@ -87,7 +87,7 @@ namespace DayTomato.Droid
 
 		private void SetViewMapOnClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Map view", new Properties()
+            Analytics.Client.Screen(_account.AnalyticsId, "Map view", new Properties()
             {
                 { "Map", "View" }
             }); ;

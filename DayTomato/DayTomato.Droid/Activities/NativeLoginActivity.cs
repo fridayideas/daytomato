@@ -101,6 +101,7 @@ namespace DayTomato.Droid.Activities
                 //Pass account info to MainActivity and start MainActivity
                 var mainActivityIntent = new Intent(this, typeof(MainActivity));
 
+                mainActivityIntent.PutExtra("AnalyticsId", userAccount.Id);
                 mainActivityIntent.PutExtra("IdToken", userAccount.IdToken);
                 mainActivityIntent.PutExtra("DisplayName", userAccount.DisplayName);
                 mainActivityIntent.PutExtra("PhotoUrl", userAccount.PhotoUrl.ToString() + "?sz=275");

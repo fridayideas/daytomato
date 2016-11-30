@@ -34,6 +34,7 @@ namespace DayTomato.Droid
 		private static readonly string TAG = "MAIN_ACTIVITY";
 
 		private AutoCompleteTextView _cityAutocomplete;
+        private int _attempt;
 		private Button _cityControlPanelButton;
 
 		private DrawerLayout _drawer;
@@ -74,6 +75,7 @@ namespace DayTomato.Droid
 
 			// Autocomplete text view
 			_cityAutocomplete = FindViewById<AutoCompleteTextView>(Resource.Id.main_city_autocomplete);
+            _attempt = 0;
 			// Go to control panel button
 			_cityControlPanelButton = FindViewById<Button>(Resource.Id.main_start_control_panel_button);
 			// My Trips recyclerview
@@ -143,6 +145,13 @@ namespace DayTomato.Droid
                                                          Android.Resource.Layout.SimpleDropDownItem1Line,
                                                          _citySearchPredictions);
                     _cityAutocomplete.Adapter = _citySearchAdapter;
+                    if (_attempt == 0)
+                    {
+                        Toast.MakeText(this, "This feature coming soon", ToastLength.Long).Show();
+                        _attempt = 1;
+                        Analytics.Client.Track(_account.AnalyticsId, "City change attempt", new Options().SetIntegration("all", true));
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -282,7 +291,7 @@ namespace DayTomato.Droid
 
 		private void SearchLocalTripsClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Local trips view", new Properties()
+            Analytics.Client.Screen(_account.AnalyticsId, "Local trips view", new Properties()
             {
                 { "Trips", "View" }
             });
@@ -304,7 +313,7 @@ namespace DayTomato.Droid
 
 		private void SetNavigationOnClick(object sender, NavigationView.NavigationItemSelectedEventArgs e)
 		{
-            Analytics.Client.Screen(_account.Id, "Navigation panel", "Account info");
+            Analytics.Client.Screen(_account.AnalyticsId, "Navigation panel", "Account info");
             switch (e.MenuItem.ItemId)
 			{
 				case (Resource.Id.nav_view_trips):
@@ -394,7 +403,7 @@ namespace DayTomato.Droid
 			}
 		}
 
-        public override void OnBackPressed() { }//Do nothing when back button pressed
+        public override void OnBackPressed() { }
     }
 
     public static class Picture

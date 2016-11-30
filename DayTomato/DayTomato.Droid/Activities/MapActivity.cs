@@ -641,7 +641,7 @@ namespace DayTomato.Droid
 			};
 
 			pin.Id = await MainActivity.dayTomatoClient.CreatePin(pin);
-            Analytics.Client.Track(account.Id, "Pin created", new Properties() {
+            Analytics.Client.Track(account.AnalyticsId, "Pin created", new Properties() {
                     { "Pin name", pin.Name }
                 }, new Options().SetIntegration("all", true));
 

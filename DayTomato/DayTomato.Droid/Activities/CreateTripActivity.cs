@@ -113,7 +113,7 @@ namespace DayTomato.Droid
 
 				// Now trip can be created
 				CreateTrip();
-                Analytics.Client.Track(_account.Id, "Trip created", new Properties() {
+                Analytics.Client.Track(_account.AnalyticsId, "Trip created", new Properties() {
                     { "trip name", _trip.Name }
                 }, new Options().SetIntegration("all", true));
             }

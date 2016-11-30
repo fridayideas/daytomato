@@ -29,6 +29,7 @@ namespace DayTomato.Models
         public string AccessToken { get; set; }
         public string IdToken { get; set; }
         public string RefreshToken { get; set; }
+        public string AnalyticsId { get; set; }
 
 		public SeedLevels GetAccountPrivileges()
 		{
