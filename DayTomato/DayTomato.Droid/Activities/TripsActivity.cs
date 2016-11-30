@@ -75,20 +75,19 @@ namespace DayTomato.Droid
 			var geo = new Geocoder(this);
 			var addresses = await geo.GetFromLocationAsync(currentLoc.Latitude, currentLoc.Longitude, 1);
 
-			string fulladdress = "Location Unknown";
+			string address = "Location Unknown";
 			if (addresses.Count > 0)
 			{
 				try
 				{
-					fulladdress = addresses[0].GetAddressLine(0);
+					address = addresses[0].GetAddressLine(0);
 				}
 				catch (Exception ex)
 				{
 					Log.Error(TAG, ex.ToString());
 				}
 			}
-            string[] address = fulladdress.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-            _userLocation.Text = "Your location: " + address[0];
+            _userLocation.Text = "Your location: " + address;
 
         }
 
