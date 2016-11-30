@@ -19,7 +19,12 @@ using Android.Support.V4.Widget;
 using Android.Support.Design.Widget;
 using Android.Locations;
 using Android.Support.V7.App;
+using Android.Gms.Common.Api.Internal;
 using System.Collections.Generic;
+using Android.Gms.Auth.Api;
+using Android.Gms.Auth.Api.SignIn;
+using Android.Gms.Common.Apis;
+using DayTomato.Droid.Activities;
 using DayTomato.Droid.Adapters;
 using Newtonsoft.Json;
 using Segment;
@@ -55,15 +60,18 @@ namespace DayTomato.Droid
 		private static LatLng _currentLocation;
 		private string _locality;
 		private static Account _account;
-	    private string _idToken; //IdToken provided by auth0. It is used to authenticate the current user on the server.
+	    private string _idToken;
+	    private string _clientId;
+        private GoogleApiClient _googleApiClient;
 
-	    internal IGeolocator Locator { get; set; }
+        internal IGeolocator Locator { get; set; }
 
         public static DayTomatoClient dayTomatoClient;
 		public static ImgurClient imgurClient;
 		public static GoogleClient googleClient;
 	    private string[] _citySearchPredictions;
 	    private ArrayAdapter _citySearchAdapter;
+	    
 
 	    protected override async void OnCreate(Bundle savedInstanceState)
         {
@@ -119,7 +127,18 @@ namespace DayTomato.Droid
 			// Get user account
 			_account = await GetUserAccount();
 
-			SetListeners();
+            _clientId = Intent.GetStringExtra("ClientId");
+            var gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DefaultSignIn)
+                .RequestProfile()
+                .RequestEmail()
+                .RequestIdToken(_clientId)//Allows for acquiring the ID Token
+                .Build();
+            _googleApiClient = new GoogleApiClient.Builder(this)
+                .AddApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .Build();
+            _googleApiClient.Connect();
+
+            SetListeners();
 			await SetInstances(); 
         }
 
@@ -333,14 +352,25 @@ namespace DayTomato.Droid
 					StartActivity(create);
 					break;
 				case (Resource.Id.nav_logout):
-					//TODO: LOGOUT
+			        //if (_googleApiClient.IsConnected)
+			        //{
+                        SignOut();
+                    //}
 					break;
 			}
 			// Close drawer
 			_drawer.CloseDrawers();
 		}
 
-        /// <summary>
+	    private void SignOut()
+	    {
+            Auth.GoogleSignInApi.SignOut(_googleApiClient);
+            Toast.MakeText(this, "Logged out.", ToastLength.Long).Show();
+            Finish();
+            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+        }
+
+	    /// <summary>
         /// Call GetAccount in core to obtain 
         /// </summary>
         /// <returns></returns>

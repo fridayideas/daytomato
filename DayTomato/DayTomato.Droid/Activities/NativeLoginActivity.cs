@@ -4,11 +4,15 @@ using Android.Content;
 using Android.Gms.Auth;
 using Android.Gms.Auth.Api;
 using Android.Gms.Auth.Api.SignIn;
+using Android.Gms.Common.Api;
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.OS;
 using Android.Support.V4.App;
+using Android.Support.V4.Content;
 using Android.Widget;
+using Java.Lang;
+using Javax.Net.Ssl;
 using Segment;
 using Segment.Model;
 
@@ -106,6 +110,7 @@ namespace DayTomato.Droid.Activities
                 mainActivityIntent.PutExtra("DisplayName", userAccount.DisplayName);
                 mainActivityIntent.PutExtra("PhotoUrl", userAccount.PhotoUrl.ToString() + "?sz=275");
                 mainActivityIntent.PutExtra("Email", userAccount.Email);
+                mainActivityIntent.PutExtra("ClientId", _clientId);
 
                 StartActivity(mainActivityIntent);
 
@@ -121,6 +126,5 @@ namespace DayTomato.Droid.Activities
         {
             Toast.MakeText(this, "Sign in failed.", ToastLength.Short).Show();
         }
-
     }
 }
