@@ -1,5 +1,7 @@
 # [DayTomato](https://fridayideas.github.io/)
 
+<a href='https://play.google.com/store/apps/details?id=com.fridayideas.daytomato&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width="20%" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
 [![Build status](https://ci.appveyor.com/api/projects/status/2gtjg5xstixqu8c3?svg=true)](https://ci.appveyor.com/project/james-woo/daytomato)
 
 DayTomato is a mobile application designed for locals and explorers. It lets locals share their opinions on businesses, activities, restaurants, and other locations around town. They can curate trips composed of these spots. Explorers can follow these trips that the locals enjoy so much.
