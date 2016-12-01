@@ -20,8 +20,8 @@ namespace DayTomato.Droid
 		private RecyclerView.LayoutManager _layoutManager;
 		private ViewPinAdapter _adapter;
 		private TextView _title;
-		private TextView _addToMyTrips;
-		private Button _return;
+		private Button _addToMyTrips;
+		//private Button _return;
 		private Button _directions;
 
 		public static ViewTripDialogFragment NewInstance(Bundle bundle)
@@ -38,9 +38,9 @@ namespace DayTomato.Droid
 			_trip = JsonConvert.DeserializeObject<Trip>(Arguments.GetString("VIEW_TRIP_DATA"));
 
 			_directions = view.FindViewById<Button>(Resource.Id.view_trip_dialog_map_button);
-			_return = view.FindViewById<Button>(Resource.Id.view_trip_dialog_return_button);
+            _addToMyTrips = view.FindViewById<Button>(Resource.Id.view_trip_add_to_my_trips);
 			_title = view.FindViewById<TextView>(Resource.Id.view_trip_dialog_title);
-			_addToMyTrips = view.FindViewById<TextView>(Resource.Id.view_trip_add_to_my_trips);
+			//_addToMyTrips = view.FindViewById<TextView>(Resource.Id.view_trip_add_to_my_trips);
 			_recyclerView = view.FindViewById<RecyclerView>(Resource.Id.view_trip_recycler_view);
 			_layoutManager = new LinearLayoutManager(Context);
 			_recyclerView.SetLayoutManager(_layoutManager);
@@ -74,7 +74,7 @@ namespace DayTomato.Droid
 
 		private void SetListeners()
 		{
-			_return.Click += Return;
+			//_return.Click += Return;
 			_directions.Click += ShowDirections;
 			_addToMyTrips.Click += AddToMyTrips;
 		}
