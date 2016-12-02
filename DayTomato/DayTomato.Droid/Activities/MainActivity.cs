@@ -29,17 +29,18 @@ using DayTomato.Droid.Adapters;
 using Newtonsoft.Json;
 using Segment;
 using Segment.Model;
+using System.Linq;
 
 namespace DayTomato.Droid
 {
-    [Activity(Icon = "@drawable/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+	[Activity(Icon = "@drawable/icon", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class MainActivity : AppCompatActivity, DeleteTripListener
 	{
 
 		private static readonly string TAG = "MAIN_ACTIVITY";
 
 		private AutoCompleteTextView _cityAutocomplete;
-        private int _attempt;
+		private int _attempt;
 		private Button _cityControlPanelButton;
 
 		private DrawerLayout _drawer;
@@ -60,30 +61,29 @@ namespace DayTomato.Droid
 		private static LatLng _currentLocation;
 		private string _locality;
 		private static Account _account;
-	    private string _idToken;
-	    private string _clientId;
-        private GoogleApiClient _googleApiClient;
+		private string _idToken;
+		private string _clientId;
+		private GoogleApiClient _googleApiClient;
 
-        internal IGeolocator Locator { get; set; }
+		internal IGeolocator Locator { get; set; }
 
-        public static DayTomatoClient dayTomatoClient;
+		public static DayTomatoClient dayTomatoClient;
 		public static ImgurClient imgurClient;
 		public static GoogleClient googleClient;
-	    private string[] _citySearchPredictions;
-	    private ArrayAdapter _citySearchAdapter;
-	    
+		private string[] _citySearchPredictions;
+		private ArrayAdapter _citySearchAdapter;
 
-	    protected override async void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
 
-            SetContentView(Resource.Layout.Main);
+		protected override async void OnCreate(Bundle savedInstanceState)
+		{
+			base.OnCreate(savedInstanceState);
+			SetContentView(Resource.Layout.Main);
 
 			Window.SetSoftInputMode(Android.Views.SoftInput.StateAlwaysHidden);
 
 			// Autocomplete text view
 			_cityAutocomplete = FindViewById<AutoCompleteTextView>(Resource.Id.main_city_autocomplete);
-            _attempt = 0;
+			_attempt = 0;
 			// Go to control panel button
 			_cityControlPanelButton = FindViewById<Button>(Resource.Id.main_start_control_panel_button);
 			// My Trips recyclerview
@@ -106,41 +106,41 @@ namespace DayTomato.Droid
 			_drawer.AddDrawerListener(drawerToggle);
 			drawerToggle.SyncState();
 
-            //Set ID token provided by LoginActivity
-            _idToken = Intent.GetStringExtra("IdToken");
+			//Set ID token provided by LoginActivity
+			_idToken = Intent.GetStringExtra("IdToken");
 
-            // REST API Client
-            dayTomatoClient = new DayTomatoClient(_idToken);
+			// REST API Client
+			dayTomatoClient = new DayTomatoClient(_idToken);
 			imgurClient = new ImgurClient();
 			googleClient = new GoogleClient();
 
-            // Get location
+			// Get location
 			_currentLocation = new LatLng(0, 0);
-            Locator = CrossGeolocator.Current;
+			Locator = CrossGeolocator.Current;
 			await Locator.StartListeningAsync(1, 0);
-            Locator.PositionChanged += (sender, args) =>
-            {
-                var pos = args.Position;
-                _currentLocation = new LatLng(pos.Latitude, pos.Longitude);
-            };
+			Locator.PositionChanged += (sender, args) =>
+			{
+				var pos = args.Position;
+				_currentLocation = new LatLng(pos.Latitude, pos.Longitude);
+			};
 
 			// Get user account
 			_account = await GetUserAccount();
 
-            _clientId = Intent.GetStringExtra("ClientId");
-            var gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DefaultSignIn)
-                .RequestProfile()
-                .RequestEmail()
-                .RequestIdToken(_clientId)//Allows for acquiring the ID Token
-                .Build();
-            _googleApiClient = new GoogleApiClient.Builder(this)
-                .AddApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .Build();
-            _googleApiClient.Connect();
+			_clientId = Intent.GetStringExtra("ClientId");
+			var gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DefaultSignIn)
+				.RequestProfile()
+				.RequestEmail()
+				.RequestIdToken(_clientId)//Allows for acquiring the ID Token
+				.Build();
+			_googleApiClient = new GoogleApiClient.Builder(this)
+				.AddApi(Auth.GOOGLE_SIGN_IN_API, gso)
+				.Build();
+			_googleApiClient.Connect();
 
-            SetListeners();
-			await SetInstances(); 
-        }
+			SetListeners();
+			await SetInstances();
+		}
 
 		protected override void OnResume()
 		{
@@ -155,41 +155,41 @@ namespace DayTomato.Droid
 			_cityControlPanelButton.Click += SetCityControlPanelButtonOnClick;
 			_myTripsEmpty.Click += SearchLocalTripsClick;
 			_recyclerView.ChildViewRemoved += MyTripsElementRemoved;
-            _cityAutocomplete.TextChanged += async (sender, e) =>
-            {
-                try
-                {
-                    _citySearchPredictions = await googleClient.PredictCities(e.Text.ToString());
-                    _citySearchAdapter = new ArrayAdapter(this,
-                                                         Android.Resource.Layout.SimpleDropDownItem1Line,
-                                                         _citySearchPredictions);
-                    _cityAutocomplete.Adapter = _citySearchAdapter;
-                    if (_attempt == 0)
-                    {
-                        Toast.MakeText(this, "This feature coming soon", ToastLength.Long).Show();
-                        _attempt = 1;
-                        Analytics.Client.Track(_account.AnalyticsId, "City change attempt", new Options().SetIntegration("all", true));
-                    }
-                    
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(TAG, ex.Message);
-                }
-            };
+			_cityAutocomplete.TextChanged += async (sender, e) =>
+			{
+				try
+				{
+					_citySearchPredictions = await googleClient.PredictCities(e.Text.ToString());
+					_citySearchAdapter = new ArrayAdapter(this,
+														 Android.Resource.Layout.SimpleDropDownItem1Line,
+														 _citySearchPredictions);
+					_cityAutocomplete.Adapter = _citySearchAdapter;
+					if (_attempt == 0)
+					{
+						Toast.MakeText(this, "This feature coming soon", ToastLength.Long).Show();
+						_attempt = 1;
+						Analytics.Client.Track(_account.AnalyticsId, "City change attempt", new Options().SetIntegration("all", true));
+					}
 
-            //TODO: Add further functionality that depends on user selection 
-            //_cityAutocomplete.ItemClick += async (Sender, e) =>
-            //{
-            //    try
-            //    {
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Log.Error(TAG, ex.Message);
-            //    }
-            //};
-        }
+				}
+				catch (Exception ex)
+				{
+					Log.Error(TAG, ex.Message);
+				}
+			};
+
+			//TODO: Add further functionality that depends on user selection 
+			//_cityAutocomplete.ItemClick += async (Sender, e) =>
+			//{
+			//    try
+			//    {
+			//    }
+			//    catch (Exception ex)
+			//    {
+			//        Log.Error(TAG, ex.Message);
+			//    }
+			//};
+		}
 
 		private async Task SetInstances()
 		{
@@ -209,7 +209,7 @@ namespace DayTomato.Droid
 			_username.Text = _account.Username;
 			_email.Text = _account.Email;
 			Bitmap bmp = BitmapFactory.DecodeByteArray(_account.ProfilePicture, 0, _account.ProfilePicture.Length);
-			bmp = PictureUtil.CircleBitmap(bmp, bmp.Width/2);
+			bmp = PictureUtil.CircleBitmap(bmp, bmp.Width / 2);
 			_pic.SetImageBitmap(bmp);
 			_places.Text = _account.Pins.ToString();
 			_seeds.Text = _account.Seeds.ToString();
@@ -233,32 +233,37 @@ namespace DayTomato.Droid
 
 		private async Task GetMyTrips()
 		{
-            _myTrips = await dayTomatoClient.GetMyTrips(_account);
-
-            _layoutManager = new LinearLayoutManager(this);
+			_myTrips = await dayTomatoClient.GetMyTrips(_account);
+			_layoutManager = new LinearLayoutManager(this);
 			_recyclerView.SetLayoutManager(_layoutManager);
 			_adapter = new ViewTripAdapter(_myTrips, this);
 			_adapter.HandleClick += OnHandleClick;
 			_recyclerView.SetAdapter(_adapter);
-            _adapter.NotifyDataSetChanged();
+			_adapter.NotifyDataSetChanged();
+
+			if (_myTrips != null)
+			{
+				_myTripsEmpty.Visibility = Android.Views.ViewStates.Gone;
+			}
+
 		}
 
 		public static async Task<int> AddToMyTrips(Trip trip)
 		{
 			if (_myTrips.FindIndex(newtrip => newtrip.Id == trip.Id) < 0)
 			{
-			    await dayTomatoClient.AddToMyTrips(trip.Id, _account);
+				await dayTomatoClient.AddToMyTrips(trip.Id, _account);
 				_myTrips.Add(trip);
 				_refresh = true;
-                return 1;
+				return 1;
 			}
-            return -1;
+			return -1;
 		}
 
 		public void OnDeleteTrip(Trip trip)
 		{
-		    Task.Run(() => dayTomatoClient.RemoveFromMyTrips(trip.Id, _account));
-            _myTrips.Remove(trip);
+			Task.Run(() => dayTomatoClient.RemoveFromMyTrips(trip.Id, _account));
+			_myTrips.Remove(trip);
 			_refresh = true;
 		}
 
@@ -269,6 +274,7 @@ namespace DayTomato.Droid
 				_adapter.NotifyDataSetChanged();
 				_refresh = false;
 				_myTripsEmpty.Visibility = _adapter.ItemCount > 0 ? Android.Views.ViewStates.Gone : Android.Views.ViewStates.Visible;
+
 			}
 		}
 
@@ -310,11 +316,11 @@ namespace DayTomato.Droid
 
 		private void SearchLocalTripsClick(object sender, System.EventArgs e)
 		{
-            Analytics.Client.Screen(_account.AnalyticsId, "Local trips view", new Properties()
-            {
-                { "Trips", "View" }
-            });
-            Intent trips = new Intent(this, typeof(TripsActivity));
+			Analytics.Client.Screen(_account.AnalyticsId, "Local trips view", new Properties()
+			{
+				{ "Trips", "View" }
+			});
+			Intent trips = new Intent(this, typeof(TripsActivity));
 			StartActivity(trips);
 		}
 
@@ -332,8 +338,8 @@ namespace DayTomato.Droid
 
 		private void SetNavigationOnClick(object sender, NavigationView.NavigationItemSelectedEventArgs e)
 		{
-            Analytics.Client.Screen(_account.AnalyticsId, "Navigation panel", "Account info");
-            switch (e.MenuItem.ItemId)
+			Analytics.Client.Screen(_account.AnalyticsId, "Navigation panel", "Account info");
+			switch (e.MenuItem.ItemId)
 			{
 				case (Resource.Id.nav_view_trips):
 					Intent trips = new Intent(this, typeof(TripsActivity));
@@ -352,39 +358,39 @@ namespace DayTomato.Droid
 					StartActivity(create);
 					break;
 				case (Resource.Id.nav_logout):
-			        //if (_googleApiClient.IsConnected)
-			        //{
-                        SignOut();
-                    //}
+					//if (_googleApiClient.IsConnected)
+					//{
+					SignOut();
+					//}
 					break;
 			}
 			// Close drawer
 			_drawer.CloseDrawers();
 		}
 
-	    private void SignOut()
-	    {
-            Auth.GoogleSignInApi.SignOut(_googleApiClient);
-            Toast.MakeText(this, "Logged out.", ToastLength.Long).Show();
-            Finish();
-            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
-        }
+		private void SignOut()
+		{
+			Auth.GoogleSignInApi.SignOut(_googleApiClient);
+			Toast.MakeText(this, "Logged out.", ToastLength.Long).Show();
+			Finish();
+			Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+		}
 
-	    /// <summary>
-        /// Call GetAccount in core to obtain 
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Call GetAccount in core to obtain 
+		/// </summary>
+		/// <returns></returns>
 		public async Task<Account> GetUserAccount()
 		{
-            _account = await dayTomatoClient.GetAccount();
+			_account = await dayTomatoClient.GetAccount();
 
-		    _account.Username = Intent.GetStringExtra("DisplayName");
-            _account.AnalyticsId = Intent.GetStringExtra("AnalyticsId");
-		    string imageurl = Intent.GetStringExtra("PhotoUrl");
-            _account.ProfilePicture = await dayTomatoClient.GetImageBitmapFromUrlAsync(imageurl);
+			_account.Username = Intent.GetStringExtra("DisplayName");
+			_account.AnalyticsId = Intent.GetStringExtra("AnalyticsId");
+			string imageurl = Intent.GetStringExtra("PhotoUrl");
+			_account.ProfilePicture = await dayTomatoClient.GetImageBitmapFromUrlAsync(imageurl);
 			_account.Email = Intent.GetStringExtra("Email");
 
-            return _account;
+			return _account;
 		}
 
 		public async Task<LatLng> GetUserLocation()
@@ -434,10 +440,10 @@ namespace DayTomato.Droid
 			}
 		}
 
-        public override void OnBackPressed() { }
-    }
+		public override void OnBackPressed() { }
+	}
 
-    public static class Picture
+	public static class Picture
 	{
 		public static File File { get; set; }
 		public static File Dir { get; set; }
