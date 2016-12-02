@@ -119,7 +119,7 @@ namespace DayTomato.Droid.Activities
             for (int i = 0; i < dots.Length; i++)
             {
                 dots[i] = new TextView(this);
-                dots[i].Text = (Html.FromHtml("•")).ToString();
+                dots[i].Text = ("\u2022");
                 dots[i].TextSize = 35;
                 dots[i].SetTextColor(Color.ParseColor(colorsActive[currentPage]));
                 dotsLayout.AddView(dots[i]);
