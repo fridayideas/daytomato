@@ -248,7 +248,7 @@ namespace DayTomato.Droid
 			_recyclerView.SetAdapter(_adapter);
 			_adapter.NotifyDataSetChanged();
 
-			if (_myTrips != null)
+			if (_myTrips != null && _myTrips.Count > 0)
 			{
 				_myTripsEmpty.Visibility = Android.Views.ViewStates.Gone;
 			}
