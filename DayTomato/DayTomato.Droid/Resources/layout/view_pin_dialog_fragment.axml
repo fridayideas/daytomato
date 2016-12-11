@@ -48,6 +48,7 @@
             <Button
                 android:text="Add Pin Here"
                 android:background="@color/colorPrimary"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/view_pin_dialog_add_button"
