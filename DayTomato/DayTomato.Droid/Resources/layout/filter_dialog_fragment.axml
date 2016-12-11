@@ -41,36 +41,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/filter_dialog_outdoors" />
-    <CheckBox
-        android:text="Cultural"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/filter_dialog_cultural" />
-    <CheckBox
-        android:text="Kids"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/filter_dialog_kids" />
-    <CheckBox
-        android:text="Walking"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/filter_dialog_walking" />
-    <CheckBox
-        android:text="Biking"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/filter_dialog_biking" />
-    <CheckBox
-        android:text="Driving"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/filter_dialog_driving" />
-    <CheckBox
-        android:text="Budget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/filter_dialog_budget" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

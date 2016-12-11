@@ -25,12 +25,6 @@ namespace DayTomato.Droid
 		private CheckBox _poi;
 		private CheckBox _shopping;
 		private CheckBox _outdoors;
-		private CheckBox _cultural;
-		private CheckBox _kids;
-		private CheckBox _walking;
-		private CheckBox _biking;
-		private CheckBox _driving;
-		private CheckBox _budget;
 
 		private bool _filter;
 		private bool[] _filterOptions;
@@ -52,12 +46,6 @@ namespace DayTomato.Droid
 			_shopping = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_shopping);
 			_outdoors = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_outdoors);
 			_general = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_general);
-			_cultural = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_cultural);
-		 	_kids = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_kids);
-			_walking = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_walking);
-			_biking = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_biking);
-			_driving = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_driving);
-			_budget = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_budget);
 			_all = (CheckBox)view.FindViewById(Resource.Id.filter_dialog_all);
 			_boxes = new List<CheckBox>();
 
@@ -66,12 +54,6 @@ namespace DayTomato.Droid
 			_boxes.Add(_poi);
 			_boxes.Add(_shopping);
 			_boxes.Add(_outdoors);
-			_boxes.Add(_cultural);
-			_boxes.Add(_kids);
-			_boxes.Add(_walking);
-			_boxes.Add(_biking);
-			_boxes.Add(_driving);
-			_boxes.Add(_budget);
 
 			_filter = false;
 
@@ -103,13 +85,7 @@ namespace DayTomato.Droid
 						_food.Checked,
 						_poi.Checked,
 						_shopping.Checked,
-						_outdoors.Checked,
-						_cultural.Checked,
-						_kids.Checked,
-						_walking.Checked,
-						_biking.Checked,
-						_driving.Checked,
-						_budget.Checked
+						_outdoors.Checked
 					},
 					Filter = _filter
 				});
@@ -124,12 +100,6 @@ namespace DayTomato.Droid
 			_poi.Checked = _filterOptions[2];
 			_shopping.Checked =_filterOptions[3];
 			_outdoors.Checked = _filterOptions[4];
-			_cultural.Checked = _filterOptions[5];
-			_kids.Checked = _filterOptions[6];
-			_walking.Checked = _filterOptions[7];
-			_biking.Checked = _filterOptions[8]; 
-			_driving.Checked = _filterOptions[9];
-			_budget.Checked = _filterOptions[10];
 			_all.Checked = SetAllChecked();
 		}
 
@@ -181,12 +151,6 @@ namespace DayTomato.Droid
 			_poi.Checked = check;
 			_shopping.Checked = check;
 			_outdoors.Checked = check;
-			_cultural.Checked = check;
-			_kids.Checked = check;
-			_walking.Checked = check;
-			_biking.Checked = check;
-			_driving.Checked = check;
-			_budget.Checked = check;
 		}
 
 		private bool SetAllChecked()

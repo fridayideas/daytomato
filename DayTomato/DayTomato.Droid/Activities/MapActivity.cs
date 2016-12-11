@@ -749,7 +749,6 @@ namespace DayTomato.Droid
 				case Android.Resource.Id.Home:
 					Finish();
 					return true;
-
 				default:
 					return base.OnOptionsItemSelected(item);
 			}
