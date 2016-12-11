@@ -94,7 +94,7 @@ namespace DayTomato.Droid.Adapters
 				Log.Debug(Tag, ex.Message);
 			}
 
-			if (trip.LinkedAccount == MainActivity.GetAccount().Id)
+			if (trip.LinkedAccount == MainActivity.GetAccount().Id || _context.ComponentName.ShortClassName.Contains("MainActivity"))
 			{
 				vh.Menu.Visibility = ViewStates.Visible;
 				vh.Menu.Click += (sender, e) =>
