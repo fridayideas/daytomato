@@ -142,13 +142,15 @@ namespace DayTomato.Droid
 				Dialog.Dismiss();
 			};
 
-			_image.Click += (sender, e) => 
+			_image.Click += (sender, e) =>
 			{
-				PopupWindow menu = new PopupWindow(Activity);
-				var adapter = new ArrayAdapter<string>(Activity, 
-				                                       Android.Resource.Layout.SimpleListItem1, 
-				                                       new string[] { "Choose Photo", "Take Photo" });
-				ListView list = new ListView(Activity) { Adapter = adapter };
+				PopupWindow menu = new PopupWindow(Context);
+				var adapter = new ArrayAdapter<string>(Context,
+													   Resource.Layout.list_item,
+													   new string[] { "Choose Photo", "Take Photo", "Cancel" });
+				ListView list = new ListView(Context) { Adapter = adapter };
+				list.SetBackgroundColor(Color.White);
+
 				list.ItemClick += (s, args) =>
 				{
 					switch (args.Position)
@@ -159,14 +161,17 @@ namespace DayTomato.Droid
 						case 1:
 							TakePhoto();
 							break;
+						case 2:
+							break;
 					}
 					menu.Dismiss();
 				};
+
 				menu.Width = ViewGroup.LayoutParams.WrapContent;
 				menu.Height = ViewGroup.LayoutParams.WrapContent;
 				menu.ContentView = list;
 				menu.ShowAtLocation(View, GravityFlags.Center, 0, 0);
-			};	
+			};
 		}
 
 		private bool isValidCost(string cost)

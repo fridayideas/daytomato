@@ -268,6 +268,7 @@
     <AndroidResource Include="Resources\layout\IntroSlider.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\list_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
