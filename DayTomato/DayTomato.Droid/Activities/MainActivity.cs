@@ -345,7 +345,12 @@ namespace DayTomato.Droid
 			intent.PutExtra("TRIP_LOCALITY", _locality);
 			intent.PutExtra("TRIP_LATITUDE", coords.latitude);
 			intent.PutExtra("TRIP_LONGITUDE", coords.longitude);
-			StartActivityForResult(intent, Constants.TRIP_CONTROL_PANEL);
+
+		    if (_locality != null)
+		    {
+                StartActivityForResult(intent, Constants.TRIP_CONTROL_PANEL);
+            }
+			
 		}
 
 		private void MyTripsElementRemoved(object sender, Android.Views.ViewGroup.ChildViewRemovedEventArgs e)
