@@ -274,7 +274,6 @@ namespace DayTomato.Droid
 				_adapter.NotifyDataSetChanged();
 				_refresh = false;
 				_myTripsEmpty.Visibility = _adapter.ItemCount > 0 ? Android.Views.ViewStates.Gone : Android.Views.ViewStates.Visible;
-
 			}
 		}
 

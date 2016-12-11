@@ -711,19 +711,12 @@ namespace DayTomato.Droid
 
 		private void UpdateCameraPosition(LatLng position)
 		{
-
 			CameraPosition cameraPosition = new CameraPosition.Builder()
 			.Target(position)
 			.Zoom(20)
 			.Bearing(0)
-			.Tilt(45)
 			.Build();
 			_map.AnimateCamera(CameraUpdateFactory.NewCameraPosition(cameraPosition));
-
-			//CameraUpdate cameraUpdate = CameraUpdateFactory.NewLatLngZoom(position, 20);
-
-
-			//_map.AnimateCamera(cameraUpdate);
 		}
 
 		private void RefreshMap()
