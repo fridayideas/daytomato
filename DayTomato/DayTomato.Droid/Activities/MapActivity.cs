@@ -35,8 +35,6 @@ namespace DayTomato.Droid
 
 		private readonly static string TAG = "PIN_MAP_FRAGMENT";
 
-		internal IGeolocator Locator { get; set; }
-
 		// Button to create new pin
 		private FloatingActionButton _createPin;
 
@@ -68,6 +66,9 @@ namespace DayTomato.Droid
 
 		private bool _createPlaceRequest = false;
 
+		private double _userLatitude;
+		private double _userLongitude;
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -95,14 +96,11 @@ namespace DayTomato.Droid
 			SupportActionBar.SetDisplayShowHomeEnabled(true);
 			SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(true);
 
+			_userLatitude = Intent.GetDoubleExtra("MAP_LOCALITY_LATITUDE", 0.0);
+			_userLongitude = Intent.GetDoubleExtra("MAP_LOCALITY_LONGITUDE", 0.0);
+
 			// Get location
-			Locator = CrossGeolocator.Current;
-			_currentLocation = new LatLng(0, 0);
-			Locator.PositionChanged += (sender, args) =>
-			{
-				var pos = args.Position;
-				_currentLocation = new LatLng(pos.Latitude, pos.Longitude);
-			};
+			_currentLocation = new LatLng(_userLatitude, _userLongitude);
 
 			SetFilterOptions();
 			SetListeners();
@@ -115,12 +113,6 @@ namespace DayTomato.Droid
 			// 2: POI
 			// 3: Shopping
 			// 4: Outdoors
-			// 5: Cultural
-			// 6: Kids
-			// 7: Walking
-			// 8: Biking
-			// 9: Driving
-			// 10: Budget
 
 			_filterOptions = new bool[11];
 			for (var i = 0; i < _filterOptions.Length; i++)
@@ -166,12 +158,6 @@ namespace DayTomato.Droid
 			// If not stacking, create a new pin and new polygon
 			if (!stack)
 			{
-				//var polyOpt = new PolygonOptions()
-				//.Add(new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude - POLY_RADIUS),
-				//     new LatLng(pin.Latitude - POLY_RADIUS, pin.Longitude + POLY_RADIUS),
-				//     new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude + POLY_RADIUS),
-				//     new LatLng(pin.Latitude + POLY_RADIUS, pin.Longitude - POLY_RADIUS))
-				//.Visible(false);
 				var points = new List<LatLng>()
 				{
 					new LatLng(pin.Coordinate.latitude - PolyRadius, pin.Coordinate.longitude - PolyRadius),
@@ -260,8 +246,12 @@ namespace DayTomato.Droid
 			_map.SetOnCameraChangeListener(this);// When the user moves the map, this will listen
 			_map.SetOnMarkerClickListener(_clusterManager);
 
-			// Wait for location, should be relatively quick, then move camera
-			Locator.PositionChanged += OnLocationChanged;
+			var builder = CameraPosition.InvokeBuilder();
+			builder.Target(_currentLocation);
+			builder.Zoom(15);
+			var cameraPosition = builder.Build();
+			var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
+			_map.AnimateCamera(cameraUpdate);
 
 			// Get pins
 			// TODO can we do this progressively?
@@ -283,20 +273,6 @@ namespace DayTomato.Droid
 			{
 				CreatePin();
 			}
-		}
-
-		private void OnLocationChanged(object sender, PositionEventArgs args)
-		{
-			Locator.PositionChanged -= OnLocationChanged;
-
-			var pos = args.Position;
-			_currentLocation = new LatLng(pos.Latitude, pos.Longitude);
-			var builder = CameraPosition.InvokeBuilder();
-			builder.Target(_currentLocation);
-			builder.Zoom(15);
-			var cameraPosition = builder.Build();
-			var cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
-			_map.AnimateCamera(cameraUpdate);
 		}
 
 		// Update pins on map when view changes

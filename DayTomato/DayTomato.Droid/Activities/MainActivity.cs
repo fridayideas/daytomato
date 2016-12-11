@@ -30,6 +30,7 @@ using Newtonsoft.Json;
 using Segment;
 using Segment.Model;
 using System.Linq;
+using Android.Views.InputMethods;
 
 namespace DayTomato.Droid
 {
@@ -60,6 +61,7 @@ namespace DayTomato.Droid
 
 		private static LatLng _currentLocation;
 		private string _locality;
+		private bool _localityChanged;
 		private static Account _account;
 		private string _idToken;
 		private string _clientId;
@@ -166,7 +168,6 @@ namespace DayTomato.Droid
 					_cityAutocomplete.Adapter = _citySearchAdapter;
 					if (_attempt == 0)
 					{
-						Toast.MakeText(this, "This feature coming soon", ToastLength.Long).Show();
 						_attempt = 1;
 						Analytics.Client.Track(_account.AnalyticsId, "City change attempt", new Options().SetIntegration("all", true));
 					}
@@ -178,17 +179,23 @@ namespace DayTomato.Droid
 				}
 			};
 
-			//TODO: Add further functionality that depends on user selection 
-			//_cityAutocomplete.ItemClick += async (Sender, e) =>
-			//{
-			//    try
-			//    {
-			//    }
-			//    catch (Exception ex)
-			//    {
-			//        Log.Error(TAG, ex.Message);
-			//    }
-			//};
+			_cityAutocomplete.ItemClick += (Sender, e) =>
+			{
+			    try
+			    {
+					var imm = (InputMethodManager)this.GetSystemService(Android.Content.Context.InputMethodService);
+					imm.HideSoftInputFromWindow(_cityAutocomplete.WindowToken, 0);
+
+					_locality = _cityAutocomplete.Text;
+					_cityAutocomplete.Text = "";
+					_cityControlPanelButton.Text = "Explore " + _locality.Split(',')[0];
+					_localityChanged = true;
+			    }
+			    catch (Exception ex)
+			    {
+			        Log.Error(TAG, ex.Message);
+			    }
+			};
 		}
 
 		private async Task SetInstances()
@@ -323,10 +330,21 @@ namespace DayTomato.Droid
 			StartActivity(trips);
 		}
 
-		private void SetCityControlPanelButtonOnClick(object sender, System.EventArgs e)
+		private async void SetCityControlPanelButtonOnClick(object sender, System.EventArgs e)
 		{
+			Coordinate coords;
+			if (_localityChanged)
+			{
+				coords = await googleClient.Geocode(_locality);
+			}
+			else
+			{
+				coords = new Coordinate(_currentLocation.Latitude, _currentLocation.Longitude);
+			}
 			Intent intent = new Intent(this, typeof(TripControlPanel));
 			intent.PutExtra("TRIP_LOCALITY", _locality);
+			intent.PutExtra("TRIP_LATITUDE", coords.latitude);
+			intent.PutExtra("TRIP_LONGITUDE", coords.longitude);
 			StartActivityForResult(intent, Constants.TRIP_CONTROL_PANEL);
 		}
 
@@ -449,10 +467,4 @@ namespace DayTomato.Droid
 		public static Bitmap Bitmap { get; set; }
 	}
 }
-
-
-
-
-
-
 

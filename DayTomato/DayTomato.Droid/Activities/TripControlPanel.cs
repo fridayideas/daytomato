@@ -21,6 +21,9 @@ namespace DayTomato.Droid
 		private Button _viewMap;
 
         private Account _account;
+		private string _locality;
+		private double _latitude;
+		private double _longitude;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -28,7 +31,10 @@ namespace DayTomato.Droid
 
 			SetContentView(Resource.Layout.trip_control_panel);
 
-			string title = Intent.GetStringExtra("TRIP_LOCALITY");
+			_locality = Intent.GetStringExtra("TRIP_LOCALITY");
+			_latitude = Intent.GetDoubleExtra("TRIP_LATITUDE", 0.0);
+			_longitude = Intent.GetDoubleExtra("TRIP_LONGITUDE", 0.0);
+			string title = _locality.Split(',')[0];
 			var toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.main_toolbar);
 			SetSupportActionBar(toolbar);
 			SupportActionBar.Title = title;
@@ -70,7 +76,7 @@ namespace DayTomato.Droid
             Analytics.Client.Screen(_account.AnalyticsId, "Create trip view", new Properties()
             {
                 { "Create Trip", "View" }
-            }); ;
+            });
             Intent intent = new Intent(this, typeof(CreateTripActivity));
 			StartActivityForResult(intent, Constants.CREATE_TRIP_REQUEST);
 		}
@@ -80,7 +86,7 @@ namespace DayTomato.Droid
             Analytics.Client.Screen(_account.AnalyticsId, "Local places view", new Properties()
             {
                 { "Pins", "View" }
-            }); ;
+            });
 			Intent intent = new Intent(this, typeof(PlacesActivity));
 			StartActivity(intent);
 		}
@@ -90,8 +96,11 @@ namespace DayTomato.Droid
             Analytics.Client.Screen(_account.AnalyticsId, "Map view", new Properties()
             {
                 { "Map", "View" }
-            }); ;
+            });
             Intent intent = new Intent(this, typeof(MapActivity));
+
+			intent.PutExtra("MAP_LOCALITY_LATITUDE", _latitude);
+			intent.PutExtra("MAP_LOCALITY_LONGITUDE", _longitude);
 			StartActivity(intent);
 		}
 
