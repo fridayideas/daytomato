@@ -35,6 +35,8 @@ namespace DayTomato.Droid
 
 		private readonly static string TAG = "PIN_MAP_FRAGMENT";
 
+		internal IGeolocator Locator { get; set; }
+
 		// Button to create new pin
 		private FloatingActionButton _createPin;
 
@@ -69,7 +71,7 @@ namespace DayTomato.Droid
 		private double _userLatitude;
 		private double _userLongitude;
 
-		protected override void OnCreate(Bundle savedInstanceState)
+		protected override async void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
 
@@ -98,9 +100,19 @@ namespace DayTomato.Droid
 
 			_userLatitude = Intent.GetDoubleExtra("MAP_LOCALITY_LATITUDE", 0.0);
 			_userLongitude = Intent.GetDoubleExtra("MAP_LOCALITY_LONGITUDE", 0.0);
+			_createPlaceRequest = Intent.GetBooleanExtra("CREATE_PLACE_REQUEST", false);
 
 			// Get location
-			_currentLocation = new LatLng(_userLatitude, _userLongitude);
+			if (_createPlaceRequest)
+			{ 
+				Locator = CrossGeolocator.Current;
+				var pos = await Locator.GetPositionAsync(timeoutMilliseconds: 10000);
+				_currentLocation = new LatLng(pos.Latitude, pos.Longitude);
+			}
+			else
+			{
+				_currentLocation = new LatLng(_userLatitude, _userLongitude);
+			}
 
 			SetFilterOptions();
 			SetListeners();
@@ -172,10 +184,10 @@ namespace DayTomato.Droid
                     pin.Type = pin.GuessType(pin.Description);
                 }
                 // Set the custom icon for pins of type 1-4
-                if (pin.Type == 1){ m = setIcon(pin.Rating, m, "T");} // Food
+                if      (pin.Type == 1) { m = setIcon(pin.Rating, m, "T"); }  // Food
                 else if (pin.Type == 2) { m = setIcon(pin.Rating, m, "Bi"); } // POI
-                else if (pin.Type == 3) { m = setIcon(pin.Rating, m, "P"); } // Shopping
-                else if (pin.Type == 4) { m = setIcon(pin.Rating, m, "B"); } // Outdoor
+                else if (pin.Type == 3) { m = setIcon(pin.Rating, m, "P"); }  // Shopping
+                else if (pin.Type == 4) { m = setIcon(pin.Rating, m, "B"); }  // Outdoor
 
                 _clusterManager.AddItem(m);
 
@@ -268,7 +280,6 @@ namespace DayTomato.Droid
 				});
 			});
 
-			_createPlaceRequest = Intent.GetBooleanExtra("CREATE_PLACE_REQUEST", false);
 			if (_createPlaceRequest)
 			{
 				CreatePin();
