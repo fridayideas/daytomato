@@ -135,15 +135,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/pin_view_holder_account"
                     android:gravity="end" />
-                <TextView
-                    android:text="add a comment"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pin_view_holder_add_comment"
-                    android:textColor="#E0E0E0"
-                    android:textColorHint="#E0E0E0"
-                    android:textColorLink="#E0E0E0" />
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -167,19 +158,6 @@
                         android:background="@color/colorPrimary"
                         android:visibility="gone" />
                 </LinearLayout>
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:minWidth="25px"
-                    android:minHeight="25px"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pin_view_holder_comment_list" />
-                <TextView
-                    android:text="show comments"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pin_view_holder_show_comments"
-                    android:textColor="#E0E0E0" />
             </LinearLayout>
         </LinearLayout>
         <View

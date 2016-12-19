@@ -53,6 +53,7 @@ namespace DayTomato.Droid.Adapters
 			return new ViewPinViewHolder(itemView);
 		}
 
+		/*
 	    private void RefreshComments(LinearLayout ll, CommentsAdapter ca)
 		{
 		    ll.RemoveAllViews();
@@ -63,6 +64,7 @@ namespace DayTomato.Droid.Adapters
 			}
 			ca.NotifyDataSetChanged();
 		}
+		*/
 
 		public override async void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
 		{
@@ -117,7 +119,7 @@ namespace DayTomato.Droid.Adapters
 		    vh.PinRatingText.Text = pin.Rating.ToString();
 
             vh.PinCost.Text = pin.Cost > 0.0 ? $"${pin.Cost}" : "FREE";
-
+			/*
 			// Initializing listview
 			vh.CommentsAdapter = new CommentsAdapter(_context, pin.Comments);
 			// Make sure we can see the comments
@@ -125,14 +127,16 @@ namespace DayTomato.Droid.Adapters
 			{
 				RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 			}
-
+			*/
+			/*
 			// When clicking add comment, show an edit text
 			vh.AddComment.Click += (sender, e) => 
 			{
 				vh.AddCommentInput.Visibility = ViewStates.Visible;
 				vh.AddCommentButton.Visibility = ViewStates.Visible;
 			};
-
+			*/
+			/*
 			// When the user presses add, add the new comment
 			vh.AddCommentButton.Click += async (sender, e) => 
 			{
@@ -148,8 +152,8 @@ namespace DayTomato.Droid.Adapters
 				vh.CommentsListView.Visibility = ViewStates.Visible;
 				vh.ShowComments.Text = "hide comments";
 				vh.AddCommentInput.Text = "";
-			};
-
+			};*/
+			/*
 			vh.ShowComments.Click += (sender, args) =>
 			{
 			    vh.HideComments = !vh.HideComments;
@@ -167,7 +171,7 @@ namespace DayTomato.Droid.Adapters
 			        RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
 			    }
 			};
-
+			*/
 			vh.UpButton.Click += async (sender, e) =>
 			{
 				// If the like and dislike button was not pressed, then its fresh
@@ -274,14 +278,14 @@ namespace DayTomato.Droid.Adapters
         public RatingBar PinRating { get; }
 		public TextView PinRatingText { get; }
 		public TextView PinLinkedAccount { get; }
-		public TextView AddComment { get; }
-		public EditText AddCommentInput { get; }
-		public Button AddCommentButton { get; }
-		public TextView ShowComments { get; }
+		//public TextView AddComment { get; }
+		//public EditText AddCommentInput { get; }
+		//public Button AddCommentButton { get; }
+		//public TextView ShowComments { get; }
 		public ImageView ViewMenu { get; }
-		public bool HideComments { get; set; }
-		public LinearLayout CommentsListView { get; }
-		public CommentsAdapter CommentsAdapter { get; set; }
+		//public bool HideComments { get; set; }
+		//public LinearLayout CommentsListView { get; }
+		//public CommentsAdapter CommentsAdapter { get; set; }
 
 		public ViewPinViewHolder(View itemView) : base(itemView)
 		{
@@ -296,13 +300,13 @@ namespace DayTomato.Droid.Adapters
             PinRating = itemView.FindViewById<RatingBar>(Resource.Id.pin_view_holder_rating);
 			PinRatingText = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_rating_text);
 			PinLinkedAccount = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_account);
-			CommentsListView = itemView.FindViewById<LinearLayout>(Resource.Id.pin_view_holder_comment_list);
-			AddComment = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_add_comment);
-			AddCommentInput = itemView.FindViewById<EditText>(Resource.Id.pin_view_holder_comment_edit_text);
-			AddCommentButton = itemView.FindViewById<Button>(Resource.Id.pin_view_holder_add_comment_button);
-			ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
+			//CommentsListView = itemView.FindViewById<LinearLayout>(Resource.Id.pin_view_holder_comment_list);
+			//AddComment = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_add_comment);
+			//AddCommentInput = itemView.FindViewById<EditText>(Resource.Id.pin_view_holder_comment_edit_text);
+			//AddCommentButton = itemView.FindViewById<Button>(Resource.Id.pin_view_holder_add_comment_button);
+			//ShowComments = itemView.FindViewById<TextView>(Resource.Id.pin_view_holder_show_comments);
 			ViewMenu = itemView.FindViewById<ImageView>(Resource.Id.pin_view_holder_view_menu);
-			HideComments = true;
+			//HideComments = true;
 		}
 	}
 }
