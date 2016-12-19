@@ -130,6 +130,19 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/trip_suggestion_create_date"
                         android:gravity="right" />
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:minWidth="25px"
+                        android:minHeight="25px"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/trip_suggestion_comment_list" />
+                    <TextView
+                        android:text="show comments"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/trip_suggestion_show_comments"
+                        android:textColor="#E0E0E0" />
                     <TextView
                         android:text="add a comment"
                         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -138,7 +151,8 @@
                         android:id="@+id/trip_suggestion_add_comment"
                         android:textColor="#E0E0E0"
                         android:textColorHint="#E0E0E0"
-                        android:textColorLink="#E0E0E0" />
+                        android:textColorLink="#E0E0E0"
+                        android:visibility="gone" />
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -163,19 +177,6 @@
                             android:background="@color/colorPrimary"
                             android:visibility="gone" />
                     </LinearLayout>
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:minWidth="25px"
-                        android:minHeight="25px"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/trip_suggestion_comment_list" />
-                    <TextView
-                        android:text="show comments"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/trip_suggestion_show_comments"
-                        android:textColor="#E0E0E0" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
