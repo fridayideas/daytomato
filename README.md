@@ -16,12 +16,11 @@ DayTomato is a mobile application designed for locals and explorers. It lets loc
 [Zane Li](https://github.com/Zanelib1)<br />
 [Alix Voorthuyzen](https://github.com/alixvoor)<br />
 
-### Documentation
-[Architectural Overview](https://docs.google.com/presentation/d/1t4Ov2VW7ZXqcUSvIqzzz1BZWfQ8kaZPr_QZloVf0Y1k/edit?usp=sharing)  
-[Main Features](https://github.com/fridayideas/daytomato/wiki/Features-List)  
-[Main Use Cases](https://drive.google.com/open?id=0B6iCv6f-iYt0OG1GeVFJdlV0SWM)  
+### Related Repositories
 [Public REST API](https://github.com/fridayideas/daytomatoserver)  
-[User Guide](https://github.com/fridayideas/daytomato/wiki/User-Guide)
+[Landing Page](https://github.com/fridayideas/fridayideas.github.io)
+
+### [Documentation](https://drive.google.com/file/d/0B6ke0hSuUXMeZVZnd3pWSUJMU3M/view?usp=sharing)
 
 ---
 
