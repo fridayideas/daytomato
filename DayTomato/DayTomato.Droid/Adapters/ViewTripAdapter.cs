@@ -158,8 +158,9 @@ namespace DayTomato.Droid.Adapters
 			vh.ShowComments.Click += (sender, e) =>
 			{
 				vh.HideComments = !vh.HideComments;
+				vh.AddComment.Visibility = ViewStates.Visible;
 				if (vh.HideComments)
-				{
+				{ 
 					vh.CommentsListView.RemoveAllViews();
 					vh.CommentsListView.Visibility = ViewStates.Gone;
 					vh.ShowComments.Text = "show comments";
