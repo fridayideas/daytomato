@@ -71,7 +71,7 @@ namespace DayTomato.Droid.Adapters
 			vh.Description.Text = trip.Description;
 		    vh.Cost.Text = trip.Cost > 0.0 ? $"${trip.Cost}" : "FREE";
 			SetImage(vh, trip.Pins);
-
+			vh.HideComments = true;
 			try
 			{
 				if (trip.LikedBy.Contains(_account.Id))
@@ -161,13 +161,19 @@ namespace DayTomato.Droid.Adapters
 				vh.AddComment.Visibility = ViewStates.Visible;
 				if (vh.HideComments)
 				{ 
+					
 					vh.CommentsListView.RemoveAllViews();
 					vh.CommentsListView.Visibility = ViewStates.Gone;
+					vh.AddComment.Visibility = ViewStates.Gone;
+					vh.AddCommentInput.Visibility = ViewStates.Gone;
+					vh.AddCommentButton.Visibility = ViewStates.Gone;
 					vh.ShowComments.Text = "show comments";
 					vh.CommentsAdapter.NotifyDataSetChanged();
+
 				}
 				else
 				{
+					vh.AddComment.Visibility = ViewStates.Visible;
 					vh.CommentsListView.Visibility = ViewStates.Visible;
 					vh.ShowComments.Text = "hide comments";
 					RefreshComments(vh.CommentsListView, vh.CommentsAdapter);
